@@ -1,0 +1,16 @@
+{
+  "color": {
+    "confidence": {
+      "established bg": {
+        "type": "color",
+        "value": "#e7f6edff",
+        "description": "PROVISIONAL, not from Figma - see AGENTS.md open items"
+      },
+      "established fg": { "type": "color", "value": "#146c3aff" },
+      "interpretation bg": { "type": "color", "value": "#eeeef4ff" },
+      "interpretation fg": { "type": "color", "value": "#494c66ff" },
+      "verify bg": { "type": "color", "value": "#fdf1e2ff" },
+      "verify fg": { "type": "color", "value": "#8a5214ff" }
+    }
+  }
+}

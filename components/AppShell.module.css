@@ -1,0 +1,33 @@
+/*
+ * Dashboard frame: persistent sidebar, topbar above the content, scrolling
+ * content area.
+ *
+ * The sidebar is a grid column rather than an overlay, so it never covers the
+ * content and there is no state to get wrong. It narrows to an icon rail below
+ * the wide breakpoint instead of disappearing, keeping all five destinations
+ * reachable at any width (PRD section 3, and the journey map's five stages).
+ *
+ * PRD section 10 requires responsive desktop and mobile web.
+ */
+.shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--layout-rail-width) 1fr;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 60rem) {
+  .shell {
+    grid-template-columns: var(--layout-sidebar-width) 1fr;
+  }
+}

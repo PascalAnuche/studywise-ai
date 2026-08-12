@@ -1,0 +1,58 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.paragraph {
+  font: var(--text-body);
+  color: var(--color-text);
+  white-space: pre-wrap;
+}
+
+.heading {
+  font: var(--text-body-medium);
+  color: var(--color-text);
+}
+
+/*
+ * Tables scroll inside their own container. An answer comparing two things is a
+ * common shape, and on a narrow column the alternative is the whole page
+ * scrolling sideways.
+ */
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--text-body);
+}
+
+.table th,
+.table td {
+  text-align: start;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.table thead th {
+  font: var(--text-body-medium);
+  background: var(--color-background);
+  white-space: nowrap;
+}
+
+/* The first column labels the row, so it reads as a header, not data. */
+.table tbody th {
+  font: var(--text-body-medium);
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child th,
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}

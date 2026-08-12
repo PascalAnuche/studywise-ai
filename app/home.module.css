@@ -1,0 +1,146 @@
+/*
+ * Home, per the approved design: main column plus a persistent assistant rail.
+ *
+ * The rail is Home-only. It is a reading surface for the latest explanation,
+ * not a second Assistant, so it does not belong in the shell.
+ *
+ * PRD section 5's empathy map records students feeling overwhelmed, and
+ * DESIGN_SYSTEM.md asks for visual calm, so the rail collapses below the main
+ * column on narrower screens rather than squeezing both.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  max-width: 96rem;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  min-width: 0;
+}
+
+.rail {
+  min-width: 0;
+}
+
+.greeting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+}
+
+.greetingText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.hello {
+  font: var(--text-h1);
+}
+
+.subtitle {
+  font: var(--text-body-large);
+  color: var(--color-text-muted);
+}
+
+/* Decorative, and the first thing to go when space is tight. */
+.illustration {
+  display: none;
+  flex: none;
+  color: var(--color-primary);
+  opacity: 0.9;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+}
+
+/*
+ * Grid items default to min-width:auto, so wide content stretches the column
+ * past its share and pushes the main column under the assistant rail. Every
+ * child opts out.
+ */
+.cards > * {
+  min-width: 0;
+}
+
+.cardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.cardTitle {
+  font: var(--text-h4);
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cardLink:hover {
+  color: var(--color-primary-hover);
+}
+
+.sectionTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font: var(--text-h4);
+}
+
+.sectionIcon {
+  color: var(--color-primary);
+  display: grid;
+  place-items: center;
+}
+
+.sectionSub {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 48rem) {
+  .layout {
+    padding: var(--spacing-2xl);
+  }
+
+  .illustration {
+    display: block;
+  }
+
+  .cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 82rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1.6fr) minmax(22rem, 1fr);
+  }
+
+  .rail {
+    position: sticky;
+    top: calc(var(--layout-topbar-height) + var(--spacing-2xl));
+    height: calc(100vh - var(--layout-topbar-height) - var(--spacing-3xl));
+  }
+}

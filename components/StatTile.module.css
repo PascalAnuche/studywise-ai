@@ -1,0 +1,101 @@
+/*
+ * A metric with a glanceable meter.
+ *
+ * The bar is the point: "2 of 4 completed" is a fact, the bar is the shape of
+ * it. Every tile carries the number in text as well, so the meter is never the
+ * only way to read the value.
+ */
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+  /*
+   * Distribute rather than stack from the top: a tile without a meter would
+   * otherwise leave a hole where the others have one, and read as broken.
+   */
+  justify-content: space-between;
+  min-height: 10.5rem;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border-radius: var(--radius-md);
+  flex: none;
+}
+
+.label {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.number {
+  font: var(--text-h1);
+  line-height: 1;
+}
+
+.suffix {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+}
+
+.track {
+  height: var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-background);
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: var(--radius-full);
+}
+
+.caption {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/* Tones. Each pairs a tinted icon chip with a matching meter. */
+.brand .icon {
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+.brand .bar {
+  background: var(--color-primary);
+}
+
+.positive .icon {
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+}
+.positive .bar {
+  background: var(--color-confidence-established-fg);
+}
+
+.accent .icon {
+  background: var(--color-confidence-verify-bg);
+  color: var(--color-confidence-verify-fg);
+}
+.accent .bar {
+  background: var(--color-confidence-verify-fg);
+}

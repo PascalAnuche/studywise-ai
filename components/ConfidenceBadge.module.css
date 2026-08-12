@@ -1,0 +1,37 @@
+/*
+ * Colours here are PROVISIONAL, generated from tokens/confidence.tokens.json
+ * rather than exported from Figma. See AGENTS.md open items.
+ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.dot {
+  width: var(--spacing-sm);
+  height: var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: currentColor;
+  flex: none;
+}
+
+.established {
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+}
+
+.interpretation {
+  background: var(--color-confidence-interpretation-bg);
+  color: var(--color-confidence-interpretation-fg);
+}
+
+.verify {
+  background: var(--color-confidence-verify-bg);
+  color: var(--color-confidence-verify-fg);
+}

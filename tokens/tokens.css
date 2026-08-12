@@ -1,0 +1,279 @@
+/**
+ * Design tokens as CSS custom properties.
+ *
+ * GENERATED FILE, do not edit by hand.
+ * Source: confidence.tokens.json, dark.theme.tokens.json, design-tokens.tokens (1).json, design-tokens.tokens.json, layout.tokens.json
+ * Regenerate: node build-tokens.js
+ */
+
+:root {
+  /* ==========================================================================
+     COLOR PRIMITIVES, INTERNAL
+     Do not use in the UI. Reference the roles below instead.
+     ========================================================================== */
+  --_p-dark-gray-100: #f2f2f7;
+  --_p-dark-gray-800: #46475e;
+  --_p-dark-green-400: #8fe0aa;
+  --_p-dark-green-950: #12331f;
+  --_p-dark-indigo-300: #a99bf5;
+  --_p-dark-indigo-300-2: #c3c6df;
+  --_p-dark-indigo-300-3: #b8acf5;
+  --_p-dark-indigo-300-a24: #a99bf53d;
+  --_p-dark-indigo-350: #b2a5f5;
+  --_p-dark-indigo-400: #a8abc4;
+  --_p-dark-indigo-800: #33344d;
+  --_p-dark-indigo-800-2: #43415d;
+  --_p-dark-indigo-850: #373452;
+  --_p-dark-indigo-900: #272444;
+  --_p-dark-indigo-900-2: #2a2b3f;
+  --_p-dark-indigo-900-3: #222338;
+  --_p-dark-indigo-900-4: #28293e;
+  --_p-dark-indigo-950: #101124;
+  --_p-dark-indigo-950-2: #191a30;
+  --_p-dark-orange-300: #f4b26e;
+  --_p-dark-orange-400: #f0bd7d;
+  --_p-dark-orange-500: #f4ac61;
+  --_p-dark-orange-950: #3a2a12;
+  --_p-gray-50: #fafafc;
+  --_p-gray-75: #f6f6f6;
+  --_p-gray-100: #eeeef4;
+  --_p-gray-150: #eeeff0;
+  --_p-gray-200: #e8e8f0;
+  --_p-gray-300: #d3d3dc;
+  --_p-gray-600: #717489;
+  --_p-green-100: #e7f6ed;
+  --_p-green-800: #146c3a;
+  --_p-indigo-100: #f1efff;
+  --_p-indigo-200: #dfddee;
+  --_p-indigo-300: #d2d0e1;
+  --_p-indigo-500: #6855df;
+  --_p-indigo-500-a24: #6855df3d;
+  --_p-indigo-600: #5e4dc9;
+  --_p-indigo-700: #5748ba;
+  --_p-indigo-800: #494c66;
+  --_p-indigo-950: #121427;
+  --_p-orange-100: #fdf1e2;
+  --_p-orange-500: #f4a24c;
+  --_p-orange-600: #d99148;
+  --_p-orange-700: #c78645;
+  --_p-orange-800: #8a5214;
+  --_p-white: #ffffff;
+
+  /* ==========================================================================
+     COLOR ROLES, PUBLIC
+     The only colour variables the UI should consume.
+     ========================================================================== */
+  --color-confidence-established-bg: var(--_p-green-100); /* PROVISIONAL, not from Figma - see AGENTS.md open items */
+  --color-confidence-established-fg: var(--_p-green-800);
+  --color-confidence-interpretation-bg: var(--_p-gray-100);
+  --color-confidence-interpretation-fg: var(--_p-indigo-800);
+  --color-confidence-verify-bg: var(--_p-orange-100);
+  --color-confidence-verify-fg: var(--_p-orange-800);
+  --color-primary: var(--_p-indigo-500);
+  --color-secondary: var(--_p-indigo-100);
+  --color-accent: var(--_p-orange-500);
+  --color-text-muted: var(--_p-gray-600);
+  --color-border: var(--_p-gray-200);
+  --color-background: var(--_p-gray-50);
+  --color-text: var(--_p-indigo-950);
+  --color-card: var(--_p-white);
+
+  /* ==========================================================================
+     INTERACTION STATES, PUBLIC
+     Derived from the roles above, not authored in Figma.
+     ========================================================================== */
+  --color-primary-hover: var(--_p-indigo-600); /* Primary buttons, active nav */
+  --color-secondary-hover: var(--_p-indigo-200); /* Subtle fills, selected rows */
+  --color-accent-hover: var(--_p-orange-600); /* Accent buttons and chips */
+  --color-surface-hover: var(--_p-gray-75); /* Card and list-row hover */
+  --color-border-hover: var(--_p-gray-300); /* Input and card borders on hover */
+  --color-primary-active: var(--_p-indigo-700); /* Pressed state */
+  --color-secondary-active: var(--_p-indigo-300); /* Pressed state */
+  --color-accent-active: var(--_p-orange-700); /* Pressed state */
+  --color-surface-active: var(--_p-gray-150); /* Pressed row or card */
+  --color-focus-ring: var(--_p-indigo-500); /* outline color, 2px with 2px offset */
+  --color-focus-halo: var(--_p-indigo-500-a24); /* box-shadow glow for inset focus */
+  --color-border-focus: var(--_p-indigo-500); /* Input border while focused */
+  --color-disabled-bg: var(--_p-gray-200); /* Disabled control fill */
+  --color-disabled-border: var(--_p-gray-200); /* Disabled control border */
+  --color-disabled-text: var(--_p-gray-600); /* Disabled label, exempt from AA */
+
+  /* ==========================================================================
+     TYPOGRAPHY
+     ========================================================================== */
+  --font-family-base: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Main page heading */
+  --text-h1-family: var(--font-family-base);
+  --text-h1-size: 2rem;
+  --text-h1-weight: 700;
+  --text-h1-line-height: 1.25;
+  --text-h1-letter-spacing: 0;
+  --text-h1: var(--text-h1-weight) var(--text-h1-size)/var(--text-h1-line-height) var(--text-h1-family);
+
+  /* Major sections */
+  --text-h2-family: var(--font-family-base);
+  --text-h2-size: 1.5rem;
+  --text-h2-weight: 700;
+  --text-h2-line-height: 1.333;
+  --text-h2-letter-spacing: 0;
+  --text-h2: var(--text-h2-weight) var(--text-h2-size)/var(--text-h2-line-height) var(--text-h2-family);
+
+  /* Card/section headings */
+  --text-h3-family: var(--font-family-base);
+  --text-h3-size: 1.25rem;
+  --text-h3-weight: 600;
+  --text-h3-line-height: 1.4;
+  --text-h3-letter-spacing: 0;
+  --text-h3: var(--text-h3-weight) var(--text-h3-size)/var(--text-h3-line-height) var(--text-h3-family);
+
+  /* Smaller headings */
+  --text-h4-family: var(--font-family-base);
+  --text-h4-size: 1.125rem;
+  --text-h4-weight: 600;
+  --text-h4-line-height: 1.333;
+  --text-h4-letter-spacing: 0;
+  --text-h4: var(--text-h4-weight) var(--text-h4-size)/var(--text-h4-line-height) var(--text-h4-family);
+
+  /* Important description */
+  --text-body-large-family: var(--font-family-base);
+  --text-body-large-size: 1rem;
+  --text-body-large-weight: 400;
+  --text-body-large-line-height: 1.5;
+  --text-body-large-letter-spacing: 0;
+  --text-body-large: var(--text-body-large-weight) var(--text-body-large-size)/var(--text-body-large-line-height) var(--text-body-large-family);
+
+  /* Main UI text */
+  --text-body-family: var(--font-family-base);
+  --text-body-size: 0.875rem;
+  --text-body-weight: 400;
+  --text-body-line-height: 1.429;
+  --text-body-letter-spacing: 0;
+  --text-body: var(--text-body-weight) var(--text-body-size)/var(--text-body-line-height) var(--text-body-family);
+
+  /* Labels and emphasized text */
+  --text-body-medium-family: var(--font-family-base);
+  --text-body-medium-size: 0.875rem;
+  --text-body-medium-weight: 500;
+  --text-body-medium-line-height: 1.429;
+  --text-body-medium-letter-spacing: 0;
+  --text-body-medium: var(--text-body-medium-weight) var(--text-body-medium-size)/var(--text-body-medium-line-height) var(--text-body-medium-family);
+
+  /* Supporting information */
+  --text-caption-family: var(--font-family-base);
+  --text-caption-size: 0.75rem;
+  --text-caption-weight: 400;
+  --text-caption-line-height: 1.333;
+  --text-caption-letter-spacing: 0;
+  --text-caption: var(--text-caption-weight) var(--text-caption-size)/var(--text-caption-line-height) var(--text-caption-family);
+
+  /* Buttons and CTAs */
+  --text-button-family: var(--font-family-base);
+  --text-button-size: 0.875rem;
+  --text-button-weight: 600;
+  --text-button-line-height: 1.429;
+  --text-button-letter-spacing: 0;
+  --text-button: var(--text-button-weight) var(--text-button-size)/var(--text-button-line-height) var(--text-button-family);
+
+  /* ==========================================================================
+     OTHER TOKENS
+     ========================================================================== */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+  --spacing-4xl: 64px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+  --shadow-card: 0 1px 2px rgba(18, 20, 39, 0.04), 0 2px 8px rgba(18, 20, 39, 0.04);
+  --shadow-raised: 0 4px 16px rgba(18, 20, 39, 0.08);
+  --layout-content-max-width: 1120px;
+  --layout-sidebar-width: 240px;
+  --layout-rail-width: 72px;
+  --layout-topbar-height: 64px;
+}
+
+[data-theme='dark'] {
+  /* ==========================================================================
+     COLOR ROLES, DARK
+     ========================================================================== */
+  --color-primary: var(--_p-dark-indigo-300); /* Lifted for dark surfaces; the light-mode indigo fails contrast on ink */
+  --color-secondary: var(--_p-dark-indigo-900);
+  --color-accent: var(--_p-orange-500);
+  --color-text-muted: var(--_p-dark-indigo-400);
+  --color-border: var(--_p-dark-indigo-800);
+  --color-background: var(--_p-dark-indigo-950);
+  --color-text: var(--_p-dark-gray-100);
+  --color-card: var(--_p-dark-indigo-950-2);
+  --color-confidence-established-bg: var(--_p-dark-green-950);
+  --color-confidence-established-fg: var(--_p-dark-green-400);
+  --color-confidence-interpretation-bg: var(--_p-dark-indigo-900-2);
+  --color-confidence-interpretation-fg: var(--_p-dark-indigo-300-2);
+  --color-confidence-verify-bg: var(--_p-dark-orange-950);
+  --color-confidence-verify-fg: var(--_p-dark-orange-400);
+
+  /* ==========================================================================
+     INTERACTION STATES, DARK
+     ========================================================================== */
+  --color-primary-hover: var(--_p-dark-indigo-350); /* Primary buttons, active nav */
+  --color-secondary-hover: var(--_p-dark-indigo-850); /* Subtle fills, selected rows */
+  --color-accent-hover: var(--_p-dark-orange-500); /* Accent buttons and chips */
+  --color-surface-hover: var(--_p-dark-indigo-900-3); /* Card and list-row hover */
+  --color-border-hover: var(--_p-dark-gray-800); /* Input and card borders on hover */
+  --color-primary-active: var(--_p-dark-indigo-300-3); /* Pressed state */
+  --color-secondary-active: var(--_p-dark-indigo-800-2); /* Pressed state */
+  --color-accent-active: var(--_p-dark-orange-300); /* Pressed state */
+  --color-surface-active: var(--_p-dark-indigo-900-4); /* Pressed row or card */
+  --color-focus-ring: var(--_p-dark-indigo-300); /* outline color, 2px with 2px offset */
+  --color-focus-halo: var(--_p-dark-indigo-300-a24); /* box-shadow glow for inset focus */
+  --color-border-focus: var(--_p-dark-indigo-300); /* Input border while focused */
+  --color-disabled-bg: var(--_p-dark-indigo-800); /* Disabled control fill */
+  --color-disabled-border: var(--_p-dark-indigo-800); /* Disabled control border */
+  --color-disabled-text: var(--_p-dark-indigo-400); /* Disabled label, exempt from AA */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    /* ==========================================================================
+     COLOR ROLES, DARK
+     ========================================================================== */
+    --color-primary: var(--_p-dark-indigo-300); /* Lifted for dark surfaces; the light-mode indigo fails contrast on ink */
+    --color-secondary: var(--_p-dark-indigo-900);
+    --color-accent: var(--_p-orange-500);
+    --color-text-muted: var(--_p-dark-indigo-400);
+    --color-border: var(--_p-dark-indigo-800);
+    --color-background: var(--_p-dark-indigo-950);
+    --color-text: var(--_p-dark-gray-100);
+    --color-card: var(--_p-dark-indigo-950-2);
+    --color-confidence-established-bg: var(--_p-dark-green-950);
+    --color-confidence-established-fg: var(--_p-dark-green-400);
+    --color-confidence-interpretation-bg: var(--_p-dark-indigo-900-2);
+    --color-confidence-interpretation-fg: var(--_p-dark-indigo-300-2);
+    --color-confidence-verify-bg: var(--_p-dark-orange-950);
+    --color-confidence-verify-fg: var(--_p-dark-orange-400);
+
+    /* ==========================================================================
+     INTERACTION STATES, DARK
+     ========================================================================== */
+    --color-primary-hover: var(--_p-dark-indigo-350); /* Primary buttons, active nav */
+    --color-secondary-hover: var(--_p-dark-indigo-850); /* Subtle fills, selected rows */
+    --color-accent-hover: var(--_p-dark-orange-500); /* Accent buttons and chips */
+    --color-surface-hover: var(--_p-dark-indigo-900-3); /* Card and list-row hover */
+    --color-border-hover: var(--_p-dark-gray-800); /* Input and card borders on hover */
+    --color-primary-active: var(--_p-dark-indigo-300-3); /* Pressed state */
+    --color-secondary-active: var(--_p-dark-indigo-800-2); /* Pressed state */
+    --color-accent-active: var(--_p-dark-orange-300); /* Pressed state */
+    --color-surface-active: var(--_p-dark-indigo-900-4); /* Pressed row or card */
+    --color-focus-ring: var(--_p-dark-indigo-300); /* outline color, 2px with 2px offset */
+    --color-focus-halo: var(--_p-dark-indigo-300-a24); /* box-shadow glow for inset focus */
+    --color-border-focus: var(--_p-dark-indigo-300); /* Input border while focused */
+    --color-disabled-bg: var(--_p-dark-indigo-800); /* Disabled control fill */
+    --color-disabled-border: var(--_p-dark-indigo-800); /* Disabled control border */
+    --color-disabled-text: var(--_p-dark-indigo-400); /* Disabled label, exempt from AA */
+  }
+}

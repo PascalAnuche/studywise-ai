@@ -1,0 +1,27 @@
+.checkpoint {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  padding: var(--spacing-lg);
+  border: 1px dashed var(--color-border-hover);
+  border-radius: var(--radius-md);
+}
+
+.question {
+  font: var(--text-body-medium);
+  flex: 1;
+  min-width: 12rem;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.resolved {
+  font: var(--text-body);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-secondary);
+}

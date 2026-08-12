@@ -1,0 +1,64 @@
+.list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-confidence-verify-fg);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.topic {
+  font: var(--text-body-medium);
+}
+
+/*
+ * The evidence, not a verdict. Prompt section 12: this says what happened in a
+ * quiz, never what it implies about the student.
+ */
+.evidence {
+  font: var(--text-body);
+}
+
+.meta {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-xs);
+}
+
+.action {
+  font: var(--text-body-medium);
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.action:hover {
+  color: var(--color-primary-hover);
+}
+
+.empty {
+  font: var(--text-body);
+}

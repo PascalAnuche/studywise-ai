@@ -1,0 +1,77 @@
+.response {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Answer first, always. Prompt section 7: never bury it under hedging. */
+.answer {
+  font: var(--text-body-large);
+  color: var(--color-text);
+  white-space: pre-wrap;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+/*
+ * Clarify, escalation and redirect are deliberately not styled like an answer.
+ * A student must be able to tell at a glance that they are not being given a
+ * factual response.
+ */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+}
+
+.clarify {
+  border-left: var(--spacing-xs) solid var(--color-primary);
+  background: var(--color-secondary);
+}
+
+.escalation {
+  border-left: var(--spacing-xs) solid var(--color-accent);
+}
+
+.redirect {
+  border-left: var(--spacing-xs) solid var(--color-border-hover);
+}
+
+.asideLabel {
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.asideBody {
+  font: var(--text-body-large);
+}
+
+.suggestion {
+  font: var(--text-body);
+}
+
+.resources {
+  margin: 0;
+  padding-left: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  font: var(--text-body);
+}
+
+.privacyNote {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}

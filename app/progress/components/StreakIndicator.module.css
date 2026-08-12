@@ -1,0 +1,51 @@
+/*
+ * Factual only.
+ *
+ * Prompt section 12 forbids editorialising about a streak in either direction,
+ * so there is no encouragement when it is long and no warning when it is about
+ * to lapse. A number, and when it was last extended.
+ */
+.indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-4xl);
+  height: var(--spacing-4xl);
+  border-radius: var(--radius-lg);
+  background: var(--color-secondary);
+  color: var(--color-primary);
+  flex: none;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.number {
+  font: var(--text-h1);
+  line-height: 1;
+}
+
+.unit {
+  font: var(--text-body-large);
+  color: var(--color-text);
+}
+
+.meta {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}

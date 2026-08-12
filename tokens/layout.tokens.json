@@ -1,0 +1,28 @@
+{
+  "spacing": {
+    "xs": { "type": "dimension", "value": 4 },
+    "sm": { "type": "dimension", "value": 8 },
+    "md": { "type": "dimension", "value": 12 },
+    "lg": { "type": "dimension", "value": 16 },
+    "xl": { "type": "dimension", "value": 24 },
+    "2xl": { "type": "dimension", "value": 32 },
+    "3xl": { "type": "dimension", "value": 48 },
+    "4xl": { "type": "dimension", "value": 64 }
+  },
+  "radius": {
+    "sm": { "type": "dimension", "value": 6 },
+    "md": { "type": "dimension", "value": 10 },
+    "lg": { "type": "dimension", "value": 14 },
+    "full": { "type": "dimension", "value": 999 }
+  },
+  "shadow": {
+    "card": { "type": "string", "value": "0 1px 2px rgba(18, 20, 39, 0.04), 0 2px 8px rgba(18, 20, 39, 0.04)" },
+    "raised": { "type": "string", "value": "0 4px 16px rgba(18, 20, 39, 0.08)" }
+  },
+  "layout": {
+    "content max width": { "type": "dimension", "value": 1120 },
+    "sidebar width": { "type": "dimension", "value": 240 },
+    "rail width": { "type": "dimension", "value": 72 },
+    "topbar height": { "type": "dimension", "value": 64 }
+  }
+}

@@ -1,0 +1,106 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.ring {
+  flex: none;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.ringLabel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+
+.ringValue {
+  font: var(--text-h2);
+}
+
+.ringCaption {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  flex: 1;
+  min-width: 9rem;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.statIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--color-primary);
+}
+
+.statBody {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.statValue {
+  font: var(--text-h4);
+}
+
+.statLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/*
+ * The encouragement callout. Prompt section 6 asks for a warm, encouraging
+ * tone; section 12 only rules out claims about ability. Progress toward a goal
+ * the student set is fair to celebrate, what they are like as a learner is not.
+ */
+.callout {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-secondary);
+}
+
+.calloutBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.calloutTitle {
+  font: var(--text-body-medium);
+}
+
+.calloutText {
+  font: var(--text-caption);
+  color: var(--color-text);
+}
+
+.spark {
+  flex: none;
+}

@@ -1,0 +1,30 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-left: var(--spacing-xs) solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+}
+
+.topic {
+  font: var(--text-body-medium);
+}
+
+/* The reason is the point: a recommendation without one is generic advice. */
+.reason {
+  font: var(--text-body);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-xs);
+}
+
+.action {
+  font: var(--text-body-medium);
+}

@@ -1,0 +1,61 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.headline {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.score {
+  font: var(--text-h1);
+  line-height: 1.1;
+}
+
+.outOf {
+  font: var(--text-body-large);
+  color: var(--color-text);
+}
+
+/*
+ * Describes the work, never the person. Prompt section 12 forbids using
+ * performance to say anything about a student's ability, so there is no praise
+ * and no commiseration here, just what happened and what to do next.
+ */
+.note {
+  font: var(--text-body);
+  max-width: 60ch;
+}
+
+.breakdown {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  font: var(--text-caption);
+}
+
+.right {
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+}
+
+.wrong {
+  background: var(--color-confidence-verify-bg);
+  color: var(--color-confidence-verify-fg);
+}
+
+.chipValue {
+  font: var(--text-body-medium);
+}

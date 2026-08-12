@@ -1,0 +1,72 @@
+/*
+ * fieldset carries a default border and inline padding in every browser, which
+ * drew a box around the group that matched nothing else on the page. Reset it;
+ * the element is here for the grouping semantics, not its appearance.
+ */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.legend {
+  font: var(--text-body-medium);
+  padding: 0;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--spacing-md);
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-focus);
+}
+
+.selected {
+  background: var(--color-secondary);
+  border-color: var(--color-primary);
+}
+
+.selected:hover {
+  background: var(--color-secondary-hover);
+}
+
+/* The radio stays in the DOM and focusable; the card is its visible form. */
+.input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.input:focus-visible + .label {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.label {
+  font: var(--text-body-medium);
+}
+
+.description {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}

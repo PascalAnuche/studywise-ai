@@ -1,0 +1,196 @@
+/*
+ * Shared page layout.
+ *
+ * PRD section 5's empathy map records students feeling "overwhelmed by
+ * coursework", and DESIGN_SYSTEM.md asks for enough visual calm to counter it.
+ * That means generous whitespace, a readable measure, and a small number of
+ * clearly ranked things per screen rather than a dense grid.
+ */
+.page {
+  max-width: var(--layout-content-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+@media (min-width: 48rem) {
+  .page {
+    padding: var(--spacing-3xl) var(--spacing-2xl);
+  }
+}
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.subtitle {
+  font: var(--text-body-large);
+  color: var(--color-text);
+  max-width: 60ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/*
+ * Two columns of secondary content at desktop width, one below it. Keeps the
+ * page from becoming a single tall stack of full-width cards, which is what
+ * made the earlier version read as a wireframe.
+ */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+/*
+ * Each column is its own stack, so the two sides fill to similar heights
+ * instead of one card leaving a hole beside a taller neighbour.
+ */
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-width: 0;
+}
+
+@media (min-width: 64rem) {
+  .columns {
+    grid-template-columns: 1.05fr 1fr;
+  }
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cardLink:hover {
+  color: var(--color-primary-hover);
+}
+
+.suggestion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  border-left: 3px solid var(--color-accent);
+}
+
+.suggestionTopic {
+  font: var(--text-body-medium);
+}
+
+.explanationMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.metric {
+  font: var(--text-h1);
+  display: block;
+  line-height: 1.1;
+}
+
+.metricLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.rowMeta {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.question {
+  font: var(--text-body-medium);
+}
+
+.explanation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.explanation:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.notice {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/*
+ * Empty states carry weight here. A student arriving at an empty Progress or
+ * Planner screen is the Discover stage of the journey map, so each one says
+ * what the feature does and offers the single next action.
+ */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-2xl);
+  border: 1px dashed var(--color-border-hover);
+  border-radius: var(--radius-lg);
+}
+
+.emptyTitle {
+  font: var(--text-h4);
+}
+
+.emptyBody {
+  font: var(--text-body);
+  max-width: 52ch;
+}

@@ -1,0 +1,24 @@
+node_modules/
+.next/
+# Verification builds, kept out of .next so they cannot clobber a dev server.
+.next-verify/
+out/
+build/
+
+# Local database
+*.db
+*.db-journal
+*.db-wal
+
+# Env
+.env
+.env.local
+.env*.local
+
+# Screenshots from scripts/screenshot.mjs, for looking at the UI locally
+.screenshots/
+
+# Editor / OS
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts

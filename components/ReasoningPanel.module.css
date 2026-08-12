@@ -1,0 +1,74 @@
+/*
+ * The collapsible "why". Built on <details>/<summary> so it works without
+ * JavaScript, is keyboard operable for free, and needs no client bundle.
+ */
+/*
+ * DESIGN_SYSTEM.md: the "why" affordance is the single biggest lever for trust
+ * and must not be an afterthought styled the same as everything else. So it
+ * carries the brand tint and a left rule rather than reading as a plain
+ * disclosure, and stays visually distinct from the answer it explains.
+ */
+.panel {
+  border: 1px solid var(--color-border);
+  border-left: var(--spacing-xs) solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  overflow: hidden;
+}
+
+.summary {
+  font: var(--text-body-medium);
+  color: var(--color-primary);
+  padding: var(--spacing-md) var(--spacing-lg);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Hide the native disclosure triangle in both engines; we draw our own. */
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover {
+  background: var(--color-surface-hover);
+}
+
+.chevron {
+  transition: transform 150ms ease;
+  flex: none;
+  font: var(--text-caption);
+}
+
+.panel[open] {
+  background: var(--color-secondary);
+}
+
+.panel[open] .summary {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panel[open] .chevron {
+  transform: rotate(90deg);
+}
+
+.body {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.because {
+  font: var(--text-body);
+}
+
+.label {
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}

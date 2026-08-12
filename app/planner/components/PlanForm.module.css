@@ -1,0 +1,64 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font: var(--text-caption);
+  background: var(--color-secondary);
+  color: var(--color-text);
+  border: 0;
+  border-radius: var(--radius-full);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.chipRemove {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  line-height: 1;
+}
+
+.chipRemove:hover {
+  color: var(--color-primary-hover);
+}
+
+.adder {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-end;
+}
+
+.adderField {
+  flex: 1;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.note {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}

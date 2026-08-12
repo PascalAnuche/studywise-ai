@@ -1,0 +1,205 @@
+/*
+ * Global bar, per the approved Home design: search, notifications, account.
+ *
+ * No navigation lives here. The sidebar owns that, and duplicating it would
+ * give the same destination two competing affordances.
+ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: 0 var(--spacing-lg);
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  height: var(--layout-topbar-height);
+}
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 28rem;
+  min-width: 0;
+}
+
+.searchIcon {
+  position: absolute;
+  inset-inline-start: var(--spacing-md);
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  font: var(--text-body);
+  color: var(--color-text);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-3xl) var(--spacing-md) var(--spacing-4xl);
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+.searchInput:hover {
+  border-color: var(--color-border-hover);
+}
+
+.searchInput:focus-visible {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+  background: var(--color-card);
+}
+
+/* The shortcut hint is decorative; the input is reachable by tab regardless. */
+.shortcut {
+  position: absolute;
+  inset-inline-end: var(--spacing-md);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--spacing-sm);
+  pointer-events: none;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: none;
+}
+
+.iconButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.iconButton:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+/*
+ * The count is text inside the badge, not colour alone, so the number is
+ * available to a screen reader and to anyone who cannot see the red.
+ */
+.badge {
+  position: absolute;
+  top: -2px;
+  inset-inline-end: -2px;
+  min-width: var(--spacing-lg);
+  height: var(--spacing-lg);
+  padding: 0 var(--spacing-xs);
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--color-confidence-verify-fg);
+  color: var(--color-card);
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.account:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border-radius: var(--radius-full);
+  background: var(--color-secondary);
+  color: var(--color-primary);
+  font: var(--text-body-medium);
+  flex: none;
+}
+
+.identity {
+  display: none;
+  flex-direction: column;
+  line-height: 1.25;
+  text-align: start;
+}
+
+.name {
+  font: var(--text-body-medium);
+}
+
+.discipline {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.skeleton {
+  background: var(--color-disabled-bg);
+  color: transparent;
+  border-radius: var(--radius-full);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+@media (min-width: 60rem) {
+  .topbar {
+    padding: 0 var(--spacing-2xl);
+  }
+
+  .identity {
+    display: flex;
+  }
+}

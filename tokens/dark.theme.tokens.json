@@ -1,0 +1,25 @@
+{
+  "color": {
+    "primary colour": {
+      "type": "color",
+      "value": "#a99bf5ff",
+      "description": "Lifted for dark surfaces; the light-mode indigo fails contrast on ink"
+    },
+    "secondary color": { "type": "color", "value": "#272444ff" },
+    "accent": { "type": "color", "value": "#f4a24cff" },
+    "muted text": { "type": "color", "value": "#a8abc4ff" },
+    "border colour": { "type": "color", "value": "#33344dff" },
+    "background colour": { "type": "color", "value": "#101124ff" },
+    "tect colour": { "type": "color", "value": "#f2f2f7ff" },
+    "cards": { "type": "color", "value": "#191a30ff" },
+
+    "confidence": {
+      "established bg": { "type": "color", "value": "#12331fff" },
+      "established fg": { "type": "color", "value": "#8fe0aaff" },
+      "interpretation bg": { "type": "color", "value": "#2a2b3fff" },
+      "interpretation fg": { "type": "color", "value": "#c3c6dfff" },
+      "verify bg": { "type": "color", "value": "#3a2a12ff" },
+      "verify fg": { "type": "color", "value": "#f0bd7dff" }
+    }
+  }
+}

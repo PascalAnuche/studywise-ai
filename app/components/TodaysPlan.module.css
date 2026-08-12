@@ -1,0 +1,111 @@
+/*
+ * Today's sessions, per the approved Home design: a vertical list with the
+ * time, the session, and its state.
+ *
+ * A list rather than a horizontal card track. The track forced a minimum width
+ * on the whole main column, which pushed it under the assistant rail and cut
+ * the last card in half.
+ */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg) 0;
+  border-bottom: 1px solid var(--color-border);
+  min-width: 0;
+}
+
+.item:first-child {
+  padding-top: 0;
+}
+
+.item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border-radius: var(--radius-md);
+}
+
+.toneA {
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.toneB {
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+}
+
+.toneC {
+  background: var(--color-confidence-verify-bg);
+  color: var(--color-confidence-verify-fg);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.title {
+  font: var(--text-body-medium);
+}
+
+.meta {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.status {
+  font: var(--text-caption);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex: none;
+  align-self: center;
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+}
+
+/*
+ * A real checkbox, not a styled div: it has to be focusable and operable by
+ * keyboard, and marking a session done is a genuine state change.
+ */
+.check {
+  flex: none;
+  align-self: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) 0;
+}
+
+.emptyBody {
+  font: var(--text-body);
+  max-width: 46ch;
+}

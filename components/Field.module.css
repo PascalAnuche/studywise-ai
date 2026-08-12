@@ -1,0 +1,50 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.label {
+  font: var(--text-body-medium);
+}
+
+.control {
+  font: var(--text-body);
+  color: var(--color-text);
+  background: var(--color-card);
+  /*
+   * --color-border is 1.22:1 against a card, below the 3:1 that applies where a
+   * border is the only thing identifying a control. Using the darker hover role
+   * at rest until the palette gains a proper input border. See AGENTS.md.
+   */
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  width: 100%;
+}
+
+.control:hover:not(:disabled) {
+  border-color: var(--color-border-focus);
+}
+
+.control:focus-visible {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.control:disabled {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-border);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+.hint {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.error {
+  font: var(--text-caption);
+  color: var(--color-confidence-verify-fg);
+}

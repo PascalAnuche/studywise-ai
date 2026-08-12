@@ -1,0 +1,121 @@
+@import '../tokens/tokens.css';
+
+/*
+ * Base layer. Everything here reads from tokens/tokens.css.
+ * No hex values, no px font sizes. See .agents/docs/DESIGN_SYSTEM.md.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font: var(--text-body);
+  color: var(--color-text);
+  background: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1 {
+  font: var(--text-h1);
+}
+h2 {
+  font: var(--text-h2);
+}
+h3 {
+  font: var(--text-h3);
+}
+h4 {
+  font: var(--text-h4);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--color-primary);
+}
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/*
+ * :focus-visible, never :focus, so a mouse click doesn't leave a ring behind.
+ * Never remove this without an equivalent indicator, PRD section 10 requires
+ * keyboard navigation.
+ */
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+::selection {
+  background: var(--color-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * Hidden until focused. A keyboard user shouldn't have to tab through the whole
+ * nav on every page, and PRD section 10 makes keyboard navigation a
+ * requirement rather than a nicety.
+ */
+.skip-link {
+  position: absolute;
+  left: var(--spacing-lg);
+  top: calc(var(--spacing-lg) * -4);
+  z-index: 100;
+  background: var(--color-card);
+  color: var(--color-text);
+  font: var(--text-body-medium);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-raised);
+  text-decoration: none;
+  transition: top 120ms ease;
+}
+
+.skip-link:focus-visible {
+  top: var(--spacing-lg);
+}

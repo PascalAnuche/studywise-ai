@@ -1,0 +1,118 @@
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-md);
+}
+
+.order {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  flex: none;
+}
+
+.prompt {
+  font: var(--text-body-large);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font: var(--text-body);
+}
+
+.option:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-focus);
+}
+
+.chosen {
+  background: var(--color-secondary);
+  border-color: var(--color-primary);
+}
+
+.chosen:hover {
+  background: var(--color-secondary-hover);
+}
+
+.radio {
+  margin-top: var(--spacing-xs);
+  flex: none;
+  accent-color: var(--color-primary);
+}
+
+.locked {
+  cursor: default;
+}
+
+.locked:hover {
+  background: transparent;
+  border-color: var(--color-border-hover);
+}
+
+/*
+ * Review styling. Correct and incorrect are never colour alone: each carries a
+ * text marker too, so the distinction survives colour blindness and greyscale.
+ */
+.correct {
+  background: var(--color-confidence-established-bg);
+  border-color: var(--color-confidence-established-fg);
+}
+
+.correct:hover {
+  background: var(--color-confidence-established-bg);
+}
+
+.incorrect {
+  background: var(--color-confidence-verify-bg);
+  border-color: var(--color-confidence-verify-fg);
+}
+
+.incorrect:hover {
+  background: var(--color-confidence-verify-bg);
+}
+
+.marker {
+  margin-left: auto;
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+  white-space: nowrap;
+}
+
+.correctMarker {
+  color: var(--color-confidence-established-fg);
+}
+
+.incorrectMarker {
+  color: var(--color-confidence-verify-fg);
+}
+
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.link {
+  font: var(--text-body);
+}

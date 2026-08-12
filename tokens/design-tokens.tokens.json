@@ -1,0 +1,100 @@
+{
+  "color": {
+    "primary colour": {
+      "description": "",
+      "type": "color",
+      "value": "#6855dfff",
+      "blendMode": "normal",
+      "extensions": {
+        "org.lukasoppermann.figmaDesignTokens": {
+          "styleId": "S:64a972a49c5c8e4f5b680915fa982f92cccad215,",
+          "exportKey": "color"
+        }
+      }
+    },
+    "secondary color": {
+      "description": "",
+      "type": "color",
+      "value": "#f1efffff",
+      "blendMode": "normal",
+      "extensions": {
+        "org.lukasoppermann.figmaDesignTokens": {
+          "styleId": "S:264b68f6ef981c244df79c409c6f3dc383777966,",
+          "exportKey": "color"
+        }
+      }
+    },
+    "accent": {
+      "description": "",
+      "type": "color",
+      "value": "#f4a24cff",
+      "blendMode": "normal",
+      "extensions": {
+        "org.lukasoppermann.figmaDesignTokens": {
+          "styleId": "S:7f4b6e7ac6940be99e531ce5cdc24a8167cab69a,",
+          "exportKey": "color"
+        }
+      }
+    },
+    "muted text": {
+      "description": "",
+      "type": "color",
+      "value": "#717489ff",
+      "blendMode": "normal",
+      "extensions": {
+        "org.lukasoppermann.figmaDesignTokens": {
+          "styleId": "S:df399904a2d81683b89c578199230fad86c6624e,",
+          "exportKey": "color"
+        }
+      }
+    },
+    "border colour": {
+      "description": "",
+      "type": "color",
+      "value": "#e8e8f0ff",
+      "blendMode": "normal",
+      "extensions": {
+        "org.lukasoppermann.figmaDesignTokens": {
+          "styleId": "S:66a4ffe9ff515ed03478d55f0eb3d7fdd541d8b2,",
+          "exportKey": "color"
+        }
+      }
+    },
+    "background colour": {
+      "description": "",
+      "type": "color",
+      "value": "#fafafcff",
+      "blendMode": "normal",
+      "extensions": {
+        "org.lukasoppermann.figmaDesignTokens": {
+          "styleId": "S:9a4231ad5ea2b1d0fa5fcb6eeb9d92751b67a360,",
+          "exportKey": "color"
+        }
+      }
+    },
+    "tect colour": {
+      "description": "",
+      "type": "color",
+      "value": "#121427ff",
+      "blendMode": "normal",
+      "extensions": {
+        "org.lukasoppermann.figmaDesignTokens": {
+          "styleId": "S:b1421cfb55684f0763735678708a8a32e61f4496,",
+          "exportKey": "color"
+        }
+      }
+    },
+    "cards": {
+      "description": "",
+      "type": "color",
+      "value": "#ffffffff",
+      "blendMode": "normal",
+      "extensions": {
+        "org.lukasoppermann.figmaDesignTokens": {
+          "styleId": "S:87e1f11e49a7fc271c6185957b089bededf9f9e1,",
+          "exportKey": "color"
+        }
+      }
+    }
+  }
+}

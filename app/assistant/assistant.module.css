@@ -1,0 +1,207 @@
+/*
+ * The Assistant screen, per the approved design: chat list, conversation, and
+ * the "why" rail.
+ *
+ * Three columns at desktop width. Below that the side panels stack under the
+ * conversation rather than squeezing, because the conversation is the thing
+ * being read and the other two are context.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: calc(100vh - var(--layout-topbar-height));
+}
+
+.chats {
+  display: none;
+}
+
+.thread {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.header {
+  padding: var(--spacing-xl) var(--spacing-xl) 0;
+}
+
+.title {
+  font: var(--text-h3);
+}
+
+.conversation {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.question {
+  align-self: flex-start;
+  max-width: 46rem;
+  font: var(--text-body);
+  color: var(--color-text);
+  background: var(--color-secondary);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+}
+
+.answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-width: 46rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.explain {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-primary);
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+  cursor: pointer;
+}
+
+.explain:hover {
+  background: var(--color-secondary);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.tool:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.followUps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding-left: var(--spacing-xl);
+  border-left: 2px solid var(--color-border);
+  max-width: 46rem;
+}
+
+.composer {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-card);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  font: var(--text-body);
+  color: var(--color-text);
+  background: var(--color-card);
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.input:focus-visible {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.send {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--spacing-4xl);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-card);
+  cursor: pointer;
+}
+
+.send:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.send:disabled {
+  background: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+.why {
+  border-top: 1px solid var(--color-border);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-2xl);
+  border: 1px dashed var(--color-border-hover);
+  border-radius: var(--radius-lg);
+  max-width: 46rem;
+}
+
+.emptyTitle {
+  font: var(--text-h4);
+}
+
+.emptyBody {
+  font: var(--text-body);
+  max-width: 52ch;
+}
+
+@media (min-width: 64rem) {
+  .layout {
+    grid-template-columns: 16rem minmax(0, 1fr);
+  }
+
+  .chats {
+    display: block;
+    min-height: 0;
+  }
+
+  .why {
+    border-top: 0;
+  }
+}
+
+@media (min-width: 90rem) {
+  .layout {
+    grid-template-columns: 16rem minmax(0, 1fr) 22rem;
+  }
+}

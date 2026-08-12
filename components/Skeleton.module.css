@@ -1,0 +1,85 @@
+/*
+ * Loading placeholders.
+ *
+ * These exist so a navigation feels like it started. Every page reads live data
+ * and so renders on demand; without a loading state the browser sits on the old
+ * page until the server replies, and the click reads as broken.
+ *
+ * Shapes mirror the real content closely enough that nothing jumps when the
+ * data lands.
+ */
+.block {
+  background: var(--color-disabled-bg);
+  border-radius: var(--radius-md);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block {
+    animation: none;
+  }
+}
+
+.hero {
+  height: 12rem;
+  border-radius: var(--radius-lg);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.tile {
+  height: 10.5rem;
+  border-radius: var(--radius-lg);
+}
+
+.card {
+  height: 16rem;
+  border-radius: var(--radius-lg);
+}
+
+.line {
+  height: var(--spacing-lg);
+}
+
+.title {
+  height: var(--spacing-2xl);
+  width: 14rem;
+}
+
+.subtitle {
+  height: var(--spacing-lg);
+  width: 26rem;
+  max-width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 64rem) {
+  .columns {
+    grid-template-columns: 1.05fr 1fr;
+  }
+}

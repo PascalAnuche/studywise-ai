@@ -86,6 +86,10 @@ Unresolved decisions. Referenced by name from TODOs in code, e.g. `// TODO: AI_P
 - **Per-session completion** — Home's weekly goal ring approximates "done" as sessions scheduled before today, because `plan_sessions` has no completion flag. Add one before this number is shown to a real student.
 - **Confidence value wording** — prompt section 9 says `one valid interpretation`; `.agents/docs/DATA_MODEL.md`, `.agents/docs/COMPONENTS.md`, and `.agents/docs/DESIGN_SYSTEM.md` all say `one interpretation`. This is a stored enum value and a rendered badge label, so the two spellings cannot both be right. One-word decision, blocks `ConfidenceBadge`.
 - **Assistant response shapes** — the prompt requires four outcomes (answer, clarifying question, wellbeing escalation, refusal to do the work wholesale) and `.agents/docs/API.md` models only the first. Determines the API contract and, because prompt section 12 forbids retaining escalation content, determines whether a row is written at all. Blocks all of Phase 2. See `.agents/docs/IMPLEMENTATION_PLAN.md`.
+- **Resources, Flashcards and Notes filter nothing** — the search fields, subject selects and sort selects on all three hold their own state but do not filter, because there is no backend to filter. The exceptions are the Favorites tabs on Flashcards and Notes, which use the one flag the fixtures carry. Wire these up with the queries, not before.
+- **`/progress` shows mock figures unlabelled** — every other mock-backed screen carries a `MockNotice`; this one had its removed on request to match the design, which has nothing in that slot. Nothing on the page now distinguishes sample data from a real record. Restore the notice or land the queries before this screen is shown outside the team.
+- **Chart palette** — `tokens/chart.tokens.json` is PROVISIONAL, sampled from the approved Progress design rather than exported from Figma. It exists because `color.event.*` is tuned for text on a tinted chip and is far too dark to work as a chart fill. It has no dark-theme override, so `npm run tokens` warns on every build; the hues are saturated enough to read on both grounds, but confirm that is intended rather than an oversight.
+- **Subject colour is inconsistent in the design** — the Progress mockup gives the same subject two different hues depending on the surface: Algorithms is teal in the Subject Performance table and magenta in the Time by Subject donut, and Operating Systems is amber in the table and teal in the donut. Both are reproduced as drawn (`tone` and `chartTone` in `lib/mock`), which means a reader cannot use colour to connect the two. Pick one palette before this stops being mock data.
 - **Spacing, radius, and shadow tokens** — never exported from Figma. Every component in Phase 1.5 needs them.
 - **Pressed and disabled colour roles** — hover and focus exist, these don't. Add to `stateRoles` in `tokens/build-tokens.js`, don't darken a role at the call site.
 
@@ -102,4 +106,12 @@ Both of these violate PRD section 10, which lists accessible color contrast as a
 
 ## Scripts
 
-`node tokens/build-tokens.js` regenerates `tokens/tokens.css` from the Figma exports. It resolves paths relative to itself, so it runs from any directory. Every other script in `.agents/docs/INSTALLATION.md` is aspirational until the Next.js scaffold is initialized.
+`node tokens/build-tokens.js` regenerates `tokens/tokens.css` from the Figma exports. It resolves paths relative to itself, so it runs from any directory.
+
+Verification scripts, all taking a base URL and needing a running server:
+
+- `node scripts/responsive-audit.mjs <url> [--shots]` — every route at 375, 414, 768, 1024 and 1440. Reports sideways scroll, naming the element that causes it, and any tap target under the 24px WCAG 2.2 minimum. **Run this after any layout change.**
+- `node scripts/formshot.mjs <url>` — opens the plan modal and drives the custom Select and DatePicker from the keyboard, asserting the ARIA state and the chosen value
+- `node scripts/viewshot.mjs <url> <out> [w] [h]` — viewport-sized capture, scrolled to the bottom
+
+Build verification runs against a separate directory so it cannot clobber a running dev server: `NEXT_DIST_DIR=.next-verify npx next build`, then `npx next start` with the same variable set.

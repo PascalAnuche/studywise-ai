@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Select } from '@/components/Select';
+import { DatePicker } from '@/components/DatePicker';
 import type { PlanInput } from '@/lib/ai/types';
 import styles from './PlanForm.module.css';
 
@@ -75,51 +76,45 @@ export function PlanForm({ pending = false, onSubmit }: PlanFormProps) {
           value={frequency}
           options={FREQUENCIES}
           hint="Sessions are spaced to match this."
-          onChange={(event) => setFrequency(event.target.value)}
+          onValueChange={setFrequency}
         />
       </div>
 
       <div className={styles.row}>
-        <Input
-          label="Start date"
-          type="date"
-          value={startDate}
-          onChange={(event) => setStartDate(event.target.value)}
-        />
-        <Input
+        <DatePicker label="Start date" value={startDate} onValueChange={setStartDate} />
+        <DatePicker
           label="Target date"
-          type="date"
           value={endDate}
+          onValueChange={setEndDate}
+          /* A target before the start is not a plan anyone can follow. */
+          min={startDate || undefined}
           hint="An exam date, if you have one."
-          onChange={(event) => setEndDate(event.target.value)}
         />
       </div>
 
       <div>
-        <div className={styles.adder}>
-          <div className={styles.adderField}>
-            <Input
-              label="Topics"
-              value={topicDraft}
-              placeholder="Recursion"
-              hint="Add each topic separately. The plan only covers what you list here."
-              onChange={(event) => setTopicDraft(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault();
-                  addTo(topics, setTopics, topicDraft, () => setTopicDraft(''));
-                }
-              }}
-            />
-          </div>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => addTo(topics, setTopics, topicDraft, () => setTopicDraft(''))}
-          >
-            Add
-          </Button>
-        </div>
+        <Input
+          label="Topics"
+          value={topicDraft}
+          placeholder="Recursion"
+          hint="Add each topic separately. The plan only covers what you list here."
+          onChange={(event) => setTopicDraft(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              addTo(topics, setTopics, topicDraft, () => setTopicDraft(''));
+            }
+          }}
+          action={
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => addTo(topics, setTopics, topicDraft, () => setTopicDraft(''))}
+            >
+              Add
+            </Button>
+          }
+        />
 
         {topics.length > 0 && (
           <ul className={styles.chips} style={{ marginTop: 'var(--spacing-md)' }}>
@@ -141,29 +136,27 @@ export function PlanForm({ pending = false, onSubmit }: PlanFormProps) {
       </div>
 
       <div>
-        <div className={styles.adder}>
-          <div className={styles.adderField}>
-            <Input
-              label="Goals"
-              value={goalDraft}
-              placeholder="Pass the January exam"
-              onChange={(event) => setGoalDraft(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault();
-                  addTo(goals, setGoals, goalDraft, () => setGoalDraft(''));
-                }
-              }}
-            />
-          </div>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => addTo(goals, setGoals, goalDraft, () => setGoalDraft(''))}
-          >
-            Add
-          </Button>
-        </div>
+        <Input
+          label="Goals"
+          value={goalDraft}
+          placeholder="Pass the January exam"
+          onChange={(event) => setGoalDraft(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              addTo(goals, setGoals, goalDraft, () => setGoalDraft(''));
+            }
+          }}
+          action={
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => addTo(goals, setGoals, goalDraft, () => setGoalDraft(''))}
+            >
+              Add
+            </Button>
+          }
+        />
 
         {goals.length > 0 && (
           <ul className={styles.chips} style={{ marginTop: 'var(--spacing-md)' }}>

@@ -16,6 +16,8 @@
   grid-auto-flow: column;
   grid-auto-columns: minmax(15rem, 1fr);
   gap: var(--spacing-lg);
+  /* Positioned so a visually-hidden descendant cannot escape this clip. */
+  position: relative;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding-bottom: var(--spacing-sm);
@@ -78,6 +80,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
+  /* 24px minimum target, per WCAG 2.2 2.5.8. */
+  min-height: var(--spacing-xl);
   font: var(--text-body-medium);
   color: var(--color-primary);
   text-decoration: none;

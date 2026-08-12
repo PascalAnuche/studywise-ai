@@ -1,0 +1,16 @@
+{
+  "color": {
+    "chart": {
+      "indigo": {
+        "type": "color",
+        "value": "#5b47e5ff",
+        "description": "PROVISIONAL, not from Figma - data-series palette for the Progress charts, see AGENTS.md. Distinct from color.event.*, which is tuned for text on a tinted chip and is too dark to read as a chart fill."
+      },
+      "magenta": { "type": "color", "value": "#e35fa9ff" },
+      "teal": { "type": "color", "value": "#14b3a6ff" },
+      "red": { "type": "color", "value": "#f2465bff" },
+      "amber": { "type": "color", "value": "#f59331ff" },
+      "blue": { "type": "color", "value": "#3d8ef7ff" }
+    }
+  }
+}

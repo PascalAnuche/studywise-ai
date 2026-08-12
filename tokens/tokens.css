@@ -2,7 +2,7 @@
  * Design tokens as CSS custom properties.
  *
  * GENERATED FILE, do not edit by hand.
- * Source: confidence.tokens.json, dark.theme.tokens.json, design-tokens.tokens (1).json, design-tokens.tokens.json, layout.tokens.json
+ * Source: calendar.tokens.json, chart.tokens.json, confidence.tokens.json, dark.theme.tokens.json, design-tokens.tokens (1).json, design-tokens.tokens.json, layout.tokens.json
  * Regenerate: node build-tokens.js
  */
 
@@ -11,29 +11,43 @@
      COLOR PRIMITIVES, INTERNAL
      Do not use in the UI. Reference the roles below instead.
      ========================================================================== */
-  --_p-dark-gray-100: #f2f2f7;
-  --_p-dark-gray-800: #46475e;
+  --_p-blue-100: #e2f0fb;
+  --_p-blue-500: #3d8ef7;
+  --_p-blue-800: #14567f;
+  --_p-cyan-700: #14b3a6;
+  --_p-dark-blue-400: #8ec8ee;
+  --_p-dark-blue-900: #1a2c3a;
+  --_p-dark-gray-100: #f3f3f4;
+  --_p-dark-gray-300: #c9c9d0;
+  --_p-dark-gray-500: #a5a5ac;
+  --_p-dark-gray-700: #434347;
+  --_p-dark-gray-750: #47444e;
+  --_p-dark-gray-800: #3b3842;
+  --_p-dark-gray-850: #252528;
+  --_p-dark-gray-900: #2b2833;
+  --_p-dark-gray-900-2: #2f2f34;
+  --_p-dark-gray-900-3: #2c2c31;
+  --_p-dark-gray-900-4: #2b2b2f;
+  --_p-dark-gray-950: #131316;
+  --_p-dark-gray-950-2: #1c1c20;
   --_p-dark-green-400: #8fe0aa;
+  --_p-dark-green-400-2: #8ade9f;
   --_p-dark-green-950: #12331f;
+  --_p-dark-green-950-2: #182f23;
   --_p-dark-indigo-300: #a99bf5;
-  --_p-dark-indigo-300-2: #c3c6df;
-  --_p-dark-indigo-300-3: #b8acf5;
+  --_p-dark-indigo-300-2: #bcb0f8;
   --_p-dark-indigo-300-a24: #a99bf53d;
-  --_p-dark-indigo-350: #b2a5f5;
-  --_p-dark-indigo-400: #a8abc4;
-  --_p-dark-indigo-800: #33344d;
-  --_p-dark-indigo-800-2: #43415d;
-  --_p-dark-indigo-850: #373452;
-  --_p-dark-indigo-900: #272444;
-  --_p-dark-indigo-900-2: #2a2b3f;
-  --_p-dark-indigo-900-3: #222338;
-  --_p-dark-indigo-900-4: #28293e;
-  --_p-dark-indigo-950: #101124;
-  --_p-dark-indigo-950-2: #191a30;
+  --_p-dark-indigo-350: #b8adf5;
+  --_p-dark-indigo-400: #b2a6f5;
+  --_p-dark-indigo-900: #2b2740;
   --_p-dark-orange-300: #f4b26e;
   --_p-dark-orange-400: #f0bd7d;
-  --_p-dark-orange-500: #f4ac61;
+  --_p-dark-orange-500: #f4ac60;
+  --_p-dark-orange-900: #3b2a12;
   --_p-dark-orange-950: #3a2a12;
+  --_p-dark-red-300: #f3a3aa;
+  --_p-dark-red-900: #3d1f24;
+  --_p-fuchsia-500: #e35fa9;
   --_p-gray-50: #fafafc;
   --_p-gray-75: #f6f6f6;
   --_p-gray-100: #eeeef4;
@@ -42,36 +56,63 @@
   --_p-gray-300: #d3d3dc;
   --_p-gray-600: #717489;
   --_p-green-100: #e7f6ed;
-  --_p-green-800: #146c3a;
-  --_p-indigo-100: #f1efff;
+  --_p-green-200: #e3f6ea;
+  --_p-green-800: #166b3c;
+  --_p-green-800-2: #146c3a;
+  --_p-indigo-100: #ece9fe;
+  --_p-indigo-100-2: #f1efff;
   --_p-indigo-200: #dfddee;
   --_p-indigo-300: #d2d0e1;
-  --_p-indigo-500: #6855df;
-  --_p-indigo-500-a24: #6855df3d;
-  --_p-indigo-600: #5e4dc9;
+  --_p-indigo-500: #5b47e5;
+  --_p-indigo-500-2: #6855df;
+  --_p-indigo-500-2-a24: #6855df3d;
+  --_p-indigo-550: #5e4dc9;
+  --_p-indigo-600: #4c3ec4;
   --_p-indigo-700: #5748ba;
   --_p-indigo-800: #494c66;
   --_p-indigo-950: #121427;
   --_p-orange-100: #fdf1e2;
-  --_p-orange-500: #f4a24c;
+  --_p-orange-200: #fdf0dc;
+  --_p-orange-500: #f59331;
+  --_p-orange-500-2: #f4a24c;
   --_p-orange-600: #d99148;
   --_p-orange-700: #c78645;
-  --_p-orange-800: #8a5214;
+  --_p-orange-800: #8a5410;
+  --_p-orange-800-2: #8a5214;
+  --_p-red-100: #fdeaea;
+  --_p-red-500: #f2465b;
+  --_p-red-700: #992b34;
   --_p-white: #ffffff;
 
   /* ==========================================================================
      COLOR ROLES, PUBLIC
      The only colour variables the UI should consume.
      ========================================================================== */
+  --color-event-violet-bg: var(--_p-indigo-100); /* PROVISIONAL, not from Figma - calendar event tones, see AGENTS.md */
+  --color-event-violet-fg: var(--_p-indigo-600);
+  --color-event-green-bg: var(--_p-green-200);
+  --color-event-green-fg: var(--_p-green-800);
+  --color-event-blue-bg: var(--_p-blue-100);
+  --color-event-blue-fg: var(--_p-blue-800);
+  --color-event-amber-bg: var(--_p-orange-200);
+  --color-event-amber-fg: var(--_p-orange-800);
+  --color-event-rose-bg: var(--_p-red-100);
+  --color-event-rose-fg: var(--_p-red-700);
+  --color-chart-indigo: var(--_p-indigo-500); /* PROVISIONAL, not from Figma - data-series palette for the Progress charts, see AGENTS.md. Distinct from color.event.*, which is tuned for text on a tinted chip and is too dark to read as a chart fill. */
+  --color-chart-magenta: var(--_p-fuchsia-500);
+  --color-chart-teal: var(--_p-cyan-700);
+  --color-chart-red: var(--_p-red-500);
+  --color-chart-amber: var(--_p-orange-500);
+  --color-chart-blue: var(--_p-blue-500);
   --color-confidence-established-bg: var(--_p-green-100); /* PROVISIONAL, not from Figma - see AGENTS.md open items */
-  --color-confidence-established-fg: var(--_p-green-800);
+  --color-confidence-established-fg: var(--_p-green-800-2);
   --color-confidence-interpretation-bg: var(--_p-gray-100);
   --color-confidence-interpretation-fg: var(--_p-indigo-800);
   --color-confidence-verify-bg: var(--_p-orange-100);
-  --color-confidence-verify-fg: var(--_p-orange-800);
-  --color-primary: var(--_p-indigo-500);
-  --color-secondary: var(--_p-indigo-100);
-  --color-accent: var(--_p-orange-500);
+  --color-confidence-verify-fg: var(--_p-orange-800-2);
+  --color-primary: var(--_p-indigo-500-2);
+  --color-secondary: var(--_p-indigo-100-2);
+  --color-accent: var(--_p-orange-500-2);
   --color-text-muted: var(--_p-gray-600);
   --color-border: var(--_p-gray-200);
   --color-background: var(--_p-gray-50);
@@ -82,7 +123,7 @@
      INTERACTION STATES, PUBLIC
      Derived from the roles above, not authored in Figma.
      ========================================================================== */
-  --color-primary-hover: var(--_p-indigo-600); /* Primary buttons, active nav */
+  --color-primary-hover: var(--_p-indigo-550); /* Primary buttons, active nav */
   --color-secondary-hover: var(--_p-indigo-200); /* Subtle fills, selected rows */
   --color-accent-hover: var(--_p-orange-600); /* Accent buttons and chips */
   --color-surface-hover: var(--_p-gray-75); /* Card and list-row hover */
@@ -91,9 +132,9 @@
   --color-secondary-active: var(--_p-indigo-300); /* Pressed state */
   --color-accent-active: var(--_p-orange-700); /* Pressed state */
   --color-surface-active: var(--_p-gray-150); /* Pressed row or card */
-  --color-focus-ring: var(--_p-indigo-500); /* outline color, 2px with 2px offset */
-  --color-focus-halo: var(--_p-indigo-500-a24); /* box-shadow glow for inset focus */
-  --color-border-focus: var(--_p-indigo-500); /* Input border while focused */
+  --color-focus-ring: var(--_p-indigo-500-2); /* outline color, 2px with 2px offset */
+  --color-focus-halo: var(--_p-indigo-500-2-a24); /* box-shadow glow for inset focus */
+  --color-border-focus: var(--_p-indigo-500-2); /* Input border while focused */
   --color-disabled-bg: var(--_p-gray-200); /* Disabled control fill */
   --color-disabled-border: var(--_p-gray-200); /* Disabled control border */
   --color-disabled-text: var(--_p-gray-600); /* Disabled label, exempt from AA */
@@ -203,38 +244,48 @@
      COLOR ROLES, DARK
      ========================================================================== */
   --color-primary: var(--_p-dark-indigo-300); /* Lifted for dark surfaces; the light-mode indigo fails contrast on ink */
-  --color-secondary: var(--_p-dark-indigo-900);
-  --color-accent: var(--_p-orange-500);
-  --color-text-muted: var(--_p-dark-indigo-400);
-  --color-border: var(--_p-dark-indigo-800);
-  --color-background: var(--_p-dark-indigo-950);
+  --color-secondary: var(--_p-dark-gray-900); /* Neutral dark, not navy: surfaces stay grey and the brand hue stays in the accents */
+  --color-accent: var(--_p-orange-500-2);
+  --color-text-muted: var(--_p-dark-gray-500);
+  --color-border: var(--_p-dark-gray-900-2);
+  --color-background: var(--_p-dark-gray-950);
   --color-text: var(--_p-dark-gray-100);
-  --color-card: var(--_p-dark-indigo-950-2);
+  --color-card: var(--_p-dark-gray-950-2);
   --color-confidence-established-bg: var(--_p-dark-green-950);
   --color-confidence-established-fg: var(--_p-dark-green-400);
-  --color-confidence-interpretation-bg: var(--_p-dark-indigo-900-2);
-  --color-confidence-interpretation-fg: var(--_p-dark-indigo-300-2);
+  --color-confidence-interpretation-bg: var(--_p-dark-gray-900-3);
+  --color-confidence-interpretation-fg: var(--_p-dark-gray-300);
   --color-confidence-verify-bg: var(--_p-dark-orange-950);
   --color-confidence-verify-fg: var(--_p-dark-orange-400);
+  --color-event-violet-bg: var(--_p-dark-indigo-900);
+  --color-event-violet-fg: var(--_p-dark-indigo-300-2);
+  --color-event-green-bg: var(--_p-dark-green-950-2);
+  --color-event-green-fg: var(--_p-dark-green-400-2);
+  --color-event-blue-bg: var(--_p-dark-blue-900);
+  --color-event-blue-fg: var(--_p-dark-blue-400);
+  --color-event-amber-bg: var(--_p-dark-orange-900);
+  --color-event-amber-fg: var(--_p-dark-orange-400);
+  --color-event-rose-bg: var(--_p-dark-red-900);
+  --color-event-rose-fg: var(--_p-dark-red-300);
 
   /* ==========================================================================
      INTERACTION STATES, DARK
      ========================================================================== */
-  --color-primary-hover: var(--_p-dark-indigo-350); /* Primary buttons, active nav */
-  --color-secondary-hover: var(--_p-dark-indigo-850); /* Subtle fills, selected rows */
+  --color-primary-hover: var(--_p-dark-indigo-400); /* Primary buttons, active nav */
+  --color-secondary-hover: var(--_p-dark-gray-800); /* Subtle fills, selected rows */
   --color-accent-hover: var(--_p-dark-orange-500); /* Accent buttons and chips */
-  --color-surface-hover: var(--_p-dark-indigo-900-3); /* Card and list-row hover */
-  --color-border-hover: var(--_p-dark-gray-800); /* Input and card borders on hover */
-  --color-primary-active: var(--_p-dark-indigo-300-3); /* Pressed state */
-  --color-secondary-active: var(--_p-dark-indigo-800-2); /* Pressed state */
+  --color-surface-hover: var(--_p-dark-gray-850); /* Card and list-row hover */
+  --color-border-hover: var(--_p-dark-gray-700); /* Input and card borders on hover */
+  --color-primary-active: var(--_p-dark-indigo-350); /* Pressed state */
+  --color-secondary-active: var(--_p-dark-gray-750); /* Pressed state */
   --color-accent-active: var(--_p-dark-orange-300); /* Pressed state */
-  --color-surface-active: var(--_p-dark-indigo-900-4); /* Pressed row or card */
+  --color-surface-active: var(--_p-dark-gray-900-4); /* Pressed row or card */
   --color-focus-ring: var(--_p-dark-indigo-300); /* outline color, 2px with 2px offset */
   --color-focus-halo: var(--_p-dark-indigo-300-a24); /* box-shadow glow for inset focus */
   --color-border-focus: var(--_p-dark-indigo-300); /* Input border while focused */
-  --color-disabled-bg: var(--_p-dark-indigo-800); /* Disabled control fill */
-  --color-disabled-border: var(--_p-dark-indigo-800); /* Disabled control border */
-  --color-disabled-text: var(--_p-dark-indigo-400); /* Disabled label, exempt from AA */
+  --color-disabled-bg: var(--_p-dark-gray-900-2); /* Disabled control fill */
+  --color-disabled-border: var(--_p-dark-gray-900-2); /* Disabled control border */
+  --color-disabled-text: var(--_p-dark-gray-500); /* Disabled label, exempt from AA */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -243,37 +294,47 @@
      COLOR ROLES, DARK
      ========================================================================== */
     --color-primary: var(--_p-dark-indigo-300); /* Lifted for dark surfaces; the light-mode indigo fails contrast on ink */
-    --color-secondary: var(--_p-dark-indigo-900);
-    --color-accent: var(--_p-orange-500);
-    --color-text-muted: var(--_p-dark-indigo-400);
-    --color-border: var(--_p-dark-indigo-800);
-    --color-background: var(--_p-dark-indigo-950);
+    --color-secondary: var(--_p-dark-gray-900); /* Neutral dark, not navy: surfaces stay grey and the brand hue stays in the accents */
+    --color-accent: var(--_p-orange-500-2);
+    --color-text-muted: var(--_p-dark-gray-500);
+    --color-border: var(--_p-dark-gray-900-2);
+    --color-background: var(--_p-dark-gray-950);
     --color-text: var(--_p-dark-gray-100);
-    --color-card: var(--_p-dark-indigo-950-2);
+    --color-card: var(--_p-dark-gray-950-2);
     --color-confidence-established-bg: var(--_p-dark-green-950);
     --color-confidence-established-fg: var(--_p-dark-green-400);
-    --color-confidence-interpretation-bg: var(--_p-dark-indigo-900-2);
-    --color-confidence-interpretation-fg: var(--_p-dark-indigo-300-2);
+    --color-confidence-interpretation-bg: var(--_p-dark-gray-900-3);
+    --color-confidence-interpretation-fg: var(--_p-dark-gray-300);
     --color-confidence-verify-bg: var(--_p-dark-orange-950);
     --color-confidence-verify-fg: var(--_p-dark-orange-400);
+    --color-event-violet-bg: var(--_p-dark-indigo-900);
+    --color-event-violet-fg: var(--_p-dark-indigo-300-2);
+    --color-event-green-bg: var(--_p-dark-green-950-2);
+    --color-event-green-fg: var(--_p-dark-green-400-2);
+    --color-event-blue-bg: var(--_p-dark-blue-900);
+    --color-event-blue-fg: var(--_p-dark-blue-400);
+    --color-event-amber-bg: var(--_p-dark-orange-900);
+    --color-event-amber-fg: var(--_p-dark-orange-400);
+    --color-event-rose-bg: var(--_p-dark-red-900);
+    --color-event-rose-fg: var(--_p-dark-red-300);
 
     /* ==========================================================================
      INTERACTION STATES, DARK
      ========================================================================== */
-    --color-primary-hover: var(--_p-dark-indigo-350); /* Primary buttons, active nav */
-    --color-secondary-hover: var(--_p-dark-indigo-850); /* Subtle fills, selected rows */
+    --color-primary-hover: var(--_p-dark-indigo-400); /* Primary buttons, active nav */
+    --color-secondary-hover: var(--_p-dark-gray-800); /* Subtle fills, selected rows */
     --color-accent-hover: var(--_p-dark-orange-500); /* Accent buttons and chips */
-    --color-surface-hover: var(--_p-dark-indigo-900-3); /* Card and list-row hover */
-    --color-border-hover: var(--_p-dark-gray-800); /* Input and card borders on hover */
-    --color-primary-active: var(--_p-dark-indigo-300-3); /* Pressed state */
-    --color-secondary-active: var(--_p-dark-indigo-800-2); /* Pressed state */
+    --color-surface-hover: var(--_p-dark-gray-850); /* Card and list-row hover */
+    --color-border-hover: var(--_p-dark-gray-700); /* Input and card borders on hover */
+    --color-primary-active: var(--_p-dark-indigo-350); /* Pressed state */
+    --color-secondary-active: var(--_p-dark-gray-750); /* Pressed state */
     --color-accent-active: var(--_p-dark-orange-300); /* Pressed state */
-    --color-surface-active: var(--_p-dark-indigo-900-4); /* Pressed row or card */
+    --color-surface-active: var(--_p-dark-gray-900-4); /* Pressed row or card */
     --color-focus-ring: var(--_p-dark-indigo-300); /* outline color, 2px with 2px offset */
     --color-focus-halo: var(--_p-dark-indigo-300-a24); /* box-shadow glow for inset focus */
     --color-border-focus: var(--_p-dark-indigo-300); /* Input border while focused */
-    --color-disabled-bg: var(--_p-dark-indigo-800); /* Disabled control fill */
-    --color-disabled-border: var(--_p-dark-indigo-800); /* Disabled control border */
-    --color-disabled-text: var(--_p-dark-indigo-400); /* Disabled label, exempt from AA */
+    --color-disabled-bg: var(--_p-dark-gray-900-2); /* Disabled control fill */
+    --color-disabled-border: var(--_p-dark-gray-900-2); /* Disabled control border */
+    --color-disabled-text: var(--_p-dark-gray-500); /* Disabled label, exempt from AA */
   }
 }

@@ -1,9 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import type { ReactNode } from 'react';
+import { Button } from '@/components/Button';
+import { DatePicker } from '@/components/DatePicker';
 import { Input } from '@/components/Input';
 import { Select } from '@/components/Select';
 import styles from '../catalogue.module.css';
+
+const FREQUENCIES = [
+  { value: '1x/week', label: 'Once a week' },
+  { value: '2x/week', label: 'Twice a week' },
+  { value: '3x/week', label: 'Three times a week' },
+  { value: '5x/week', label: 'Five times a week' },
+];
 
 /**
  * Catalogue scaffolding, plus the form controls.
@@ -50,6 +60,9 @@ export function Specimen({
 }
 
 export function PreviewControls() {
+  const [frequency, setFrequency] = useState('3x/week');
+  const [date, setDate] = useState('');
+
   return (
     <>
       <Specimen label="Input, with a hint" wide>
@@ -75,10 +88,53 @@ export function PreviewControls() {
           <Select
             label="How often"
             hint="Sessions are spaced to match this."
-            options={[
-              { value: '1x/week', label: 'Once a week' },
-              { value: '3x/week', label: 'Three times a week' },
-            ]}
+            value={frequency}
+            onValueChange={setFrequency}
+            options={FREQUENCIES}
+          />
+        </div>
+      </Specimen>
+
+      <Specimen label="Select, disabled" wide>
+        <div className={styles.stack}>
+          <Select
+            label="How often"
+            value={frequency}
+            onValueChange={setFrequency}
+            options={FREQUENCIES}
+            disabled
+          />
+        </div>
+      </Specimen>
+
+      <Specimen label="Date picker" wide>
+        <div className={styles.stack}>
+          <DatePicker
+            label="Target date"
+            value={date}
+            onValueChange={setDate}
+            hint="An exam date, if you have one."
+          />
+        </div>
+      </Specimen>
+
+      <Specimen label="Date picker, empty" wide>
+        <div className={styles.stack}>
+          <DatePicker label="Start date" value="" onValueChange={() => {}} />
+        </div>
+      </Specimen>
+
+      <Specimen label="Input with a trailing action" wide>
+        <div className={styles.stack}>
+          <Input
+            label="Topics"
+            placeholder="Recursion"
+            hint="The button lines up with the input, not with this hint."
+            action={
+              <Button type="button" variant="ghost">
+                Add
+              </Button>
+            }
           />
         </div>
       </Specimen>

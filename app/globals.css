@@ -85,13 +85,24 @@ a:hover {
   }
 }
 
+/*
+ * Hidden visually, kept for assistive technology.
+ *
+ * Being absolutely positioned, this lands relative to the nearest *positioned*
+ * ancestor. Inside a horizontally scrolling box that is static, it escapes the
+ * clip and can extend the document sideways — so any scroll container holding
+ * one needs position:relative. `clip` is deprecated; `clip-path` is the
+ * current property and is listed second so it wins where supported.
+ */
 .visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
   padding: 0;
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }

@@ -166,6 +166,16 @@
   flex-wrap: wrap;
 }
 
+/*
+ * These are standalone links, not links inside a sentence, so the 24px minimum
+ * target size applies to them (WCAG 2.2, 2.5.8).
+ */
+.actions > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--spacing-xl);
+}
+
 .notice {
   font: var(--text-caption);
   color: var(--color-text-muted);

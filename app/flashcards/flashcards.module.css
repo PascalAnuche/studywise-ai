@@ -1,0 +1,436 @@
+/*
+ * Flashcards — flow 5, built to the approved design.
+ *
+ * Narrow first: the set grid starts at one column, the rail's stat pairs start
+ * stacked, and the spaced-repetition panel puts its figures above its chart
+ * until there is room to sit them side by side.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 96rem;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.main,
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  min-width: 0;
+}
+
+/*
+ * Flex children default to min-width:auto, so a horizontally scrolling child —
+ * the featured row, the tab strip — sizes the column to its content instead of
+ * scrolling inside it, and the whole page gains a sideways scrollbar.
+ */
+.main > *,
+.rail > * {
+  min-width: 0;
+}
+
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.title {
+  font: var(--text-h2);
+}
+
+.subtitle {
+  font: var(--text-body-large);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.sets {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.setsList {
+  grid-template-columns: 1fr;
+}
+
+.set {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 0;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+.setTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.setControls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.iconButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+/* A favourited set keeps the star filled and tinted, never colour alone. */
+.starOn,
+.starOn:hover {
+  color: var(--color-chart-amber);
+}
+
+.setTitle {
+  font: var(--text-body-medium);
+}
+
+.setSubject {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.setFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.track {
+  display: block;
+  flex: 1;
+  height: var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--tone);
+}
+
+.viewMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  min-height: var(--spacing-4xl);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-primary);
+  font: var(--text-body-medium);
+  cursor: pointer;
+}
+
+.viewMore:hover {
+  background: var(--color-surface-hover);
+}
+
+.viewMore:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/* Spaced repetition */
+.spaced {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+}
+
+.spacedHead {
+  margin-bottom: var(--spacing-lg);
+}
+
+.spacedTitle {
+  font: var(--text-h4);
+}
+
+.spacedText {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.spacedStats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.spacedStat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.spacedValue {
+  font: var(--text-h3);
+  color: var(--color-primary);
+}
+
+.spacedLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  text-wrap: balance;
+}
+
+/* Rail */
+.railHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.railTitle {
+  font: var(--text-body-medium);
+}
+
+.todayGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.todayStat {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.todayBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.todayValue {
+  font: var(--text-h4);
+  line-height: 1.1;
+}
+
+/* Wraps rather than clipping: "Cards Reviewed" does not fit a rail half. */
+.todayLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.streakValue {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.streakNumber {
+  font: var(--text-h1);
+  line-height: 1;
+}
+
+.streakNote {
+  display: block;
+  margin-top: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.week {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-lg);
+}
+
+.weekDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.weekMark {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.weekDone {
+  background: var(--color-confidence-established-fg);
+  border-color: var(--color-confidence-established-fg);
+  color: var(--color-card);
+}
+
+.activity {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.activityRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.activityText {
+  flex: 1;
+  min-width: 0;
+  font: var(--text-caption);
+  color: var(--color-text);
+}
+
+.activityWhen {
+  flex: none;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.tip {
+  background: var(--color-secondary);
+}
+
+.tipTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  font: var(--text-body-medium);
+}
+
+.tipIcon {
+  color: var(--color-primary);
+  display: grid;
+  place-items: center;
+}
+
+.tipText {
+  font: var(--text-body);
+}
+
+@media (min-width: 30rem) {
+  .sets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .setsList {
+    grid-template-columns: 1fr;
+  }
+
+  .spacedStats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 48rem) {
+  .layout {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .header {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .headerActions {
+    flex: none;
+  }
+
+  /* The four figures need the wider half; the chart reads fine in the rest. */
+  .spaced {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .layout {
+    padding: var(--spacing-2xl);
+  }
+
+  .sets {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .setsList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 82rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 19rem);
+  }
+
+  .sets {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .setsList {
+    grid-template-columns: 1fr;
+  }
+}

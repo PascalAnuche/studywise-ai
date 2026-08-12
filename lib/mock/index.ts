@@ -157,6 +157,118 @@ export const MOCK_SOURCES: MockSource[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Flow 6 — Progress panels
+// ---------------------------------------------------------------------------
+
+/**
+ * Strengths and areas to improve.
+ *
+ * Mock: nothing derives these yet.
+ *
+ * The approved design phrases one strength as "You score higher than 80% of
+ * users". That is a comparison against other students, which prompt section 12
+ * rules out, so the wording here describes the student's own record instead.
+ * The card, its title and its position are exactly as designed. Flagged in
+ * AGENTS.md.
+ */
+export interface MockInsight {
+  id: string;
+  title: string;
+  detail: string;
+  icon: 'check-circle' | 'shield' | 'trend-up' | 'learn' | 'plan' | 'notes';
+  /** Tint of the icon square, as designed. Keys into `color.event.*`. */
+  tone: 'green' | 'blue' | 'amber' | 'rose';
+}
+
+export const MOCK_STRENGTHS: MockInsight[] = [
+  { id: 'consistent', title: 'Consistent Learner', detail: 'You study regularly and stay consistent.', icon: 'check-circle', tone: 'green' },
+  { id: 'quiz', title: 'Quiz Master', detail: 'You scored 80% or higher on 4 of your 6 quizzes.', icon: 'shield', tone: 'blue' },
+  { id: 'improver', title: 'Quick Improver', detail: 'Your progress is better than last month.', icon: 'trend-up', tone: 'green' },
+];
+
+export const MOCK_IMPROVEMENTS: MockInsight[] = [
+  { id: 'algorithms', title: 'Algorithms', detail: 'Practice more on sorting algorithms.', icon: 'learn', tone: 'blue' },
+  { id: 'os', title: 'Operating Systems', detail: 'Focus on memory management.', icon: 'plan', tone: 'amber' },
+  { id: 'db', title: 'Database Systems', detail: 'Review normalization concepts.', icon: 'notes', tone: 'rose' },
+];
+
+export type { ChartTone } from '../tones';
+import type { ChartTone } from '../tones';
+
+/** Per-subject rollup for the Subject Performance table. */
+export interface MockSubjectPerformance {
+  subject: string;
+  studyTime: string;
+  studyMinutes: number;
+  topicsLearned: number;
+  questionsSolved: number;
+  averageScore: number | null;
+  progressPercent: number;
+  /**
+   * Dot beside the subject in the Subject Performance table.
+   *
+   * The design gives the table and the donut different hues for the same
+   * subject — Algorithms is teal in the table and magenta in the donut, and
+   * Operating Systems is amber in the table and teal in the donut. Both are
+   * reproduced rather than reconciled, so `tone` and `chartTone` are separate.
+   * Worth settling before this stops being mock data; noted in AGENTS.md.
+   */
+  tone: ChartTone;
+  /** Slice colour in the Time by Subject donut. */
+  chartTone: ChartTone;
+  /**
+   * Whether the subject counts toward the weekly Study Time figure and the
+   * Time by Subject donut.
+   *
+   * Computer Networks is tracked in the table but sits outside both, which is
+   * what makes the design's donut show four slices totalling 14h 30m while the
+   * table lists five subjects.
+   */
+  inWeeklyTotal: boolean;
+}
+
+export const MOCK_SUBJECT_PERFORMANCE: MockSubjectPerformance[] = [
+  { subject: 'Data Structures', studyTime: '6h 20m', studyMinutes: 380, topicsLearned: 4, questionsSolved: 24, averageScore: 86, progressPercent: 72, tone: 'indigo', chartTone: 'indigo', inWeeklyTotal: true },
+  { subject: 'Algorithms', studyTime: '4h 10m', studyMinutes: 250, topicsLearned: 2, questionsSolved: 18, averageScore: 78, progressPercent: 58, tone: 'teal', chartTone: 'magenta', inWeeklyTotal: true },
+  { subject: 'Operating Systems', studyTime: '2h 30m', studyMinutes: 150, topicsLearned: 1, questionsSolved: 9, averageScore: 81, progressPercent: 45, tone: 'amber', chartTone: 'teal', inWeeklyTotal: true },
+  { subject: 'Database Systems', studyTime: '1h 30m', studyMinutes: 90, topicsLearned: 1, questionsSolved: 5, averageScore: 75, progressPercent: 38, tone: 'magenta', chartTone: 'red', inWeeklyTotal: true },
+  { subject: 'Computer Networks', studyTime: '45m', studyMinutes: 45, topicsLearned: 0, questionsSolved: 0, averageScore: null, progressPercent: 12, tone: 'blue', chartTone: 'blue', inWeeklyTotal: false },
+];
+
+/**
+ * The five headline figures, exactly as the design states them.
+ *
+ * Given rather than derived: the design's Average Score (82%) is not the mean
+ * of its own table, so deriving it would quietly contradict the mockup. When
+ * these come from real queries the derivation replaces the literal.
+ */
+export const MOCK_PROGRESS_STATS = {
+  studyTime: '14h 30m',
+  topicsLearned: 8,
+  questionsSolved: 56,
+  quizzesTaken: 6,
+  averageScore: 82,
+  deltas: {
+    studyTime: '12% vs last week',
+    topicsLearned: '2 vs last week',
+    questionsSolved: '18 vs last week',
+    quizzesTaken: '1 vs last week',
+    averageScore: '9% vs last week',
+  },
+};
+
+/** Minutes studied per weekday, Monday first, for the Study Time Overview. */
+export const MOCK_STUDY_TIME_BY_DAY: { day: string; minutes: number }[] = [
+  { day: 'Mon', minutes: 130 },
+  { day: 'Tue', minutes: 300 },
+  { day: 'Wed', minutes: 195 },
+  { day: 'Thu', minutes: 130 },
+  { day: 'Fri', minutes: 245 },
+  { day: 'Sat', minutes: 90 },
+  { day: 'Sun', minutes: 150 },
+];
+
+// ---------------------------------------------------------------------------
 // Flow 8 — Settings
 // ---------------------------------------------------------------------------
 
@@ -181,3 +293,13 @@ export const MOCK_PRIVACY: { label: string; detail: string }[] = [
   { label: 'Ability inferences', detail: 'Never made. Your record describes work done, not what you are capable of.' },
   { label: 'Removing your data', detail: 'Any saved explanation, plan or material can be deleted, and deletion is permanent.' },
 ];
+
+// ---------------------------------------------------------------------------
+// Per-screen fixtures, split out once they outgrew a section here.
+// Re-exported so `@/lib/mock` stays the single import for every screen, and
+// `rm -r lib/mock` stays an exact inventory of what needs a real source.
+// ---------------------------------------------------------------------------
+
+export * from './resources';
+export * from './flashcards';
+export * from './notes';

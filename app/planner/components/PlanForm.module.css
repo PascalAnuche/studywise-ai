@@ -42,16 +42,6 @@
   color: var(--color-primary-hover);
 }
 
-.adder {
-  display: flex;
-  gap: var(--spacing-md);
-  align-items: flex-end;
-}
-
-.adderField {
-  flex: 1;
-}
-
 .actions {
   display: flex;
   gap: var(--spacing-md);

@@ -1,0 +1,20 @@
+{
+  "color": {
+    "event": {
+      "violet bg": {
+        "type": "color",
+        "value": "#ece9feff",
+        "description": "PROVISIONAL, not from Figma - calendar event tones, see AGENTS.md"
+      },
+      "violet fg": { "type": "color", "value": "#4c3ec4ff" },
+      "green bg": { "type": "color", "value": "#e3f6eaff" },
+      "green fg": { "type": "color", "value": "#166b3cff" },
+      "blue bg": { "type": "color", "value": "#e2f0fbff" },
+      "blue fg": { "type": "color", "value": "#14567fff" },
+      "amber bg": { "type": "color", "value": "#fdf0dcff" },
+      "amber fg": { "type": "color", "value": "#8a5410ff" },
+      "rose bg": { "type": "color", "value": "#fdeaeaff" },
+      "rose fg": { "type": "color", "value": "#992b34ff" }
+    }
+  }
+}

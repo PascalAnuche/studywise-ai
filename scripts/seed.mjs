@@ -104,19 +104,19 @@ insertPlan.get(
  */
 const SESSIONS = [
   // Earlier this week, all in the past: these count as done.
-  ['Arrays', 'Rework the parts that caught you out, then one practice pass', 60, 6, '09:00'],
-  ['Linked Lists', 'Work through the core ideas, then check yourself on one example', 45, 6, '14:00'],
-  ['Stacks', 'Work through the core ideas, then check yourself on one example', 45, 5, '10:00'],
-  ['Queues', 'Work through the core ideas, then check yourself on one example', 45, 5, '16:00'],
-  ['Hash Tables', 'Rework the parts that caught you out, then one practice pass', 60, 4, '09:30'],
-  ['Big-O notation', 'Work through the core ideas, then check yourself on one example', 45, 4, '13:00'],
-  ['Recursion', 'Rework the parts that caught you out, then one practice pass', 120, 3, '10:00'],
-  ['Trees', 'Work through the core ideas, then check yourself on one example', 60, 3, '15:00'],
-  ['Processes', 'Read the chapter, then summarise it in your own words', 60, 2, '11:00'],
-  ['Scheduling', 'Work through the core ideas, then check yourself on one example', 45, 2, '17:00'],
-  ['Graph traversal', 'Rework the parts that caught you out, then one practice pass', 120, 1, '10:00'],
-  ['Memory management', 'Read the chapter, then summarise it in your own words', 60, 1, '14:30'],
-  ['Dynamic programming', 'Rework the parts that caught you out, then one practice pass', 105, 1, '19:00'],
+  ['Arrays', 'Data Structures Lecture', 60, 6, '09:00'],
+  ['Linked Lists', 'Algorithms Practice', 45, 6, '14:00'],
+  ['Stacks', 'Data Structures Lecture', 45, 5, '10:00'],
+  ['Queues', 'Practice Questions', 45, 5, '16:00'],
+  ['Hash Tables', 'Weekly Review', 60, 4, '09:30'],
+  ['Big-O notation', 'Algorithms Practice', 45, 4, '13:00'],
+  ['Recursion', 'Data Structures Lecture', 120, 3, '10:00'],
+  ['Trees', 'Practice Questions', 60, 3, '15:00'],
+  ['Processes', 'Read Chapter 5', 60, 2, '11:00'],
+  ['Scheduling', 'Algorithms Practice', 45, 2, '17:00'],
+  ['Graph traversal', 'Weekly Review', 120, 1, '10:00'],
+  ['Memory management', 'Read Chapter 6', 60, 1, '14:30'],
+  ['Dynamic programming', 'Review AI Notes', 105, 1, '19:00'],
 
   // Today, matching the design's Today's Plan.
   ['Arrays, Linked Lists', 'Data Structures Lecture', 90, 0, '10:00'],
@@ -125,7 +125,7 @@ const SESSIONS = [
   ['File systems', 'Read Chapter 7', 60, 0, '19:00'],
 
   // Ahead: scheduled but not yet due, so they do not count as done.
-  ['Sorting Algorithms', 'Work through the core ideas, then check yourself on one example', 60, -1, '10:00'],
+  ['Sorting Algorithms', 'Algorithms Practice', 60, -1, '10:00'],
 ];
 
 SESSIONS.forEach(([topic, focus, minutes, daysAgo, startTime], index) => {

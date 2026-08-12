@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/Button';
+import { DatePicker } from '@/components/DatePicker';
 import { Input } from '@/components/Input';
 import { Modal } from '@/components/Modal';
 import type { PlanSession } from '@/lib/ai/types';
@@ -80,11 +81,10 @@ export function EditPlanModal({ open, sessions, saving, onSave, onClose }: EditP
                   update(index, { durationMinutes: Number(event.target.value) || 0 })
                 }
               />
-              <Input
+              <DatePicker
                 label="Date"
-                type="date"
                 value={session.scheduledFor ?? ''}
-                onChange={(event) => update(index, { scheduledFor: event.target.value || null })}
+                onValueChange={(next) => update(index, { scheduledFor: next || null })}
               />
             </div>
           </div>

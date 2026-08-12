@@ -8,6 +8,26 @@
   font: var(--text-body-medium);
 }
 
+/*
+ * A field with a trailing button — "Topics" plus Add, say.
+ *
+ * The button has to be a sibling of the input, not of the whole field. Laying
+ * the two out as a row of [field, button] and aligning to flex-end puts the
+ * button level with the *hint*, because the hint is the last thing in the
+ * field box. Here the row holds the control alone, so they line up whatever
+ * the label and hint do.
+ */
+.controlRow {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-md);
+}
+
+.controlRow > .control {
+  flex: 1;
+  min-width: 0;
+}
+
 .control {
   font: var(--text-body);
   color: var(--color-text);

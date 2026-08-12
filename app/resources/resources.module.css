@@ -1,0 +1,473 @@
+/*
+ * Resources — flow 4, built to the approved design.
+ *
+ * Narrow first. Every grid here starts at one or two columns and widens at a
+ * breakpoint, so nothing needs a horizontal scrollbar on a phone. The one
+ * exception is the Recent Resources table, which scrolls inside its own box:
+ * a five-column table cannot be made to fit 375px without becoming a list, and
+ * the design draws a table.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 96rem;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.main,
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  min-width: 0;
+}
+
+/*
+ * Flex children default to min-width:auto, so a horizontally scrolling child —
+ * the featured row, the tab strip — sizes the column to its content instead of
+ * scrolling inside it, and the whole page gains a sideways scrollbar.
+ */
+.main > *,
+.rail > * {
+  min-width: 0;
+}
+
+
+.title {
+  font: var(--text-h2);
+}
+
+.subtitle {
+  font: var(--text-body-large);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+/* Type filters: two up on a phone, all six across on a desktop. */
+.types {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.type {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-text);
+  font: var(--text-body);
+  text-align: start;
+  cursor: pointer;
+}
+
+.type:hover {
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+}
+
+.type:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.typeActive,
+.typeActive:hover {
+  border-color: var(--color-primary);
+  background: var(--color-secondary);
+}
+
+.typeBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/*
+ * Wrapping, not truncating. Six cards across a 12-column main leaves about
+ * 110px each, and "All Resources" clipped to "All Res..." is not a filter
+ * anyone can use.
+ */
+.typeLabel {
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+  overflow-wrap: anywhere;
+}
+
+.typeCount {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.sectionTitle {
+  font: var(--text-h4);
+}
+
+/*
+ * Featured runs as a scroll-snapping row at every width. The design shows it
+ * as a carousel with a next control, and a row that scrolls by touch is the
+ * same affordance without a control that does nothing on a phone.
+ */
+.featured {
+  /*
+   * Flex, not `grid-auto-flow: column`. In a grid the `1fr` track maximum
+   * resolves against the scrollable area rather than the visible box, so the
+   * grid sized itself to its content and took the whole document sideways with
+   * it. Fixed-basis flex items scroll predictably.
+   */
+  display: flex;
+  gap: var(--spacing-lg);
+  /* Positioned so a visually-hidden descendant cannot escape this clip. */
+  position: relative;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--spacing-sm);
+}
+
+.featuredCard {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 15rem;
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+  overflow: hidden;
+}
+
+.thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 7.5rem;
+  background: color-mix(in srgb, var(--tone) 12%, var(--color-card));
+  color: var(--tone);
+}
+
+.thumbBadge {
+  position: absolute;
+  top: var(--spacing-md);
+  inset-inline-start: var(--spacing-md);
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  background: var(--color-card);
+  color: var(--tone);
+  font: var(--text-caption);
+}
+
+.featuredBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  flex: 1;
+}
+
+.featuredTitle {
+  font: var(--text-body-medium);
+}
+
+.featuredText {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.featuredFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.bookmark {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.bookmark:hover {
+  color: var(--color-primary);
+  background: var(--color-surface-hover);
+}
+
+.bookmark:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.subjects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.subject {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.subject:hover {
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.subjectName {
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+  overflow-wrap: anywhere;
+}
+
+.subjectCount {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/*
+ * position:relative is load-bearing. The table's visually-hidden "Actions"
+ * heading is absolutely positioned, so without a positioned ancestor its
+ * containing block is the page itself: it escaped this scroll container, came
+ * to rest around x=756, and put a horizontal scrollbar on the whole document.
+ */
+.tableWrap {
+  position: relative;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font: var(--text-body);
+}
+
+.table th,
+.table td {
+  text-align: start;
+  padding: var(--spacing-md) var(--spacing-lg);
+  white-space: nowrap;
+  font-weight: inherit;
+}
+
+.table thead th {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  background: var(--color-background);
+}
+
+.table thead th:first-child {
+  border-start-start-radius: var(--radius-md);
+  border-end-start-radius: var(--radius-md);
+}
+
+.table thead th:last-child {
+  border-start-end-radius: var(--radius-md);
+  border-end-end-radius: var(--radius-md);
+}
+
+.resourceCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font: var(--text-body-medium);
+}
+
+.subjectCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.dot {
+  width: var(--spacing-sm);
+  height: var(--spacing-sm);
+  border-radius: var(--radius-full);
+  flex: none;
+}
+
+.rowMore {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.rowMore:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.rowMore:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.viewMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  min-height: var(--spacing-4xl);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-primary);
+  font: var(--text-body-medium);
+  cursor: pointer;
+}
+
+.viewMore:hover {
+  background: var(--color-surface-hover);
+}
+
+.viewMore:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/* Rail */
+.railHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.railTitle {
+  font: var(--text-body-medium);
+}
+
+.railList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.railRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 0;
+  /* Vertical only: a sideways pull would overflow the card. */
+  padding: var(--spacing-sm);
+  margin-block: calc(var(--spacing-sm) * -1);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.railRow:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.railBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.railRowTitle {
+  font: var(--text-body-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.railRowDetail {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.railWhen {
+  flex: none;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 30rem) {
+  .types {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 48rem) {
+  .layout {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .subjects {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .layout {
+    padding: var(--spacing-2xl);
+  }
+
+  .types {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .subjects {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 82rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 19rem);
+  }
+}

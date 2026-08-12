@@ -1,0 +1,44 @@
+/*
+ * The tinted rounded square behind an icon. It appears roughly thirty times
+ * across Resources, Flashcards and Notes, which is why it is a component.
+ *
+ * The tint is mixed from the series colour rather than stored as a second
+ * token per hue: one source of truth per colour, and a theme change moves the
+ * tint with it automatically.
+ */
+.tile {
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--tone) 14%, var(--color-card));
+  color: var(--tone);
+}
+
+.sm {
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border-radius: var(--radius-sm);
+}
+
+.md {
+  width: var(--spacing-3xl);
+  height: var(--spacing-3xl);
+}
+
+.lg {
+  width: var(--spacing-4xl);
+  height: var(--spacing-4xl);
+  border-radius: var(--radius-lg);
+}
+
+/* Dark themes need a touch more tint to separate from the card. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .tile {
+    background: color-mix(in srgb, var(--tone) 22%, var(--color-card));
+  }
+}
+
+:root[data-theme='dark'] .tile {
+  background: color-mix(in srgb, var(--tone) 22%, var(--color-card));
+}

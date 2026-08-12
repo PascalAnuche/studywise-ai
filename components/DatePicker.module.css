@@ -1,0 +1,239 @@
+/*
+ * Custom date picker, replacing `<input type="date">` for the same reasons the
+ * Select replaced `<select>`: the native calendar icon sits hard against the
+ * border, and the popup is drawn by the operating system, so it ignores the
+ * design system completely.
+ *
+ * The trigger deliberately mirrors the Select trigger — same padding, same
+ * border roles, same focus ring — so the two read as one family in a form.
+ */
+.wrap {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+  font: var(--text-body);
+  color: var(--color-text);
+  text-align: start;
+  background: var(--color-card);
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.trigger:hover:not(:disabled) {
+  border-color: var(--color-border-focus);
+}
+
+.trigger:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.trigger:disabled {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-border);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+/* An unset date reads as a placeholder, not as a value. */
+.placeholder {
+  color: var(--color-text-muted);
+}
+
+.calendarIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+}
+
+.popup {
+  position: absolute;
+  z-index: 20;
+  inset-inline-start: 0;
+  top: calc(100% + var(--spacing-xs));
+  width: 21rem;
+  max-width: calc(100vw - var(--spacing-xl));
+  padding: var(--spacing-md);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-raised);
+}
+
+/* Flipped when the space below runs out, as in Select. */
+.dropUp {
+  top: auto;
+  bottom: calc(100% + var(--spacing-xs));
+}
+
+/* Kept inside the viewport when the field sits near the trailing edge. */
+.alignEnd {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/*
+ * Month and year as dropdowns rather than a static label. Reuses Select, so
+ * the popups inside the calendar behave exactly like every other dropdown.
+ */
+.periodPickers {
+  display: flex;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  flex: 1;
+}
+
+/* Month is the wider word; year gets what it needs and no more. */
+.periodPickers > *:first-child {
+  flex: 1 1 60%;
+  min-width: 0;
+}
+
+.periodPickers > *:last-child {
+  flex: 1 1 40%;
+  min-width: 0;
+}
+
+.periodTrigger {
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) var(--spacing-md);
+  font: var(--text-body-medium);
+}
+
+.navGroup {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.nav {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-card);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.nav:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.nav:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.weekday {
+  padding-bottom: var(--spacing-sm);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.cell {
+  padding: 1px;
+  text-align: center;
+}
+
+.day {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text);
+  font: var(--text-body);
+  cursor: pointer;
+}
+
+.day:hover {
+  background: var(--color-surface-hover);
+}
+
+.day:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+/* Days spilling in from the neighbouring months stay reachable, just quieter. */
+.outside {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+/*
+ * Today is marked with a ring rather than a fill, so it never looks selected.
+ */
+.today {
+  box-shadow: inset 0 0 0 1px var(--color-border-focus);
+}
+
+.selected,
+.selected:hover {
+  background: var(--color-primary);
+  color: var(--color-card);
+}
+
+.day:disabled {
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.footerAction {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  font: var(--text-caption);
+  cursor: pointer;
+}
+
+.footerAction:hover {
+  background: var(--color-surface-hover);
+}
+
+.footerAction:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}

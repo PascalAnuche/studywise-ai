@@ -5,7 +5,12 @@ Component breakdown. The shared layer below is built; the four feature folders a
 ## Shared (`/components`) — built
 
 - `Button` — variants `primary` / `secondary` / `accent` / `ghost`, sizes medium and small, with hover, active, focus-visible, disabled and loading states. Accent carries `--color-text`, never white: white on accent is 2.08:1 and fails AA
-- `Input`, `Select` — label, hint and error wired through `aria-describedby` and `aria-invalid`
+- `Input` — label, hint and error wired through `aria-describedby` and `aria-invalid`. The `action` slot puts a trailing button in the same row as the input, so it lines up with the control rather than with the hint
+- `Select` — **custom, not a native `<select>`**. ARIA combobox/listbox: arrow keys, Home/End, Enter, Escape, type-to-select, `aria-activedescendant`. Replaced the native control because its arrow cannot be inset from the border and its popup is drawn by the OS, so it ignores the design system. `labelHidden` keeps the label for assistive tech where the surroundings already say what the control is
+- `DatePicker` — **custom, not `<input type="date">`**, for the same reasons. Month and year are chosen from dropdowns, not walked to. Values are `YYYY-MM-DD` strings in local time; never construct a `Date` from one without going through the helpers, or the picker shows the wrong day west of Greenwich
+- `ActionLink` — the small "View all →" in a card header. Exists so it clears the 24px minimum target size (WCAG 2.2, 2.5.8); its negative margin is **vertical only**, because pulling it sideways overflows the container
+- `IconTile` — tinted rounded square behind an icon, keyed to the `color.chart.*` series palette. Decorative: the label beside it always carries the meaning
+- `popover.ts` — `placementFor()`, shared by `Select` and `DatePicker`. Measures against the nearest scrolling ancestor, not the viewport, so a popup inside a modal flips before it hits the panel edge
 - `Card` — optional title and action slot, optional `interactive` for hover and pressed
 - `Modal` — Escape to close, backdrop click, focus moved into the dialog
 - `Toast` — tones `info` / `success` / `caution`, `role="alert"` only for caution
@@ -80,6 +85,24 @@ Prompt section 12 governs every string here: describe the work, never the person
 - `StreakIndicator` — a count and a date. No praise for a long run, no nudge when it is about to lapse
 - `WeakAreaList` — each area individually, carrying the quiz evidence that flagged it ("3 of 5 questions were answered incorrectly on 2026-08-10"), never a verdict. Ends in two links out, so the page finishes with something to do
 - `TopicCompletionList` — the only place a student writes to `progress` directly. Marking a topic deliberately does **not** extend the streak: ticking four boxes should not read as four days of study
+
+## Resources, Flashcards and Notes — flows 4 and 5, built to the approved design
+
+All three render entirely from `lib/mock` and share their header furniture (`app/components/Toolbar.tsx`: `TabStrip`, `SearchField`, `FilterRow`, `ViewToggle`, `FilterButton`).
+
+- `ResourcesBoard` — type filters, a scroll-snapping featured row, browse-by-subject, and the recent-resources table. The featured row is a flex scroller rather than a carousel with a next button, which would do nothing on a touch screen
+- `FlashcardsBoard`, `ScheduleChart` — set grid and the spaced-repetition panel. Per-set percentages describe cards answered correctly on the last pass, a fact about the deck rather than a claim about the student
+- `NotesBoard`, `NoteBody` — list and detail. **Below 64rem they are one pane at a time** with a back control. `NoteBody` renders structured blocks, not markdown, so nothing has to decide what to do with arbitrary HTML
+
+## Responsiveness
+
+`scripts/responsive-audit.mjs` loads every route at five widths and reports sideways scroll (naming the offending element) and tap targets under 24px. Run it after any layout change; it is faster and more reliable than reading sixty screenshots.
+
+Three causes of sideways scroll have bitten this codebase and are commented where they did:
+
+1. A flex or grid child defaults to `min-width: auto`, so a horizontally scrolling descendant sizes the column to its content instead of scrolling inside it
+2. `grid-auto-flow: column` in a scroll container resolves `1fr` against the scrollable area, not the visible box
+3. A `visually-hidden` element inside a horizontally scrolling box escapes the clip unless that box is `position: relative`
 
 ## Note
 `ConfidenceBadge` and `ReasoningPanel` are the two components doing the most product-critical work, they're the visual expression of the explainability requirement the whole research base points to. Get these right before polishing anything else.

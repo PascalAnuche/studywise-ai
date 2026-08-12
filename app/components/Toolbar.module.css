@@ -1,0 +1,199 @@
+/*
+ * The header furniture shared by Resources, Flashcards and Notes: a tab strip,
+ * a search-and-filter row, and a grid/list toggle.
+ *
+ * Narrow first throughout. The tab strip scrolls sideways inside its own box
+ * rather than wrapping, because a wrapped tab row reads as two separate
+ * groups; the filter row stacks, because a 3-across filter bar on a phone
+ * leaves each control too small to read its own label.
+ */
+.tabs {
+  display: flex;
+  gap: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  /* Positioned so a visually-hidden descendant cannot escape this clip. */
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: none;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: var(--text-body-medium);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tab:focus-visible {
+  outline: none;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.tabActive,
+.tabActive:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.searchIcon {
+  position: absolute;
+  inset-inline-start: var(--spacing-md);
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  font: var(--text-body);
+  color: var(--color-text);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md) var(--spacing-2xl);
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+.searchInput:hover {
+  border-color: var(--color-border-hover);
+}
+
+.searchInput:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/*
+ * Wraps on a phone. Two selects and a view toggle across 279px left each
+ * select about 87px, which renders "All Subjects" as "All ..." — the toggle
+ * drops to its own line instead, and the selects get a readable width.
+ */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+  min-width: 0;
+}
+
+.controls > * {
+  min-width: 0;
+  flex: 1 1 8rem;
+}
+
+/* The view toggle is a fixed pair of squares, never stretched. */
+.viewToggle {
+  display: flex;
+  flex: none;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+}
+
+.viewButton {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.viewButton:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.viewButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.viewActive,
+.viewActive:hover {
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.filterButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  min-height: var(--spacing-4xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-text);
+  font: var(--text-body);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.filterButton:hover {
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+}
+
+.filterButton:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+@media (min-width: 48rem) {
+  .filters {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .controls {
+    flex: none;
+  }
+
+  .controls > * {
+    flex: none;
+  }
+}

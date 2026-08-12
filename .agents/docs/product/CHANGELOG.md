@@ -13,6 +13,63 @@ All notable changes to this project are documented here. Format follows Keep a C
 - Design tokens exported from Figma, converted to CSS variables by `../../../tokens/build-tokens.js` into `../../../tokens/tokens.css`, including derived hover and focus roles
 - Docs reorganized into `docs/`, `rules/`, and `.agents/`, leaving `../../../README.md` and `../../../AGENTS.md` at the root
 
+### Responsiveness, custom form controls, and three more screens
+
+**Responsiveness across all breakpoints.** `scripts/responsive-audit.mjs` loads every route at 375, 414, 768, 1024 and 1440 and reports which element causes a sideways scroll, plus any tap target under the 24px WCAG 2.2 minimum. It went from 30-odd findings to none.
+
+- **Study Planner's schedule** was the worst of it: a 6.5rem time column, a marker rail and a card across a phone left the title about 90px, so headings were clipped and the page scrolled sideways. Narrow layouts now put the time above its card and drop the marker rail
+- **The topbar** reserved trailing space for a ⌘K hint it was too narrow to show, and a flex spacer competed with the search for the same free space and halved it — about two characters' worth on a phone
+- **`ActionLink`**, so the "View all →" link in every card header is at least 24px tall. As loose CSS in each page module every one of them was drawn at its text height
+- Two subtle overflow causes worth knowing about, both now commented where they bit: a `grid-auto-flow: column` scroll row resolves `1fr` against the *scrollable* area and sizes itself to its content; and a `visually-hidden` element inside a horizontally scrolling box escapes the clip unless that box is positioned, which is what put a scrollbar across the whole document on Resources
+- The remaining audit finding is a link inside a sentence on `/profile`, which the target-size rule explicitly exempts
+
+**Custom form controls, replacing the native ones app-wide.**
+
+- **`Select`** — the native control's arrow sits hard against the border with no way to inset it, and its popup is drawn by the operating system, so it ignored the design system entirely. The replacement implements the ARIA combobox/listbox pattern: arrow keys, Home/End, Enter, Escape, type-to-select, and `aria-activedescendant`
+- **`DatePicker`** — same reasoning for `<input type="date">`. Month and year are **chosen from dropdowns** rather than walked to with arrows, since August to next June is ten clicks otherwise. Dates are handled as `YYYY-MM-DD` strings in local time throughout, never parsed as `new Date('2026-08-12')`, which is UTC midnight and therefore the previous day for anyone west of Greenwich
+- Both flip above the trigger when the space below runs out, measured against the nearest **scrolling ancestor** rather than the viewport — inside a modal the panel has its own bottom edge
+- **`Input` gained an `action` slot**, so a trailing button is a sibling of the input. Laying out `[field, button]` and aligning to the end put the button level with the *hint*, which is what made the Add button sit low
+
+### Resources, Flashcards and Notes built to the design
+
+All three replace placeholder routes, and all three are narrow-first at every breakpoint.
+
+- **Resources** (flow 4): type filters, a scroll-snapping featured row, browse-by-subject, a recent-resources table, and a rail of quick access, recently viewed and recommendations
+- **Flashcards** (flow 5): set grid with favourites and per-set progress, a spaced-repetition panel with an inline SVG schedule chart, and a rail of today's figures, a study streak week, activity and a tip
+- **Notes** (flow 5): a list-and-detail workspace that becomes **one pane at a time below 64rem** with a back control, rather than a shrunken desktop layout. Note bodies are structured blocks, not markdown strings, so the detail pane renders headings and lists without parsing anything
+- **`tokens/chart.tokens.json` now also drives `IconTile`**, the tinted icon square used around thirty times across the three screens. The tint is mixed from the series colour with `color-mix` rather than stored as a second token per hue
+- Shared `TabStrip`, `SearchField` and `ViewToggle` in `app/components/Toolbar.tsx`, so the three screens' header furniture is one implementation
+- Every figure comes from `lib/mock`. The counts are the design's own numbers, not a count of the fixtures — deriving "245 resources" from six rows would be a lie dressed as arithmetic
+
+### Learning Progress built to the design
+
+- **`/progress` (flow 6) rebuilt to the approved design**: five headline figures in one row, a weekday bar chart, a Time by Subject donut, a Subject Performance table, and a rail of streak, strengths, areas to improve and one AI recommendation. Both charts are inline SVG — seven bars and a ring do not justify a chart dependency, and drawing them by hand keeps every colour a token reference
+- **`tokens/chart.tokens.json`**, a data-series palette. `color.event.*` was being reused for chart fills and is tuned for text on a tinted chip, so slices came out muddy and two subjects shared a colour. PROVISIONAL, sampled from the design; logged in `../../../AGENTS.md`
+- Both charts stay readable without colour: the donut legend names every slice with its time and share, and the bar chart carries a visually-hidden table of the same figures
+- The design's *"Quiz Master — you score higher than 80% of users"* is a comparison against other students, which prompt section 12 rules out. Card, title and placement are unchanged; the line now states her own record. Flagged in `../../../AGENTS.md`
+
+**Fixed while building this:**
+
+- Progress bars in the Subject Performance table rendered as empty tracks. `.track` and `.bar` were inline `<span>`s, and `width` has no effect on an inline box
+- The bar chart was letterboxed: a `640x220` viewBox with a fixed `height="220"` scaled to fit the narrower card and left a band of dead space under the bars. The viewBox now carries the aspect ratio alone
+- Computer Networks was inflating the donut, which made it disagree with the Study Time figure beside it. `inWeeklyTotal` separates what counts toward the week from what the table lists
+
+### Mock data, and three screens built to the design
+
+- **`scripts/seed.mjs` rewritten**: one student with a term of coherent study. The topics on the plan are the topics quizzed, the weak areas are the ones actually missed, and the recommendations name those same topics. Figures land on the design's numbers (72% goal, 14h 30m, 8 topics, 56 questions) from real arithmetic, not hardcoded display values. Dates are relative to the run, so **re-run `npm run db:seed` after the date rolls over** or "today's plan" drifts
+- **`lib/mock/`** for the four flows with no backend: Resources, Notes, Flashcards, Achievements, Settings preferences, and source citations. Everything is in that one module, the shapes match what real queries should return, and every screen using it says so via `MockNotice`
+- **`plan_sessions.start_time`** added: the design shows today's plan as time ranges, which a date plus a duration cannot express
+- **`scripts/migrate.mjs` is now additive**: `CREATE TABLE IF NOT EXISTS` never adds a column to an existing table, and dropping the file is impossible while anything holds it open. New columns are applied by `ALTER TABLE` from a list in the script
+- **AI Assistant screen** (flow 1) rebuilt to the design: chat list, conversation, and a "why" rail with reasoning, confidence and sources. `AnswerBody` renders markdown tables, so a comparison comes back as a real table
+- **Study Planner screen** (flow 2) rebuilt to the design: a week calendar with sessions placed by start time, a session detail panel, and the plan form behind a **Create Study Plan** button rather than always open
+- Controls with no backing store — answer feedback, clear conversations, mark session complete, session notes — are shown disabled with a reason rather than silently discarding input
+
+**Fixed while building these:**
+
+- `relativeDay` and `formatTimeRange` were exported from `'use client'` modules and called during server rendering, which crashed the Assistant page into its loading skeleton. Both moved to `lib/format.ts`, which is neither client nor server-only
+- `next build` and `next dev` both wrote to `.next`, so a verification build corrupted a running dev server's chunks. `distDir` now honours `NEXT_DIST_DIR`, and verification builds go to `.next-verify`
+- Home's main column overflowed under the sticky assistant rail, cutting off content, because grid items default to `min-width: auto`
+
 ### Approved design and flow set
 Home rebuilt to the approved design, and every flow in the approved diagram given a destination. Frontend only; the backend is restructured against these flows next.
 

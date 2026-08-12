@@ -1,0 +1,468 @@
+/*
+ * Learning Progress, per the approved design: a main column of charts and
+ * tables, with a rail of streak, strengths and suggestions.
+ *
+ * DESIGN_SYSTEM.md names this view when it asks for visual calm, so the density
+ * is deliberate: five figures, two charts, one table, and nothing that reduces
+ * a term to a single verdict.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  max-width: 96rem;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.main,
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.title {
+  font: var(--text-h2);
+}
+
+.subtitle {
+  font: var(--text-body-large);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+.rangeSelect {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font: var(--text-body-medium);
+  color: var(--color-text);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/*
+ * Five figures across at desktop, as designed. auto-fit with a 10.5rem minimum
+ * dropped the fifth onto its own row once the rail took its share, so the
+ * count is explicit at each breakpoint instead.
+ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+@media (min-width: 48rem) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 68rem) {
+  .stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--spacing-lg);
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+.statHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.statIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+/*
+ * One line, as designed. "Questions Solved" is the widest of the five and only
+ * clears the card once the icon, the gap and the rail are all sized for it.
+ */
+.statLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.statValue {
+  font: var(--text-h2);
+  line-height: 1.1;
+}
+
+/*
+ * The delta describes the change, never the student. An arrow plus a number,
+ * with no adjective attached to it (prompt section 12).
+ */
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-confidence-established-fg);
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+}
+
+.chartHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.chartTitle {
+  font: var(--text-h4);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font: var(--text-caption);
+}
+
+.dot {
+  width: var(--spacing-sm);
+  height: var(--spacing-sm);
+  border-radius: var(--radius-full);
+  flex: none;
+}
+
+.legendName {
+  flex: 1;
+  color: var(--color-text);
+}
+
+.legendValue {
+  color: var(--color-text-muted);
+}
+
+.legendPercent {
+  color: var(--color-text-muted);
+  min-width: 2.5rem;
+  text-align: end;
+}
+
+.tableWrap {
+  /* Positioned so a visually-hidden descendant cannot escape this clip. */
+  position: relative;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  /* separate, not collapse: a collapsed table drops the radius on the header. */
+  border-collapse: separate;
+  border-spacing: 0;
+  font: var(--text-body);
+}
+
+/*
+ * No rules between rows. The design separates them with space alone, and the
+ * only band of colour on the table is the header.
+ */
+.table th,
+.table td {
+  text-align: start;
+  padding: var(--spacing-md) var(--spacing-lg);
+  white-space: nowrap;
+  font-weight: inherit;
+}
+
+.table thead th {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  background: var(--color-background);
+}
+
+.table thead th:first-child {
+  border-start-start-radius: var(--radius-md);
+  border-end-start-radius: var(--radius-md);
+}
+
+.table thead th:last-child {
+  border-start-end-radius: var(--radius-md);
+  border-end-end-radius: var(--radius-md);
+}
+
+.subjectCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font: var(--text-body-medium);
+}
+
+.progressCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 9rem;
+}
+
+/*
+ * display:block on both. A span is inline by default, and width has no effect
+ * on an inline box, so the fill rendered as an empty track.
+ */
+.track {
+  display: block;
+  flex: 1;
+  height: var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+}
+
+/* Rail cards */
+.railHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.railTitle {
+  font: var(--text-body-medium);
+}
+
+.railLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.railLink:hover {
+  color: var(--color-primary-hover);
+}
+
+.streak {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.streakBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.streakValue {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.streakNumber {
+  font: var(--text-h1);
+  line-height: 1;
+}
+
+.streakUnit {
+  font: var(--text-body);
+}
+
+.streakNote {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.flame {
+  font-size: 2.5rem;
+  line-height: 1;
+  flex: none;
+}
+
+.insights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.insight {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.insightIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border-radius: var(--radius-md);
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+/*
+ * Each insight carries its own tint, as designed. The icon is decorative — the
+ * title beside it says which subject this is — so the colour adds emphasis
+ * rather than meaning.
+ */
+.insightIcon[data-tone='green'] {
+  background: var(--color-event-green-bg);
+  color: var(--color-event-green-fg);
+}
+
+.insightIcon[data-tone='blue'] {
+  background: var(--color-event-blue-bg);
+  color: var(--color-event-blue-fg);
+}
+
+.insightIcon[data-tone='amber'] {
+  background: var(--color-event-amber-bg);
+  color: var(--color-event-amber-fg);
+}
+
+.insightIcon[data-tone='rose'] {
+  background: var(--color-event-rose-bg);
+  color: var(--color-event-rose-fg);
+}
+
+.insightBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.insightTitle {
+  font: var(--text-body-medium);
+}
+
+.insightDetail {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.improveRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+}
+
+/* The one tinted card in the rail, as designed. */
+.aiRecommendation {
+  background: var(--color-secondary);
+}
+
+.aiCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.aiTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font: var(--text-body-medium);
+}
+
+.aiIcon {
+  color: var(--color-primary);
+  display: grid;
+  place-items: center;
+}
+
+.aiText {
+  font: var(--text-body);
+}
+
+.aiAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-card);
+  font: var(--text-button);
+  text-decoration: none;
+}
+
+.aiAction:hover {
+  background: var(--color-primary-hover);
+  color: var(--color-card);
+}
+
+@media (min-width: 48rem) {
+  .layout {
+    padding: var(--spacing-2xl);
+  }
+
+  .charts {
+    grid-template-columns: 1.6fr 1fr;
+  }
+}
+
+@media (min-width: 82rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 19rem);
+  }
+}

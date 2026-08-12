@@ -1,0 +1,46 @@
+/*
+ * The small "View all →" link that sits in card headers all over the app.
+ *
+ * It exists as a component for one reason: as loose CSS in each page module it
+ * was drawn at its text height, about 16px, so every one of them failed the
+ * 24px minimum target size in WCAG 2.2 (2.5.8).
+ *
+ * The negative margin is vertical only. Pulling it sideways too made the link
+ * wider than its container, which put a horizontal scrollbar on every page
+ * carrying one — the hit area has to grow inwards, not outwards.
+ */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-height: var(--spacing-xl);
+  padding: var(--spacing-xs) 0;
+  margin-block: calc(var(--spacing-xs) * -1);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font: var(--text-caption);
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.link:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-primary-hover);
+}
+
+.link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+/* Quieter variant for links that are not the card's main affordance. */
+.muted {
+  color: var(--color-text-muted);
+}
+
+.muted:hover {
+  color: var(--color-text);
+}

@@ -1,0 +1,496 @@
+/*
+ * Notes — flow 5, built to the approved design.
+ *
+ * The list-plus-detail pair is the responsive problem on this screen. Below
+ * 64rem there is not room for both, so the list is shown alone and choosing a
+ * note swaps the pane; from 64rem up they sit side by side as designed. That
+ * is a master/detail pattern rather than a shrunken desktop layout.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 96rem;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.main,
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  min-width: 0;
+}
+
+/*
+ * Flex children default to min-width:auto, so a horizontally scrolling child —
+ * the featured row, the tab strip — sizes the column to its content instead of
+ * scrolling inside it, and the whole page gains a sideways scrollbar.
+ */
+.main > *,
+.rail > * {
+  min-width: 0;
+}
+
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.title {
+  font: var(--text-h2);
+}
+
+.subtitle {
+  font: var(--text-body-large);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+/* minmax(0, 1fr), not 1fr: a grid track defaults to min-content, so the note
+ * list's widest row set the column width and pushed the page sideways. */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+/* Narrow: one pane at a time. */
+.paneHidden {
+  display: none;
+}
+
+.listHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.listTitle {
+  font: var(--text-body-medium);
+}
+
+.listCount {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.noteList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.noteRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  min-width: 0;
+  padding: var(--spacing-md);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  text-align: start;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.noteRow:hover {
+  background: var(--color-surface-hover);
+}
+
+.noteRow:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.noteRowActive,
+.noteRowActive:hover {
+  background: var(--color-secondary);
+}
+
+.noteRowBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * Caption size, not body. A 19rem list minus the icon, the timestamp and the
+ * star leaves about 155px, which "Binary Search Algorithm" clears at 12px and
+ * does not at 14px.
+ */
+.noteRowTitle {
+  font: var(--text-caption);
+  font-weight: var(--text-body-medium-weight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noteRowSubject {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.noteRowMeta {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.starOn {
+  color: var(--color-chart-amber);
+}
+
+.listFoot {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Detail pane */
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-height: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: var(--text-caption);
+  cursor: pointer;
+}
+
+.detailHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.detailTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font: var(--text-h4);
+  min-width: 0;
+}
+
+.detailTools {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex: none;
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.iconButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.detailMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-md) 0 var(--spacing-lg);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.subjectChip {
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--tone) 14%, var(--color-card));
+  color: var(--tone);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.paragraph {
+  font: var(--text-body);
+}
+
+.heading {
+  font: var(--text-body-medium);
+  color: var(--color-primary);
+}
+
+/* Numbered steps use a drawn counter, so the number keeps its own colour. */
+.ordered {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.orderedItem {
+  counter-increment: step;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  font: var(--text-body);
+}
+
+.orderedItem::before {
+  content: counter(step);
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-card);
+  font: var(--text-caption);
+}
+
+.bullets {
+  margin: 0;
+  padding-inline-start: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  font: var(--text-body);
+}
+
+.definitionLabel {
+  font: var(--text-body);
+  margin-bottom: var(--spacing-md);
+}
+
+.tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.tag {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary);
+  color: var(--color-primary);
+  font: var(--text-caption);
+}
+
+.addTag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-height: var(--spacing-xl);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px dashed var(--color-border-hover);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font: var(--text-caption);
+  cursor: pointer;
+}
+
+.addTag:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.addTag:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+/* Rail */
+.railHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.railTitle {
+  font: var(--text-body-medium);
+}
+
+.railList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.railRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  min-width: 0;
+  /* Vertical only: a sideways pull would overflow the card. */
+  padding: var(--spacing-sm);
+  margin-block: calc(var(--spacing-sm) * -1);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  text-align: start;
+  color: var(--color-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.railRow:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.railRow:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.railBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.railRowTitle {
+  font: var(--text-body-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.railRowDetail {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.railWhen {
+  flex: none;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.newFolder {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-height: var(--spacing-xl);
+  padding: var(--spacing-xs) 0;
+  margin-block: calc(var(--spacing-xs) * -1);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  font: var(--text-caption);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.newFolder:hover {
+  background: var(--color-surface-hover);
+}
+
+.newFolder:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+@media (min-width: 48rem) {
+  .layout {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .header {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .headerActions {
+    flex: none;
+  }
+}
+
+@media (min-width: 64rem) {
+  .layout {
+    padding: var(--spacing-2xl);
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
+  }
+
+  /* Both panes fit, so nothing is hidden and the back control is redundant. */
+  .paneHidden {
+    display: block;
+  }
+
+  .backButton {
+    display: none;
+  }
+}
+
+@media (min-width: 82rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 19rem);
+  }
+}

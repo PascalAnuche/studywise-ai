@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnswerBody } from '@/components/AnswerBody';
-import { ConfidenceBadge } from '@/components/ConfidenceBadge';
-import { Icon } from '@/components/Icon';
+import { Icon, type IconName } from '@/components/Icon';
 import { Toast } from '@/components/Toast';
 import type { Confidence } from '@/lib/db/types';
 import { UnderstandingCheckpoint } from './UnderstandingCheckpoint';
@@ -14,14 +13,16 @@ import styles from '../assistant.module.css';
  * One conversation, per the approved Assistant design.
  *
  * The answer renders through AnswerBody so a comparison comes back as a real
- * table. The reasoning lives in the "why" rail on this screen rather than in a
- * collapsible, which is why no ReasoningPanel appears here.
+ * table. The four suggestions beneath it are prompts the student can send with
+ * one tap, which is the design's way of offering the follow-ups prompt section
+ * 4 asks for.
  */
 export interface Turn {
   id: number | null;
   question: string;
   answer: string;
   confidence: Confidence;
+  sentAt?: string;
 }
 
 export interface ConversationProps {
@@ -30,8 +31,25 @@ export interface ConversationProps {
   answer: string;
   confidence: Confidence;
   understood: boolean | null;
+  askedAt: string;
+  answeredAt: string;
   followUps: Turn[];
 }
+
+/** The four moves offered under an answer. */
+const SUGGESTIONS: { label: string; icon: IconName; prompt: string }[] = [
+  {
+    label: 'Explain this answer',
+    icon: 'sparkle',
+    prompt: 'Explain this answer in more depth, and show the reasoning step by step.',
+  },
+  { label: 'Give an example', icon: 'code', prompt: 'Give me a worked example of this.' },
+  {
+    label: 'Compare pros and cons',
+    icon: 'scales',
+    prompt: 'Compare the pros and cons of each option here.',
+  },
+];
 
 export function Conversation(props: ConversationProps) {
   const router = useRouter();
@@ -115,62 +133,103 @@ export function Conversation(props: ConversationProps) {
   return (
     <>
       <div className={styles.conversation}>
-        <p className={styles.question}>{props.question}</p>
+        <div className={styles.question}>
+          {props.question}
+          <span className={styles.questionMeta}>
+            {props.askedAt}
+            <Icon name="check" size={12} />
+          </span>
+        </div>
 
-        <div className={styles.answer}>
-          <AnswerBody text={props.answer} />
+        <div className={styles.answerRow}>
+          <span className={styles.answerAvatar} aria-hidden="true">
+            <Icon name="sparkle" size={16} />
+          </span>
 
-          <div className={styles.toolbar}>
-            <button
-              type="button"
-              className={styles.explain}
-              disabled={pending}
-              onClick={() =>
-                send('Explain this answer in more depth, and show the reasoning step by step.')
-              }
-            >
-              <Icon name="wand" size={14} />
-              Explain this answer
-            </button>
+          <div className={styles.answer}>
+            <AnswerBody text={props.answer} />
 
-            <ConfidenceBadge confidence={props.confidence} />
-
-            <span className={styles.spacer} />
-
-            {/*
-              Feedback has no table and no decision behind it, so these state
-              that rather than silently discarding a student's signal.
-            */}
-            {(['thumb-up', 'thumb-down', 'bookmark'] as const).map((icon) => (
+            <div className={styles.toolbar}>
+              {/*
+                Copy is real. Feedback and read-aloud have no store and no
+                decision behind them, so they say so rather than discarding a
+                student's signal silently.
+              */}
               <button
-                key={icon}
                 type="button"
                 className={styles.tool}
-                title="Not available yet"
-                aria-disabled="true"
-                onClick={(event) => event.preventDefault()}
+                aria-label="Copy this answer"
+                onClick={() => void navigator.clipboard?.writeText(props.answer)}
               >
-                <Icon name={icon} size={16} />
+                <Icon name="copy" size={16} />
               </button>
-            ))}
-          </div>
+              {(['thumb-up', 'thumb-down', 'speaker'] as const).map((icon) => (
+                <button
+                  key={icon}
+                  type="button"
+                  className={styles.tool}
+                  disabled
+                  title="Not available yet"
+                  aria-label={icon === 'speaker' ? 'Read this answer aloud' : `Mark answer ${icon}`}
+                >
+                  <Icon name={icon} size={16} />
+                </button>
+              ))}
+              <span className={styles.toolSpacer} />
+              <span className={styles.sentAt}>{props.answeredAt}</span>
+            </div>
 
-          {props.explanationId !== null && (
-            <UnderstandingCheckpoint
-              understood={understood}
-              pending={checkpointPending}
-              onAnswer={answerCheckpoint}
-            />
-          )}
+            {props.explanationId !== null && (
+              <UnderstandingCheckpoint
+                understood={understood}
+                pending={checkpointPending}
+                onAnswer={answerCheckpoint}
+              />
+            )}
+          </div>
+        </div>
+
+        <div className={styles.suggestions}>
+          {SUGGESTIONS.map((suggestion) => (
+            <button
+              key={suggestion.label}
+              type="button"
+              className={styles.suggestion}
+              disabled={pending || !props.explanationId}
+              onClick={() => void send(suggestion.prompt)}
+            >
+              <span className={styles.suggestionIcon} aria-hidden="true">
+                <Icon name={suggestion.icon} size={16} />
+              </span>
+              {suggestion.label}
+            </button>
+          ))}
+          <button
+            type="button"
+            className={styles.suggestion}
+            disabled
+            title="Saving an explanation is not built yet"
+          >
+            <span className={styles.suggestionIcon} aria-hidden="true">
+              <Icon name="bookmark" size={16} />
+            </span>
+            Save explanation
+          </button>
         </div>
 
         {turns.length > 0 && (
           <div className={styles.followUps}>
             {turns.map((turn, index) => (
-              <div key={turn.id ?? `pending-${index}`} className={styles.answer}>
-                <p className={styles.question}>{turn.question}</p>
-                <AnswerBody text={turn.answer} />
-                <ConfidenceBadge confidence={turn.confidence} />
+              <div key={turn.id ?? `pending-${index}`} className={styles.conversation}>
+                <div className={styles.question}>{turn.question}</div>
+                <div className={styles.answerRow}>
+                  <span className={styles.answerAvatar} aria-hidden="true">
+                    <Icon name="sparkle" size={16} />
+                  </span>
+                  <div className={styles.answer}>
+                    <AnswerBody text={turn.answer} />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -190,25 +249,55 @@ export function Conversation(props: ConversationProps) {
         }}
       >
         <label className="visually-hidden" htmlFor="assistant-follow-up">
-          Ask a follow-up question
+          Ask anything
         </label>
-        <input
+        <textarea
           id="assistant-follow-up"
           className={styles.input}
+          rows={2}
           value={followUp}
-          placeholder="Ask a follow-up question..."
+          placeholder="Ask anything..."
           disabled={pending || !props.explanationId}
           onChange={(event) => setFollowUp(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+              event.preventDefault();
+              const trimmed = followUp.trim();
+              if (!trimmed) return;
+              setFollowUp('');
+              void send(trimmed);
+            }
+          }}
         />
-        <button
-          type="submit"
-          className={styles.send}
-          disabled={pending || !followUp.trim() || !props.explanationId}
-          aria-label="Send"
-        >
-          <Icon name="send" size={18} />
-        </button>
+
+        <div className={styles.composerRow}>
+          {(['attach', 'mic', 'lightbulb'] as const).map((icon) => (
+            <button
+              key={icon}
+              type="button"
+              className={styles.tool}
+              disabled
+              title="Not available yet"
+              aria-label={icon === 'attach' ? 'Attach a file' : icon === 'mic' ? 'Dictate' : 'Prompt ideas'}
+            >
+              <Icon name={icon} size={18} />
+            </button>
+          ))}
+          <span className={styles.toolSpacer} />
+          <button
+            type="submit"
+            className={styles.send}
+            disabled={pending || !followUp.trim() || !props.explanationId}
+            aria-label="Send"
+          >
+            <Icon name="send" size={18} />
+          </button>
+        </div>
       </form>
+
+      <p className={styles.disclaimer}>
+        AI responses can make mistakes. Please verify important information.
+      </p>
     </>
   );
 }

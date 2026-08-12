@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Card } from '@/components/Card';
+import { ActionLink } from '@/components/ActionLink';
 import { Icon } from '@/components/Icon';
 import { buildDashboard } from '@/lib/view-models/dashboard';
 import { getCurrentStudentId } from '@/lib/session';
@@ -83,10 +84,7 @@ export default function HomePage() {
           <Card>
             <div className={styles.cardHead}>
               <h2 className={styles.cardTitle}>Today&rsquo;s Plan</h2>
-              <Link href="/planner" className={styles.cardLink}>
-                View full planner
-                <Icon name="arrow-right" size={14} />
-              </Link>
+              <ActionLink href="/planner">View full planner</ActionLink>
             </div>
             <TodaysPlan items={planItems} />
           </Card>
@@ -94,10 +92,7 @@ export default function HomePage() {
           <Card>
             <div className={styles.cardHead}>
               <h2 className={styles.cardTitle}>Learning Progress</h2>
-              <Link href="/progress" className={styles.cardLink}>
-                This Week
-                <Icon name="arrow-right" size={14} />
-              </Link>
+              <ActionLink href="/progress">This Week</ActionLink>
             </div>
             <LearningProgress
               goalPercent={view.weekly.goalPercent}
@@ -120,10 +115,7 @@ export default function HomePage() {
               </h2>
               <p className={styles.sectionSub}>Based on your progress and study habits</p>
             </div>
-            <Link href="/progress" className={styles.cardLink}>
-              View all
-              <Icon name="arrow-right" size={14} />
-            </Link>
+            <ActionLink href="/progress">View all</ActionLink>
           </div>
           <RecommendationRail items={recommendations} />
         </Card>

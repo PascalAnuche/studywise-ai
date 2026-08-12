@@ -5,21 +5,38 @@
       "value": "#a99bf5ff",
       "description": "Lifted for dark surfaces; the light-mode indigo fails contrast on ink"
     },
-    "secondary color": { "type": "color", "value": "#272444ff" },
+    "secondary color": {
+      "type": "color",
+      "value": "#2b2833ff",
+      "description": "Neutral dark, not navy: surfaces stay grey and the brand hue stays in the accents"
+    },
     "accent": { "type": "color", "value": "#f4a24cff" },
-    "muted text": { "type": "color", "value": "#a8abc4ff" },
-    "border colour": { "type": "color", "value": "#33344dff" },
-    "background colour": { "type": "color", "value": "#101124ff" },
-    "tect colour": { "type": "color", "value": "#f2f2f7ff" },
-    "cards": { "type": "color", "value": "#191a30ff" },
+    "muted text": { "type": "color", "value": "#a5a5acff" },
+    "border colour": { "type": "color", "value": "#2f2f34ff" },
+    "background colour": { "type": "color", "value": "#131316ff" },
+    "tect colour": { "type": "color", "value": "#f3f3f4ff" },
+    "cards": { "type": "color", "value": "#1c1c20ff" },
 
     "confidence": {
       "established bg": { "type": "color", "value": "#12331fff" },
       "established fg": { "type": "color", "value": "#8fe0aaff" },
-      "interpretation bg": { "type": "color", "value": "#2a2b3fff" },
-      "interpretation fg": { "type": "color", "value": "#c3c6dfff" },
+      "interpretation bg": { "type": "color", "value": "#2c2c31ff" },
+      "interpretation fg": { "type": "color", "value": "#c9c9d0ff" },
       "verify bg": { "type": "color", "value": "#3a2a12ff" },
       "verify fg": { "type": "color", "value": "#f0bd7dff" }
+    },
+
+    "event": {
+      "violet bg": { "type": "color", "value": "#2b2740ff" },
+      "violet fg": { "type": "color", "value": "#bcb0f8ff" },
+      "green bg": { "type": "color", "value": "#182f23ff" },
+      "green fg": { "type": "color", "value": "#8ade9fff" },
+      "blue bg": { "type": "color", "value": "#1a2c3aff" },
+      "blue fg": { "type": "color", "value": "#8ec8eeff" },
+      "amber bg": { "type": "color", "value": "#3b2a12ff" },
+      "amber fg": { "type": "color", "value": "#f0bd7dff" },
+      "rose bg": { "type": "color", "value": "#3d1f24ff" },
+      "rose fg": { "type": "color", "value": "#f3a3aaff" }
     }
   }
 }

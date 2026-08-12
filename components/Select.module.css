@@ -1,0 +1,125 @@
+/*
+ * Custom select. The native control was replaced for two reasons: its arrow
+ * sits hard against the border with no way to inset it, and its popup is drawn
+ * by the operating system, so it ignores the design system entirely — wrong
+ * type, wrong radius, wrong colours, and a bright blue highlight in dark mode.
+ *
+ * The trade is that the accessible behaviour is now ours to provide. This
+ * implements the ARIA combobox/listbox pattern: focus stays on the trigger and
+ * the active option is tracked with aria-activedescendant.
+ */
+.wrap {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  width: 100%;
+  /* Trailing padding is smaller than leading: the chevron supplies the rest. */
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+  font: var(--text-body);
+  color: var(--color-text);
+  text-align: start;
+  background: var(--color-card);
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.trigger:hover:not(:disabled) {
+  border-color: var(--color-border-focus);
+}
+
+.trigger:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.trigger:disabled {
+  background: var(--color-disabled-bg);
+  border-color: var(--color-disabled-border);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+  transition: transform 120ms ease;
+}
+
+.open .chevron {
+  transform: rotate(180deg);
+}
+
+.listbox {
+  position: absolute;
+  z-index: 20;
+  inset-inline: 0;
+  top: calc(100% + var(--spacing-xs));
+  margin: 0;
+  padding: var(--spacing-xs);
+  list-style: none;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-raised);
+  /* Long lists scroll rather than run off the viewport. */
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+/*
+ * Flipped above the trigger when the space below runs out. Inside a scrolling
+ * modal panel a list opening downward is otherwise cut off at the panel edge.
+ */
+.dropUp {
+  top: auto;
+  bottom: calc(100% + var(--spacing-xs));
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  font: var(--text-body);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+/*
+ * The keyboard-active option and the pointer-hovered option get the same
+ * treatment, so moving between the two input methods does not change how the
+ * list reads.
+ */
+.option:hover,
+.active {
+  background: var(--color-surface-hover);
+}
+
+.selected {
+  color: var(--color-primary);
+  font: var(--text-body-medium);
+}
+
+.tick {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--color-primary);
+}

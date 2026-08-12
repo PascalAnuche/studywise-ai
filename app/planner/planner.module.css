@@ -1,16 +1,31 @@
-.page {
-  display: flex;
-  flex-direction: column;
+/*
+ * Study Planner, per the approved design: the active plan, today's schedule and
+ * an AI recommendation, with a rail of month calendar, streak and tasks.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--spacing-xl);
   padding: var(--spacing-xl) var(--spacing-lg);
   max-width: 96rem;
   margin: 0 auto;
+  align-items: start;
+}
+
+.main,
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  min-width: 0;
 }
 
 .header {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
 }
 
 .title {
@@ -23,33 +38,709 @@
   max-width: 60ch;
 }
 
-/*
- * Calendar and detail side by side at desktop width. Below that the detail
- * stacks under the calendar, because the calendar is what is being read and a
- * squeezed grid stops being legible before the panel does.
- */
-.layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-xl);
-  align-items: start;
+.createButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-primary);
+  font: var(--text-button);
+  cursor: pointer;
 }
 
-.aside {
+.createButton:hover {
+  background: var(--color-secondary);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+  /* Positioned so a visually-hidden descendant cannot escape this clip. */
+  position: relative;
+  overflow-x: auto;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: var(--text-body-medium);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tabActive,
+.tabActive:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* Active plan */
+.planCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.planBody {
+  flex: 1;
+  min-width: 14rem;
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.planTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.planTitle {
+  font: var(--text-h4);
+}
+
+.planBadge {
+  font: var(--text-caption);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+  white-space: nowrap;
+}
+
+.planDescription {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+}
+
+.planMeta {
+  display: flex;
   gap: var(--spacing-xl);
-  min-width: 0;
+  flex-wrap: wrap;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.planMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.planRing {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.planRingLabel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+
+.planRingValue {
+  font: var(--text-h4);
+}
+
+.planRingCaption {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.planAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-card);
+  font: var(--text-button);
+  text-decoration: none;
+  flex: none;
+}
+
+.planAction:hover {
+  background: var(--color-primary-hover);
+  color: var(--color-card);
+}
+
+/* Today's schedule */
+.cardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.cardTitle {
+  font: var(--text-h4);
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.schedule {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/*
+ * Narrow first: the time sits above its card and the marker rail is dropped.
+ *
+ * Laying a 6.5rem time column, the rail and the card across a phone leaves the
+ * title about 90px, which is where the clipped headings and the sideways
+ * scroll came from. The row returns at 48rem, where it fits.
+ */
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.slotTime {
+  flex: none;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.slotMarker {
+  display: none;
 }
 
 @media (min-width: 48rem) {
-  .page {
+  .slot {
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--spacing-lg);
+  }
+
+  .slotTime {
+    width: 6.5rem;
+    padding-top: var(--spacing-md);
+  }
+
+  .slotMarker {
+    display: flex;
+  }
+}
+
+/* The rail of dots down the left of the schedule. */
+.slotMarker {
+  flex: none;
+  position: relative;
+  width: var(--spacing-sm);
+  justify-content: center;
+}
+
+.slotDot {
+  width: var(--spacing-sm);
+  height: var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-border-hover);
+  margin-top: var(--spacing-xl);
+}
+
+.slotDotActive {
+  background: var(--color-primary);
+}
+
+.slotCard {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  /* Status and controls drop to a second line rather than crushing the title. */
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+}
+
+.slotIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--spacing-3xl);
+  height: var(--spacing-3xl);
+  border-radius: var(--radius-md);
+}
+
+.slotBody {
+  flex: 1 1 8rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+@media (min-width: 48rem) {
+  .slotCard {
+    flex-wrap: nowrap;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .slotIcon {
+    width: var(--spacing-4xl);
+    height: var(--spacing-4xl);
+  }
+}
+
+.slotTitle {
+  font: var(--text-body-medium);
+}
+
+.slotSubtitle {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.slotStatus {
+  font: var(--text-caption);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex: none;
+}
+
+.statusInProgress {
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.statusCompleted {
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+}
+
+.statusUpcoming {
+  background: var(--color-background);
+  color: var(--color-text-muted);
+}
+
+.slotDone {
+  color: var(--color-confidence-established-fg);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.slotMore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  flex: none;
+}
+
+.slotMore:disabled {
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+.editSchedule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-text);
+  font: var(--text-body-medium);
+  cursor: pointer;
+}
+
+.editSchedule:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+}
+
+.editSchedule:disabled {
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+/* AI recommendation strip */
+.aiStrip {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  background: var(--color-secondary);
+}
+
+.aiHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: none;
+}
+
+.aiIcon {
+  color: var(--color-primary);
+  display: grid;
+  place-items: center;
+}
+
+.aiTitle {
+  font: var(--text-body-medium);
+}
+
+.aiSub {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.aiText {
+  flex: 1;
+  min-width: 14rem;
+  font: var(--text-body);
+}
+
+.aiAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-primary);
+  font: var(--text-button);
+  text-decoration: none;
+  flex: none;
+}
+
+.aiAction:hover {
+  background: var(--color-secondary-hover);
+  color: var(--color-primary);
+}
+
+/* Mini calendar */
+.miniHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.miniMonth {
+  flex: 1;
+  font: var(--text-body-medium);
+}
+
+.miniNav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.miniNav:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.miniToday {
+  font: var(--text-caption);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.miniToday:hover {
+  background: var(--color-surface-hover);
+}
+
+.miniGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.miniWeekday {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  text-align: center;
+  padding-bottom: var(--spacing-sm);
+}
+
+.miniDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--spacing-xs) 0;
+  font: var(--text-caption);
+  color: var(--color-text);
+  min-height: 2.25rem;
+}
+
+.miniOutside {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.miniToday_ .miniNumber {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-card);
+}
+
+.miniNumber {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+}
+
+.miniDots {
+  display: flex;
+  gap: 2px;
+}
+
+.miniDot {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+}
+
+.dotStudy {
+  background: var(--color-primary);
+}
+
+.dotPlan {
+  background: var(--color-confidence-established-fg);
+}
+
+.dotGoal {
+  background: var(--color-accent);
+}
+
+.miniLegend {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-lg);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.miniLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Streak + tasks */
+.railHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.railTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font: var(--text-body-medium);
+}
+
+.railIcon {
+  display: grid;
+  place-items: center;
+  color: var(--color-accent);
+}
+
+.railLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.streakRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.streakBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.streakValue {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.streakNumber {
+  font: var(--text-h1);
+  line-height: 1;
+}
+
+.streakUnit {
+  font: var(--text-body);
+}
+
+.streakNote {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.flame {
+  font-size: 2.5rem;
+  line-height: 1;
+  flex: none;
+}
+
+.tasks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.taskCheck {
+  margin-top: 2px;
+  accent-color: var(--color-primary);
+  flex: none;
+}
+
+.taskBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.taskTitle {
+  font: var(--text-body-medium);
+}
+
+.taskSub {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.taskWhen {
+  flex: none;
+  text-align: end;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.addTask {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  /* 24px minimum target, per WCAG 2.2 2.5.8. */
+  min-height: var(--spacing-xl);
+  margin-top: var(--spacing-lg);
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: var(--text-body-medium);
+  cursor: pointer;
+  padding: 0;
+}
+
+.addTask:disabled {
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+.empty {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 48rem) {
+  .layout {
     padding: var(--spacing-2xl);
   }
 }
 
 @media (min-width: 82rem) {
   .layout {
-    grid-template-columns: minmax(0, 1fr) 22rem;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 22rem);
   }
 }

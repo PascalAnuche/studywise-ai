@@ -10,8 +10,8 @@
   z-index: 40;
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
-  padding: 0 var(--spacing-lg);
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-md);
   background: var(--color-card);
   border-bottom: 1px solid var(--color-border);
   height: var(--layout-topbar-height);
@@ -35,6 +35,11 @@
   pointer-events: none;
 }
 
+/*
+ * Trailing padding only clears the shortcut hint where the hint is shown. On a
+ * phone there is no room for both, and reserving space for a hidden badge is
+ * what pushed the placeholder under it.
+ */
 .searchInput {
   width: 100%;
   font: var(--text-body);
@@ -42,7 +47,7 @@
   background: var(--color-background);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--spacing-md) var(--spacing-3xl) var(--spacing-md) var(--spacing-4xl);
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-2xl);
 }
 
 .searchInput::placeholder {
@@ -61,6 +66,7 @@
 
 /* The shortcut hint is decorative; the input is reachable by tab regardless. */
 .shortcut {
+  display: none;
   position: absolute;
   inset-inline-end: var(--spacing-md);
   font: var(--text-caption);
@@ -71,8 +77,21 @@
   pointer-events: none;
 }
 
+/*
+ * Only needed once the search stops growing at its 28rem cap, to push the
+ * account chip to the trailing edge. Below that it competes with the search
+ * for the same free space and halves it, which on a phone left room for about
+ * two characters.
+ */
 .spacer {
+  display: none;
   flex: 1;
+}
+
+@media (min-width: 48rem) {
+  .spacer {
+    display: block;
+  }
 }
 
 .status {
@@ -191,6 +210,21 @@
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;
+  }
+}
+
+@media (min-width: 48rem) {
+  .topbar {
+    gap: var(--spacing-lg);
+    padding: 0 var(--spacing-lg);
+  }
+
+  .shortcut {
+    display: block;
+  }
+
+  .searchInput {
+    padding: var(--spacing-md) var(--spacing-3xl) var(--spacing-md) var(--spacing-4xl);
   }
 }
 

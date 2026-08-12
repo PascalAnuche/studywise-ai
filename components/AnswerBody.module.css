@@ -21,6 +21,8 @@
  * scrolling sideways.
  */
 .tableWrap {
+  /* Positioned so a visually-hidden descendant cannot escape this clip. */
+  position: relative;
   overflow-x: auto;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);

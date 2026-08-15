@@ -13,6 +13,25 @@
  */
 import { connect, prepare } from './db-client.mjs';
 
+/**
+ * Seeding is destructive: it deletes the seed student and everything that
+ * cascades from that row — plans, explanations, quizzes, progress.
+ *
+ * `prebuild` runs this before every build. Against a local file that is what
+ * you want; against a hosted database it would wipe and rewrite production on
+ * every single deploy, taking any real student's work with it. So a remote
+ * database has to be asked for explicitly.
+ */
+const isFile = (process.env.DATABASE_URL ?? 'file:./dev.db').startsWith('file:');
+if (!isFile && !process.argv.includes('--force')) {
+  console.log(
+    'Skipping seed: DATABASE_URL points at a hosted database, and seeding deletes\n' +
+      'the seed student and everything belonging to it. Pass --force if that is\n' +
+      'genuinely what you want (setting up a fresh database, say).'
+  );
+  process.exit(0);
+}
+
 const client = connect();
 // A tiny prepared-statement shape over the async client, so the script below
 // reads as it did under node:sqlite.

@@ -125,7 +125,12 @@ DATABASE_URL=libsql://<name>.turso.io      # hosted
 DATABASE_AUTH_TOKEN=<token>                # hosted only
 ```
 
-`npm run db:migrate` and `npm run db:seed` honour the same variable, so seeding a hosted database is a change of environment and nothing else. `--fresh` refuses to run against a remote database.
+`npm run db:migrate` and `npm run db:seed` honour the same variable, so setting up a hosted database is a change of environment and nothing else.
+
+Two guards, both because `prebuild` runs `migrate && seed` before *every* build:
+
+- **`db:seed` skips a hosted database** unless given `--force`. Seeding deletes the seed student and everything that cascades from it, so left ungated it would wipe and rewrite production on every deploy. Use `npm run db:seed -- --force` once, deliberately, when setting up a fresh hosted database.
+- **`migrate --fresh` refuses a hosted database outright.** Dropping one is not something a build script should be able to do by accident. Plain `migrate` is idempotent and safe to run on every deploy, which is what makes it a reasonable auto-migration.
 
 Left file-backed on a serverless host, writes still land in that instance's temp copy and are lost when it recycles. That is the demo mode, not the deployment.
 

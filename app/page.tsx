@@ -31,8 +31,8 @@ export const dynamic = 'force-dynamic';
 const RECOMMENDATION_TONES = ['brand', 'positive', 'caution'] as const;
 const RECOMMENDATION_ICONS = ['target', 'practice', 'flame'] as const;
 
-export default function HomePage() {
-  const view = buildDashboard(getCurrentStudentId());
+export default async function HomePage() {
+  const view = await buildDashboard(getCurrentStudentId());
 
   if (!view) {
     return (

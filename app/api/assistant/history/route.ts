@@ -22,9 +22,9 @@ export async function GET(request: Request) {
   const limitParam = new URL(request.url).searchParams.get('limit');
   const limit = Math.min(Math.max(Number(limitParam) || 20, 1), 50);
 
-  const recent = getRecentExplanations(studentId, limit);
+  const recent = await getRecentExplanations(studentId, limit);
   // One query for every explanation's follow-ups, not one per explanation.
-  const followUpsById = getFollowUpsFor(recent.map((explanation) => explanation.id));
+  const followUpsById = await getFollowUpsFor(recent.map((explanation) => explanation.id));
 
   const explanations = recent.map((explanation) => ({
     ...explanation,

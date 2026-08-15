@@ -11,26 +11,22 @@
  * Dates are relative to today, so the data never goes stale.
  * Re-runnable: it clears the seeded student first.
  */
-import { DatabaseSync } from 'node:sqlite';
-import path from 'node:path';
+import { connect, prepare } from './db-client.mjs';
 
-import { announce, databaseFile } from './db-path.mjs';
-
-const file = databaseFile();
-announce(file);
-const db = new DatabaseSync(file);
-db.exec('PRAGMA foreign_keys = ON');
+const client = connect();
+// A tiny prepared-statement shape over the async client, so the script below
+// reads as it did under node:sqlite.
+const db = { prepare: (sql) => prepare(client, sql) };
 
 const now = new Date();
 const iso = (daysAgo = 0) => new Date(now.getTime() - daysAgo * 864e5).toISOString();
 const day = (daysAgo = 0) => iso(daysAgo).slice(0, 10);
 
 const EMAIL = 'sarah.johnson@example.ac.uk';
-db.prepare('DELETE FROM students WHERE email = ?').run(EMAIL);
+await db.prepare('DELETE FROM students WHERE email = ?').run(EMAIL);
 
 // Persona 1 from PRD section 4.
-const student = db
-  .prepare(
+const student = await db.prepare(
     `INSERT INTO students (name, email, discipline, streak_count, last_active_on, created_at)
      VALUES (?, ?, ?, ?, ?, ?) RETURNING id`
   )
@@ -54,7 +50,7 @@ const insertSession = db.prepare(
    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
 );
 
-const dataStructures = insertPlan.get(
+const dataStructures = await insertPlan.get(
   studentId,
   'Data Structures',
   JSON.stringify(['Pass the January exam', 'Actually understand recursion', 'Stop guessing at Big-O']),
@@ -68,7 +64,7 @@ const dataStructures = insertPlan.get(
   iso(1)
 );
 
-const operatingSystems = insertPlan.get(
+const operatingSystems = await insertPlan.get(
   studentId,
   'Operating Systems',
   JSON.stringify(['Keep up with the lectures']),
@@ -83,7 +79,7 @@ const operatingSystems = insertPlan.get(
 );
 
 // A draft whose checkpoint has not been answered: understood stays null.
-insertPlan.get(
+await insertPlan.get(
   studentId,
   'Databases',
   JSON.stringify(['Normalisation confidence before the coursework']),
@@ -130,11 +126,13 @@ const SESSIONS = [
   ['Sorting Algorithms', 'Algorithms Practice', 60, -1, '10:00'],
 ];
 
-SESSIONS.forEach(([topic, focus, minutes, daysAgo, startTime], index) => {
+// for..of rather than forEach: a callback cannot await, and these inserts now
+// go one at a time over the client.
+for (const [index, [topic, focus, minutes, daysAgo, startTime]] of SESSIONS.entries()) {
   const osTopics = ['Processes', 'Scheduling', 'Memory management', 'File systems'];
   const planId = osTopics.includes(topic) ? operatingSystems.id : dataStructures.id;
-  insertSession.run(planId, index + 1, topic, focus, minutes, day(daysAgo), startTime, iso(21), iso(daysAgo < 0 ? 0 : daysAgo));
-});
+  await insertSession.run(planId, index + 1, topic, focus, minutes, day(daysAgo), startTime, iso(21), iso(daysAgo < 0 ? 0 : daysAgo));
+}
 
 // ---------------------------------------------------------------------------
 // Explanations and follow-ups
@@ -195,7 +193,7 @@ const insertExplanation = db.prepare(
 
 const explanationIds = {};
 for (const [subject, question, answer, reasoning, confidence, understood, daysAgo] of EXPLANATIONS) {
-  const row = insertExplanation.get(studentId, subject, question, answer, reasoning, confidence, understood, iso(daysAgo));
+  const row = await insertExplanation.get(studentId, subject, question, answer, reasoning, confidence, understood, iso(daysAgo));
   explanationIds[subject] = row.id;
 }
 
@@ -205,7 +203,7 @@ const insertFollowUp = db.prepare(
    VALUES (?, ?, ?, ?, ?, ?)`
 );
 
-insertFollowUp.run(
+await insertFollowUp.run(
   explanationIds['Dynamic programming'],
   "I didn't follow that. Can you explain it a different way, with a worked example or smaller steps?",
   'Take Fibonacci with n = 5. Memoisation starts at fib(5) and caches on the way down. Tabulation starts at fib(0) and fills upward. Same values, opposite direction.',
@@ -214,7 +212,7 @@ insertFollowUp.run(
   iso(2)
 );
 
-insertFollowUp.run(
+await insertFollowUp.run(
   explanationIds['Arrays'],
   'Can you give me an example of each?',
   'An array is a row of lockers numbered 0 upward. A linked list is a treasure hunt: each note tells you where the next one is.',
@@ -255,12 +253,12 @@ let questionsSolved = 0;
 
 for (const [subject, topic, difficulty, correct, wrong, daysAgo] of QUIZZES) {
   const total = correct + wrong;
-  const quiz = insertQuiz.get(studentId, subject, topic, difficulty, correct / total, iso(daysAgo), iso(daysAgo));
+  const quiz = await insertQuiz.get(studentId, subject, topic, difficulty, correct / total, iso(daysAgo), iso(daysAgo));
 
   for (let i = 0; i < total; i++) {
     const isCorrect = i < correct;
     const answer = `The correct answer for ${topic} point ${i + 1}`;
-    insertQuestion.run(
+    await insertQuestion.run(
       quiz.id,
       `[${difficulty}] Question ${i + 1} on ${topic}.`,
       JSON.stringify([answer, `A common mix-up on ${topic}`, `True of a related topic, but not ${topic}`, 'Correct wording, wrong conclusion']),
@@ -304,7 +302,7 @@ const insertProgress = db.prepare(
 );
 
 for (const [topic, status, weak, daysAgo] of PROGRESS) {
-  insertProgress.run(studentId, topic, status, daysAgo === null ? null : iso(daysAgo), weak, iso(21), iso(daysAgo ?? 21));
+  await insertProgress.run(studentId, topic, status, daysAgo === null ? null : iso(daysAgo), weak, iso(21), iso(daysAgo ?? 21));
 }
 
 // ---------------------------------------------------------------------------
@@ -316,27 +314,30 @@ const insertRecommendation = db.prepare(
    VALUES (?, ?, ?, ?, ?)`
 );
 
-const lastQuiz = db
-  .prepare('SELECT id FROM quizzes WHERE student_id = ? ORDER BY created_at DESC LIMIT 1')
+const lastQuiz = await db.prepare('SELECT id FROM quizzes WHERE student_id = ? ORDER BY created_at DESC LIMIT 1')
   .get(studentId);
 
-insertRecommendation.run(studentId, lastQuiz.id, 'Dynamic programming', '3 of 5 questions on Dynamic programming were incorrect.', iso(1));
-insertRecommendation.run(studentId, null, 'Hash Tables', '2 of 6 questions were incorrect, and it is on your active Data Structures plan.', iso(4));
-insertRecommendation.run(studentId, null, 'Sorting Algorithms', 'Not started, and it is scheduled on your plan for tomorrow.', iso(0));
+await insertRecommendation.run(studentId, lastQuiz.id, 'Dynamic programming', '3 of 5 questions on Dynamic programming were incorrect.', iso(1));
+await insertRecommendation.run(studentId, null, 'Hash Tables', '2 of 6 questions were incorrect, and it is on your active Data Structures plan.', iso(4));
+await insertRecommendation.run(studentId, null, 'Sorting Algorithms', 'Not started, and it is scheduled on your plan for tomorrow.', iso(0));
 
 // ---------------------------------------------------------------------------
 
-const count = (table) =>
-  db.prepare(`SELECT COUNT(*) AS n FROM ${table} WHERE student_id = ?`).get(studentId).n;
+const count = async (table) =>
+  (await db.prepare(`SELECT COUNT(*) AS n FROM ${table} WHERE student_id = ?`).get(studentId)).n;
 
-const sessions = db
-  .prepare('SELECT COUNT(*) AS n FROM plan_sessions WHERE plan_id IN (SELECT id FROM study_plans WHERE student_id = ?)')
-  .get(studentId).n;
+const sessions = (
+  await db
+    .prepare(
+      'SELECT COUNT(*) AS n FROM plan_sessions WHERE plan_id IN (SELECT id FROM study_plans WHERE student_id = ?)'
+    )
+    .get(studentId)
+).n;
 
 console.log(`Seeded student ${studentId} (${EMAIL})`);
-console.log(`  study_plans:     ${count('study_plans')} (${sessions} sessions)`);
-console.log(`  explanations:    ${count('explanations')}`);
-console.log(`  quizzes:         ${count('quizzes')} (${questionsSolved} questions answered)`);
-console.log(`  progress:        ${count('progress')}`);
-console.log(`  recommendations: ${count('recommendations')}`);
-db.close();
+console.log(`  study_plans:     ${await count('study_plans')} (${sessions} sessions)`);
+console.log(`  explanations:    ${await count('explanations')}`);
+console.log(`  quizzes:         ${await count('quizzes')} (${questionsSolved} questions answered)`);
+console.log(`  progress:        ${await count('progress')}`);
+console.log(`  recommendations: ${await count('recommendations')}`);
+client.close();

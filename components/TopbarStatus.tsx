@@ -11,7 +11,7 @@ import { AccountChip, AccountChipSkeleton, NotificationBell } from './Topbar';
  * immediately and the account fills in when it is ready.
  */
 export async function TopbarStatus() {
-  const student = getStudent(getCurrentStudentId());
+  const student = await getStudent(getCurrentStudentId());
 
   return (
     <>

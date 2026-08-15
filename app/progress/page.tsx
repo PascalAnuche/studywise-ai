@@ -44,8 +44,8 @@ interface Stat {
   delta: string;
 }
 
-export default function ProgressPage() {
-  const overview = getProgressOverview(getCurrentStudentId());
+export default async function ProgressPage() {
+  const overview = await getProgressOverview(getCurrentStudentId());
 
   // The donut and the Study Time figure cover the subjects in this week's
   // total; the table below lists every tracked subject.

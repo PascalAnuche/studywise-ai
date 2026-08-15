@@ -20,6 +20,6 @@ export const dynamic = 'force-dynamic';
  * explainable as an answer.
  */
 export async function GET() {
-  const recommendations = getGeneralRecommendations(getCurrentStudentId());
+  const recommendations = await getGeneralRecommendations(getCurrentStudentId());
   return NextResponse.json({ recommendations });
 }

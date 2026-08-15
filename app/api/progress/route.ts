@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic';
  * Scoped to the current student; studentId is never read from the query string.
  */
 export async function GET() {
-  const overview = getProgressOverview(getCurrentStudentId());
+  const overview = await getProgressOverview(getCurrentStudentId());
 
   return NextResponse.json({
     streak: overview.streak,

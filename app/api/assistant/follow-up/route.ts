@@ -29,11 +29,11 @@ export async function POST(request: Request) {
   if (!question) return badRequest('question is required');
 
   const studentId = getCurrentStudentId();
-  const explanation = getExplanationForStudent(studentId, explanationId);
+  const explanation = await getExplanationForStudent(studentId, explanationId);
   if (!explanation) return notFound('Explanation not found');
 
   try {
-    const priorFollowUps = getFollowUps(explanationId);
+    const priorFollowUps = await getFollowUps(explanationId);
 
     const history = [
       { question: explanation.question, answer: explanation.answer },
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
 
     const result = await runExplain({
       userMessage: question,
-      context: buildStudentContext(studentId),
+      context: await buildStudentContext(studentId),
       history,
     });
 
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ followUpId: null, result });
     }
 
-    const followUp = insertFollowUp({
+    const followUp = await insertFollowUp({
       explanationId,
       question,
       answer: result.answer,

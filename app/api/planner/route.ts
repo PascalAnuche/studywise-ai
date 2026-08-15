@@ -23,5 +23,5 @@ export async function GET(request: Request) {
   const requested = new URL(request.url).searchParams.get('status');
   const status = STATUSES.find((value) => value === requested);
 
-  return NextResponse.json({ plans: listPlans(studentId, status).map(toPlanDto) });
+  return NextResponse.json({ plans: (await listPlans(studentId, status)).map(toPlanDto) });
 }

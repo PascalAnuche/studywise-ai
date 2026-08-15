@@ -13,6 +13,23 @@ All notable changes to this project are documented here. Format follows Keep a C
 - Design tokens exported from Figma, converted to CSS variables by `../../../tokens/build-tokens.js` into `../../../tokens/tokens.css`, including derived hover and focus roles
 - Docs reorganized into `docs/`, `rules/`, and `.agents/`, leaving `../../../README.md` and `../../../AGENTS.md` at the root
 
+### Hosted database, and a deployable build
+
+- **Migrated the data layer from `node:sqlite` to libSQL.** One `DATABASE_URL` now selects a local file or a hosted Turso database behind the same API, so writes survive on a serverless host instead of dying with the instance. The SQL is unchanged — libSQL is SQLite
+- **Every function in `lib/db` is now async**, and every caller awaits. That is the cost of the change: libSQL is a network client even against a file
+- **Independent reads are issued together.** `buildStudentContext` (4 queries) and `buildDashboard` (6) use `Promise.all` rather than sequential awaits, which against a hosted database is the difference between one round-trip and six — both sit on a critical path
+- **Multi-statement writes are transactional.** Replacing a plan's sessions, saving quiz answers, and marking a quiz complete go through `batch`, so a failure part-way cannot leave a plan with no sessions or a quiz scored against rows that were never updated
+- **libSQL rows are normalised to plain objects.** Its rows carry columns as named properties *and* array indices, so serialising one straight to JSON leaks `"0"`, `"1"`, `"length"` into the response
+- `migrate.mjs` and `seed.mjs` run against the same `DATABASE_URL`, so seeding a hosted database is a change of environment. `--fresh` refuses to touch a remote one
+
+**Deployment fixes, from three failed builds:**
+
+- `/_not-found` is prerendered, prerendering it renders the root layout, and the layout queries the database. With `dev.db` gitignored the build machine had none, so the whole build died on `SQLITE_CANTOPEN`. `prebuild` now creates and seeds it
+- Both scripts resolved the path from `process.cwd()`, and a build host is not obliged to run npm scripts from the project root. From elsewhere that became `/dev.db`, unwritable, reported as the same opaque error. Resolved from the repo root now
+- All 15 API routes are `force-dynamic`. Handlers without a dynamic marker are candidates for build-time evaluation, which would run them against seed data and cache the result
+- `lib/db/client.test.ts` covers `openPath`, whose read-only branch never runs on a developer machine and cannot be simulated on Windows — which is exactly how the original failure reached a deploy
+- `.gitignore` missed `*.db-shm`, so a SQLite sidecar had been committed
+
 ### Responsiveness, custom form controls, and three more screens
 
 **Responsiveness across all breakpoints.** `scripts/responsive-audit.mjs` loads every route at 375, 414, 768, 1024 and 1440 and reports which element causes a sideways scroll, plus any tap target under the 24px WCAG 2.2 minimum. It went from 30-odd findings to none.

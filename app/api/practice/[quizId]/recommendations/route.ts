@@ -26,7 +26,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ qui
 
   // Confirm the quiz belongs to this student before returning anything derived
   // from it (rules/SECURITY.md).
-  if (!getQuiz(studentId, quizId)) return notFound('Quiz not found');
+  if (!await getQuiz(studentId, quizId)) return notFound('Quiz not found');
 
-  return NextResponse.json({ recommendations: getQuizRecommendations(studentId, quizId) });
+  return NextResponse.json({ recommendations: await getQuizRecommendations(studentId, quizId) });
 }

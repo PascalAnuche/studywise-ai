@@ -1,5 +1,5 @@
 import 'server-only';
-import { getDb, nowIso, queryAll, queryOne } from './client';
+import { batch, nowIso, queryAll, queryOne } from './client';
 import type { PlanSession } from '@/lib/ai/types';
 import type { PlanStatus, StudyPlan } from './types';
 
@@ -83,31 +83,31 @@ export function parseJsonArray(value: string | null): string[] {
   }
 }
 
-export function getPlan(studentId: number, planId: number): PlanWithSessions | undefined {
-  const plan = queryOne<StudyPlan>(
+export async function getPlan(studentId: number, planId: number): Promise<PlanWithSessions | undefined> {
+  const plan = await queryOne<StudyPlan>(
     'SELECT * FROM study_plans WHERE id = ? AND student_id = ?',
     planId,
     studentId
   );
   if (!plan) return undefined;
-  return { ...plan, sessions: getSessions(planId) };
+  return { ...plan, sessions: await getSessions(planId) };
 }
 
-export function getSessions(planId: number): PlanSessionRow[] {
-  return queryAll<PlanSessionRow>(
+export async function getSessions(planId: number): Promise<PlanSessionRow[]> {
+  return await queryAll<PlanSessionRow>(
     'SELECT * FROM plan_sessions WHERE plan_id = ? ORDER BY order_index',
     planId
   );
 }
 
-export function listPlans(studentId: number, status?: PlanStatus): PlanWithSessions[] {
+export async function listPlans(studentId: number, status?: PlanStatus): Promise<PlanWithSessions[]> {
   const plans = status
-    ? queryAll<StudyPlan>(
+    ? await queryAll<StudyPlan>(
         'SELECT * FROM study_plans WHERE student_id = ? AND status = ? ORDER BY updated_at DESC',
         studentId,
         status
       )
-    : queryAll<StudyPlan>(
+    : await queryAll<StudyPlan>(
         'SELECT * FROM study_plans WHERE student_id = ? ORDER BY updated_at DESC',
         studentId
       );
@@ -117,7 +117,7 @@ export function listPlans(studentId: number, status?: PlanStatus): PlanWithSessi
   // One query for every plan's sessions rather than one per plan. Cheap at this
   // size, but the N+1 shape is what turns a fast page into a slow one later.
   const placeholders = plans.map(() => '?').join(', ');
-  const sessions = queryAll<PlanSessionRow>(
+  const sessions = await queryAll<PlanSessionRow>(
     `SELECT * FROM plan_sessions WHERE plan_id IN (${placeholders}) ORDER BY plan_id, order_index`,
     ...plans.map((plan) => plan.id)
   );
@@ -136,7 +136,7 @@ export function listPlans(studentId: number, status?: PlanStatus): PlanWithSessi
  * Creates a plan as `draft` with `understood` null. It only becomes `active`
  * once the student confirms it, which is PRD 7.2's review step.
  */
-export function insertPlan(input: {
+export async function insertPlan(input: {
   studentId: number;
   subject: string;
   goals: string[];
@@ -145,10 +145,10 @@ export function insertPlan(input: {
   startDate: string | null;
   endDate: string | null;
   sessions: PlanSession[];
-}): PlanWithSessions {
+}): Promise<PlanWithSessions> {
   const stamp = nowIso();
 
-  const plan = queryOne<StudyPlan>(
+  const plan = await queryOne<StudyPlan>(
     `INSERT INTO study_plans
        (student_id, subject, goals, topics, frequency, start_date, end_date, status, understood, created_at, updated_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, 'draft', NULL, ?, ?)
@@ -166,42 +166,45 @@ export function insertPlan(input: {
 
   if (!plan) throw new Error('Failed to insert study plan');
 
-  replaceSessions(plan.id, input.sessions);
-  return { ...plan, sessions: getSessions(plan.id) };
+  await replaceSessions(plan.id, input.sessions);
+  return { ...plan, sessions: await getSessions(plan.id) };
 }
 
-export function replaceSessions(planId: number, sessions: PlanSession[]): void {
-  const db = getDb();
+/**
+ * The delete and the inserts go as one batch, which libSQL runs as a
+ * transaction. Sent as separate statements a failure part-way through would
+ * leave the plan with no sessions at all — the old ones already gone and the
+ * new ones never written.
+ */
+export async function replaceSessions(planId: number, sessions: PlanSession[]): Promise<void> {
   const stamp = nowIso();
 
-  db.prepare('DELETE FROM plan_sessions WHERE plan_id = ?').run(planId);
-
-  const insert = db.prepare(
-    `INSERT INTO plan_sessions
+  await batch([
+    { sql: 'DELETE FROM plan_sessions WHERE plan_id = ?', args: [planId] },
+    ...sessions.map((session, index) => ({
+      sql: `INSERT INTO plan_sessions
        (plan_id, order_index, topic, focus, duration_minutes, scheduled_for, start_time, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  );
-
-  sessions.forEach((session, index) => {
-    insert.run(
-      planId,
-      session.order ?? index + 1,
-      session.topic,
-      session.focus,
-      session.durationMinutes,
-      session.scheduledFor,
-      session.startTime ?? null,
-      stamp,
-      stamp
-    );
-  });
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        planId,
+        session.order ?? index + 1,
+        session.topic,
+        session.focus,
+        session.durationMinutes,
+        session.scheduledFor,
+        session.startTime ?? null,
+        stamp,
+        stamp,
+      ],
+    })),
+  ]);
 }
 
 /**
  * PRD 7.2: plans stay adjustable after saving, not just before. Status is
  * deliberately not editable here, only /confirm moves a plan to active.
  */
-export function updatePlan(
+export async function updatePlan(
   studentId: number,
   planId: number,
   changes: {
@@ -213,11 +216,11 @@ export function updatePlan(
     endDate?: string | null;
     sessions?: PlanSession[];
   }
-): PlanWithSessions | undefined {
-  const existing = getPlan(studentId, planId);
+): Promise<PlanWithSessions | undefined> {
+  const existing = await getPlan(studentId, planId);
   if (!existing) return undefined;
 
-  const plan = queryOne<StudyPlan>(
+  const plan = await queryOne<StudyPlan>(
     `UPDATE study_plans SET
        subject = ?, goals = ?, topics = ?, frequency = ?,
        start_date = ?, end_date = ?, updated_at = ?
@@ -235,9 +238,9 @@ export function updatePlan(
   );
 
   if (!plan) return undefined;
-  if (changes.sessions) replaceSessions(planId, changes.sessions);
+  if (changes.sessions) await replaceSessions(planId, changes.sessions);
 
-  return { ...plan, sessions: getSessions(planId) };
+  return { ...plan, sessions: await getSessions(planId) };
 }
 
 /**
@@ -247,12 +250,12 @@ export function updatePlan(
  * stays draft so the student can edit and re-review; the answer is recorded
  * either way, which is what makes the branch testable.
  */
-export function confirmPlan(
+export async function confirmPlan(
   studentId: number,
   planId: number,
   understood: boolean
-): StudyPlan | undefined {
-  return queryOne<StudyPlan>(
+): Promise<StudyPlan | undefined> {
+  return await queryOne<StudyPlan>(
     `UPDATE study_plans SET status = ?, understood = ?, updated_at = ?
       WHERE id = ? AND student_id = ?
       RETURNING *`,

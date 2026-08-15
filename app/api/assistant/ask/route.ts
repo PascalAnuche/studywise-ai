@@ -34,14 +34,14 @@ export async function POST(request: Request) {
   const studentId = getCurrentStudentId();
 
   try {
-    const context = buildStudentContext(studentId);
+    const context = await buildStudentContext(studentId);
     const result = await runExplain({ userMessage: question, context });
 
     if (!isPersistable(result)) {
       return NextResponse.json({ explanationId: null, result });
     }
 
-    const explanation = insertExplanation({
+    const explanation = await insertExplanation({
       studentId,
       subject: subject ?? context.currentTopics[0] ?? null,
       question,
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
 
     // Studying a topic counts even before the checkpoint is answered. The
     // streak itself waits for the checkpoint, see the write table in API.md.
-    if (explanation.subject) touchTopic(studentId, explanation.subject);
+    if (explanation.subject) await touchTopic(studentId, explanation.subject);
 
     return NextResponse.json({ explanationId: explanation.id, result });
   } catch (error) {

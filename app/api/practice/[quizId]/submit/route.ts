@@ -32,7 +32,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ qui
   if (!answers) return badRequest('answers are malformed');
 
   const studentId = getCurrentStudentId();
-  const outcome = submitQuiz(studentId, quizId, answers);
+  const outcome = await submitQuiz(studentId, quizId, answers);
   if (!outcome) return notFound('Quiz not found, or already submitted');
 
   const quiz = toQuizDto(outcome.quiz);
@@ -42,7 +42,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ qui
     quiz,
     results: quiz.questions,
     incorrectQuestions: quiz.questions.filter((question) => question.isCorrect === false),
-    recommendations: getQuizRecommendations(studentId, quizId),
+    recommendations: await getQuizRecommendations(studentId, quizId),
     streak: outcome.streak,
   });
 }

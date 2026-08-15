@@ -44,13 +44,13 @@ function formatDateRange(start: string | null, end: string | null): string {
   return `${from} – ${to}`;
 }
 
-export default function PlannerPage() {
+export default async function PlannerPage() {
   const studentId = getCurrentStudentId();
-  const student = getStudent(studentId);
+  const student = await getStudent(studentId);
   const today = new Date().toISOString().slice(0, 10);
   const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
 
-  const plans = listPlans(studentId).map(toPlanDto);
+  const plans = (await listPlans(studentId)).map(toPlanDto);
   const active = plans.find((plan) => plan.status === 'active') ?? null;
 
   const allSessions = plans.flatMap((plan) =>

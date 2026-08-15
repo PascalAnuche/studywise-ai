@@ -54,14 +54,14 @@ export async function POST(request: Request) {
   const input = { subject, goals, topics, frequency, startDate, endDate };
 
   try {
-    const context = buildStudentContext(studentId);
+    const context = await buildStudentContext(studentId);
     const result = await runPlan({ input, context });
 
     if (isAside(result)) {
       return NextResponse.json({ planId: null, result });
     }
 
-    const plan = insertPlan({ studentId, ...input, sessions: result.sessions });
+    const plan = await insertPlan({ studentId, ...input, sessions: result.sessions });
 
     return NextResponse.json({ planId: plan.id, plan: toPlanDto(plan), result });
   } catch (error) {

@@ -1,5 +1,5 @@
 import 'server-only';
-import { getDb, nowIso, queryAll, queryOne } from './client';
+import { nowIso, queryAll, queryOne, run } from './client';
 import type { Progress, Recommendation, Student, TopicStatus } from './types';
 
 /**
@@ -56,8 +56,8 @@ interface QuizEvidenceRow {
  * One grouped query rather than one per quiz; the N+1 shape is what turns this
  * page slow once a student has a term's worth of history.
  */
-function quizEvidence(studentId: number): QuizEvidenceRow[] {
-  return queryAll<QuizEvidenceRow>(
+async function quizEvidence(studentId: number): Promise<QuizEvidenceRow[]> {
+  return await queryAll<QuizEvidenceRow>(
     `SELECT q.id                                              AS quiz_id,
             q.topic                                           AS topic,
             q.subject                                         AS subject,
@@ -73,14 +73,14 @@ function quizEvidence(studentId: number): QuizEvidenceRow[] {
   );
 }
 
-export function getProgressOverview(studentId: number): ProgressOverview {
-  const student = queryOne<Student>('SELECT * FROM students WHERE id = ?', studentId);
-  const rows = queryAll<Progress>(
+export async function getProgressOverview(studentId: number): Promise<ProgressOverview> {
+  const student = await queryOne<Student>('SELECT * FROM students WHERE id = ?', studentId);
+  const rows = await queryAll<Progress>(
     'SELECT * FROM progress WHERE student_id = ? ORDER BY topic',
     studentId
   );
 
-  const evidence = quizEvidence(studentId);
+  const evidence = await quizEvidence(studentId);
 
   // Newest quiz per topic. Quizzes are already ordered newest first, so the
   // first sighting of a topic wins.
@@ -129,24 +129,27 @@ export function getProgressOverview(studentId: number): ProgressOverview {
  * The only direct write to `progress`: the student marking a topic themselves.
  * Everything else is a side effect of studying, see the write table in API.md.
  */
-export function setTopicStatus(
+export async function setTopicStatus(
   studentId: number,
   topic: string,
   status: TopicStatus
-): Progress | undefined {
+): Promise<Progress | undefined> {
   const stamp = nowIso();
 
-  getDb()
-    .prepare(
-      `INSERT INTO progress (student_id, topic, status, last_studied_at, is_weak_area, created_at, updated_at)
+  await run(
+    `INSERT INTO progress (student_id, topic, status, last_studied_at, is_weak_area, created_at, updated_at)
        VALUES (?, ?, ?, NULL, 0, ?, ?)
        ON CONFLICT (student_id, topic) DO UPDATE SET
          status     = excluded.status,
-         updated_at = excluded.updated_at`
-    )
-    .run(studentId, topic, status, stamp, stamp);
+         updated_at = excluded.updated_at`,
+    studentId,
+    topic,
+    status,
+    stamp,
+    stamp
+  );
 
-  return queryOne<Progress>(
+  return await queryOne<Progress>(
     'SELECT * FROM progress WHERE student_id = ? AND topic = ?',
     studentId,
     topic
@@ -158,8 +161,8 @@ export function setTopicStatus(
  * the `based_on_quiz_id IS NULL` case the data model allows for and that no
  * route could previously produce.
  */
-export function getGeneralRecommendations(studentId: number, limit = 10): Recommendation[] {
-  return queryAll<Recommendation>(
+export async function getGeneralRecommendations(studentId: number, limit = 10): Promise<Recommendation[]> {
+  return await queryAll<Recommendation>(
     `SELECT * FROM recommendations
       WHERE student_id = ? AND based_on_quiz_id IS NULL
       ORDER BY created_at DESC

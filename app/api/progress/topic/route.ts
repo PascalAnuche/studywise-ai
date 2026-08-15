@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   if (!status) return badRequest('status must be not_started, in_progress, or completed');
 
   try {
-    const row = setTopicStatus(getCurrentStudentId(), topic, status);
+    const row = await setTopicStatus(getCurrentStudentId(), topic, status);
     if (!row) return serverError('Could not update the topic');
 
     return NextResponse.json({

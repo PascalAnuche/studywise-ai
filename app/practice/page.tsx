@@ -20,7 +20,7 @@ export default async function PracticePage({
 }) {
   const { topic } = await searchParams;
   const studentId = getCurrentStudentId();
-  const history = listQuizzes(studentId, 5);
+  const history = await listQuizzes(studentId, 5);
 
   return (
     <main id="main" className={styles.page}>

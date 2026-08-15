@@ -1,5 +1,5 @@
 import 'server-only';
-import { getDb, nowIso, queryAll, queryOne } from './client';
+import { batch, nowIso, queryAll, queryOne, run } from './client';
 import { extendStreak, touchTopic } from './mutations';
 import type { Difficulty, QuizQuestionDraft } from '@/lib/ai/types';
 import type { Quiz, QuizQuestion, Recommendation } from './types';
@@ -72,15 +72,15 @@ export function toQuizDto(quiz: QuizWithQuestions): QuizDto {
   };
 }
 
-export function getQuiz(studentId: number, quizId: number): QuizWithQuestions | undefined {
-  const quiz = queryOne<Quiz>(
+export async function getQuiz(studentId: number, quizId: number): Promise<QuizWithQuestions | undefined> {
+  const quiz = await queryOne<Quiz>(
     'SELECT * FROM quizzes WHERE id = ? AND student_id = ?',
     quizId,
     studentId
   );
   if (!quiz) return undefined;
 
-  const questions = queryAll<QuizQuestion>(
+  const questions = await queryAll<QuizQuestion>(
     'SELECT * FROM quiz_questions WHERE quiz_id = ? ORDER BY id',
     quizId
   );
@@ -88,25 +88,24 @@ export function getQuiz(studentId: number, quizId: number): QuizWithQuestions | 
   return { ...quiz, questions };
 }
 
-export function listQuizzes(studentId: number, limit = 10): Quiz[] {
-  return queryAll<Quiz>(
+export async function listQuizzes(studentId: number, limit = 10): Promise<Quiz[]> {
+  return await queryAll<Quiz>(
     'SELECT * FROM quizzes WHERE student_id = ? ORDER BY created_at DESC LIMIT ?',
     studentId,
     limit
   );
 }
 
-export function insertQuiz(input: {
+export async function insertQuiz(input: {
   studentId: number;
   subject: string;
   topic: string | null;
   difficulty: Difficulty;
   questions: QuizQuestionDraft[];
-}): QuizWithQuestions {
+}): Promise<QuizWithQuestions> {
   const stamp = nowIso();
-  const db = getDb();
 
-  const quiz = queryOne<Quiz>(
+  const quiz = await queryOne<Quiz>(
     `INSERT INTO quizzes (student_id, subject, topic, difficulty, score, completed_at, created_at)
      VALUES (?, ?, ?, ?, NULL, NULL, ?)
      RETURNING *`,
@@ -119,47 +118,49 @@ export function insertQuiz(input: {
 
   if (!quiz) throw new Error('Failed to insert quiz');
 
-  const insert = db.prepare(
-    `INSERT INTO quiz_questions
+  await batch(
+    input.questions.map((question) => ({
+      sql: `INSERT INTO quiz_questions
        (quiz_id, question_text, options, correct_answer, reasoning, student_answer, is_correct, explanation_id, created_at)
-     VALUES (?, ?, ?, ?, ?, NULL, NULL, NULL, ?)`
+     VALUES (?, ?, ?, ?, ?, NULL, NULL, NULL, ?)`,
+      args: [
+        quiz.id,
+        question.question,
+        JSON.stringify(question.options),
+        question.correctAnswer,
+        question.reasoning,
+        stamp,
+      ],
+    }))
   );
 
-  for (const question of input.questions) {
-    insert.run(
-      quiz.id,
-      question.question,
-      JSON.stringify(question.options),
-      question.correctAnswer,
-      question.reasoning,
-      stamp
-    );
-  }
-
-  return getQuiz(input.studentId, quiz.id)!;
+  const saved = await getQuiz(input.studentId, quiz.id);
+  if (!saved) throw new Error('Quiz vanished immediately after insert');
+  return saved;
 }
 
 /**
  * PRD 7.3's "save questions" step, read as saving work in progress.
  * Scores nothing and reveals nothing. Assumption, see AGENTS.md.
  */
-export function saveAnswers(
+export async function saveAnswers(
   studentId: number,
   quizId: number,
   answers: { questionId: number; studentAnswer: string }[]
-): boolean {
-  const quiz = getQuiz(studentId, quizId);
+): Promise<boolean> {
+  const quiz = await getQuiz(studentId, quizId);
   if (!quiz || quiz.completed_at) return false;
 
   const valid = new Set(quiz.questions.map((question) => question.id));
-  const update = getDb().prepare(
-    'UPDATE quiz_questions SET student_answer = ? WHERE id = ? AND quiz_id = ?'
-  );
 
-  for (const answer of answers) {
-    if (!valid.has(answer.questionId)) continue;
-    update.run(answer.studentAnswer, answer.questionId, quizId);
-  }
+  await batch(
+    answers
+      .filter((answer) => valid.has(answer.questionId))
+      .map((answer) => ({
+        sql: 'UPDATE quiz_questions SET student_answer = ? WHERE id = ? AND quiz_id = ?',
+        args: [answer.studentAnswer, answer.questionId, quizId],
+      }))
+  );
 
   return true;
 }
@@ -177,22 +178,16 @@ export interface SubmissionOutcome {
  * incorrect answers link back to a related explanation where possible, which is
  * the loop between practising and understanding.
  */
-export function submitQuiz(
+export async function submitQuiz(
   studentId: number,
   quizId: number,
   answers: { questionId: number; studentAnswer: string }[]
-): SubmissionOutcome | undefined {
-  const existing = getQuiz(studentId, quizId);
+): Promise<SubmissionOutcome | undefined> {
+  const existing = await getQuiz(studentId, quizId);
   if (!existing || existing.completed_at) return undefined;
 
-  const db = getDb();
   const submitted = new Map(answers.map((a) => [a.questionId, a.studentAnswer]));
-
-  const update = db.prepare(
-    `UPDATE quiz_questions
-        SET student_answer = ?, is_correct = ?, explanation_id = ?
-      WHERE id = ? AND quiz_id = ?`
-  );
+  const updates: { sql: string; args: unknown[] }[] = [];
 
   let correctCount = 0;
 
@@ -205,34 +200,43 @@ export function submitQuiz(
     // student to the explanation covering what they just missed.
     const explanationId = isCorrect
       ? null
-      : (findRelatedExplanation(studentId, existing.topic ?? existing.subject)?.id ?? null);
+      : ((await findRelatedExplanation(studentId, existing.topic ?? existing.subject))?.id ?? null);
 
-    update.run(given, isCorrect ? 1 : 0, explanationId, question.id, quizId);
+    updates.push({
+      sql: `UPDATE quiz_questions
+        SET student_answer = ?, is_correct = ?, explanation_id = ?
+      WHERE id = ? AND quiz_id = ?`,
+      args: [given, isCorrect ? 1 : 0, explanationId, question.id, quizId],
+    });
   }
 
   const score = existing.questions.length === 0 ? 0 : correctCount / existing.questions.length;
   const stamp = nowIso();
 
-  db.prepare('UPDATE quizzes SET score = ?, completed_at = ? WHERE id = ? AND student_id = ?').run(
-    score,
-    stamp,
-    quizId,
-    studentId
-  );
+  // Marking every answer and closing the quiz is one unit: a quiz recorded as
+  // complete with only half its answers saved would be scored against rows
+  // that were never updated.
+  await batch([
+    ...updates,
+    {
+      sql: 'UPDATE quizzes SET score = ?, completed_at = ? WHERE id = ? AND student_id = ?',
+      args: [score, stamp, quizId, studentId],
+    },
+  ]);
 
-  const quiz = getQuiz(studentId, quizId)!;
+  const quiz = await getQuiz(studentId, quizId);
+  if (!quiz) throw new Error('Quiz vanished immediately after submission');
   const missed = quiz.questions.filter((question) => question.is_correct === 0);
   const topic = quiz.topic ?? quiz.subject;
 
-  touchTopic(studentId, topic);
-  if (missed.length > 0) markWeakArea(studentId, topic, true);
-  else markWeakArea(studentId, topic, false);
+  await touchTopic(studentId, topic);
+  await markWeakArea(studentId, topic, missed.length > 0);
 
-  const streak = extendStreak(studentId);
+  const streak = await extendStreak(studentId);
   const missedTopics = missed.length > 0 ? [topic] : [];
 
   if (missedTopics.length > 0) {
-    insertRecommendation({
+    await insertRecommendation({
       studentId,
       quizId,
       topic,
@@ -247,8 +251,8 @@ export function submitQuiz(
  * Finds a saved explanation covering a topic. Subject is stored free-text, so
  * this matches case-insensitively rather than requiring an exact string.
  */
-function findRelatedExplanation(studentId: number, topic: string) {
-  return queryOne<{ id: number }>(
+async function findRelatedExplanation(studentId: number, topic: string) {
+  return await queryOne<{ id: number }>(
     `SELECT id FROM explanations
       WHERE student_id = ? AND subject IS NOT NULL AND LOWER(subject) = LOWER(?)
       ORDER BY created_at DESC LIMIT 1`,
@@ -257,30 +261,35 @@ function findRelatedExplanation(studentId: number, topic: string) {
   );
 }
 
-function markWeakArea(studentId: number, topic: string, weak: boolean): void {
-  getDb()
-    .prepare(
-      `UPDATE progress SET is_weak_area = ?, updated_at = ? WHERE student_id = ? AND topic = ?`
-    )
-    .run(weak ? 1 : 0, nowIso(), studentId, topic);
+async function markWeakArea(studentId: number, topic: string, weak: boolean): Promise<Promise<void>> {
+  await run(
+    `UPDATE progress SET is_weak_area = ?, updated_at = ? WHERE student_id = ? AND topic = ?`,
+    weak ? 1 : 0,
+    nowIso(),
+    studentId,
+    topic
+  );
 }
 
-export function insertRecommendation(input: {
+export async function insertRecommendation(input: {
   studentId: number;
   quizId: number | null;
   topic: string;
   reason: string;
-}): void {
-  getDb()
-    .prepare(
-      `INSERT INTO recommendations (student_id, based_on_quiz_id, topic, reason, created_at)
-       VALUES (?, ?, ?, ?, ?)`
-    )
-    .run(input.studentId, input.quizId, input.topic, input.reason, nowIso());
+}): Promise<void> {
+  await run(
+    `INSERT INTO recommendations (student_id, based_on_quiz_id, topic, reason, created_at)
+       VALUES (?, ?, ?, ?, ?)`,
+    input.studentId,
+    input.quizId,
+    input.topic,
+    input.reason,
+    nowIso()
+  );
 }
 
-export function getQuizRecommendations(studentId: number, quizId: number): Recommendation[] {
-  return queryAll<Recommendation>(
+export async function getQuizRecommendations(studentId: number, quizId: number): Promise<Recommendation[]> {
+  return await queryAll<Recommendation>(
     `SELECT * FROM recommendations
       WHERE student_id = ? AND based_on_quiz_id = ?
       ORDER BY created_at DESC`,

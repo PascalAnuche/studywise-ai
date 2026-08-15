@@ -34,8 +34,8 @@ export default async function AssistantPage({
   const { chat, q } = await searchParams;
   const studentId = getCurrentStudentId();
 
-  const explanations = getRecentExplanations(studentId, 20);
-  const followUpsById = getFollowUpsFor(explanations.map((explanation) => explanation.id));
+  const explanations = await getRecentExplanations(studentId, 20);
+  const followUpsById = await getFollowUpsFor(explanations.map((explanation) => explanation.id));
 
   const requested = chat ? Number(chat) : NaN;
   const selected =

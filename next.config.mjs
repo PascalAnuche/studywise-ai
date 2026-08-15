@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // node:sqlite is a built-in; keep it external so the bundler doesn't try to trace it.
-  serverExternalPackages: ['node:sqlite'],
+  // libSQL loads a platform-specific binding at runtime, which the bundler
+  // cannot follow. Keeping it external leaves the require to Node.
+  serverExternalPackages: ['@libsql/client', 'libsql'],
 
   /**
    * `next dev` and `next build` both write to `.next` by default, so a

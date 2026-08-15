@@ -31,7 +31,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ quiz
   const answers = parseAnswers(body.answers);
   if (!answers) return badRequest('answers are malformed');
 
-  const saved = saveAnswers(getCurrentStudentId(), quizId, answers);
+  const saved = await saveAnswers(getCurrentStudentId(), quizId, answers);
   if (!saved) return notFound('Quiz not found, or already submitted');
 
   return NextResponse.json({ saved: true });

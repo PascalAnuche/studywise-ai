@@ -14,23 +14,28 @@ import type { Progress, Quiz, Student, StudyPlan } from './types';
  * student's record leaves the server, so it sends the minimum each request
  * needs rather than the whole history.
  */
-export function buildStudentContext(studentId: number): StudentContext {
-  const student = queryOne<Student>('SELECT * FROM students WHERE id = ?', studentId);
-
-  const progress = queryAll<Progress>(
-    'SELECT * FROM progress WHERE student_id = ? ORDER BY updated_at DESC',
-    studentId
-  );
-
-  const plans = queryAll<StudyPlan>(
-    "SELECT * FROM study_plans WHERE student_id = ? AND status = 'active'",
-    studentId
-  );
-
-  const quizzes = queryAll<Quiz>(
-    'SELECT * FROM quizzes WHERE student_id = ? ORDER BY created_at DESC LIMIT 3',
-    studentId
-  );
+export async function buildStudentContext(studentId: number): Promise<StudentContext> {
+  /*
+   * Four independent queries, issued together. Awaited one after another they
+   * would be four sequential round-trips, which against a hosted database is
+   * four times the latency for no reason — and this runs on the path of every
+   * assistant request.
+   */
+  const [student, progress, plans, quizzes] = await Promise.all([
+    queryOne<Student>('SELECT * FROM students WHERE id = ?', studentId),
+    queryAll<Progress>(
+      'SELECT * FROM progress WHERE student_id = ? ORDER BY updated_at DESC',
+      studentId
+    ),
+    queryAll<StudyPlan>(
+      "SELECT * FROM study_plans WHERE student_id = ? AND status = 'active'",
+      studentId
+    ),
+    queryAll<Quiz>(
+      'SELECT * FROM quizzes WHERE student_id = ? ORDER BY created_at DESC LIMIT 3',
+      studentId
+    ),
+  ]);
 
   return {
     studentId,

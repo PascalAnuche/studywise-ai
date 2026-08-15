@@ -111,16 +111,26 @@ export function pickNextSession<T extends { scheduledFor: string | null }>(
   );
 }
 
-export function buildDashboard(studentId: number): DashboardViewModel | null {
-  const student = getStudent(studentId);
+export async function buildDashboard(studentId: number): Promise<DashboardViewModel | null> {
+  const student = await getStudent(studentId);
   if (!student) return null;
 
-  const progress = getProgress(studentId);
-  const plans = listPlans(studentId, 'active').map(toPlanDto);
-  const explanations = getRecentExplanations(studentId, 3);
-  const recommendations = getRecommendations(studentId, 3);
-  const comprehension = getComprehensionRate(studentId);
-  const questionsSolved = getQuestionsAnswered(studentId);
+  /*
+   * Six independent reads, issued together. Awaited in sequence they are six
+   * round-trips, and against a hosted database that is the difference between
+   * Home feeling instant and Home feeling slow.
+   */
+  const [progress, planRows, explanations, recommendations, comprehension, questionsSolved] =
+    await Promise.all([
+      getProgress(studentId),
+      listPlans(studentId, 'active'),
+      getRecentExplanations(studentId, 3),
+      getRecommendations(studentId, 3),
+      getComprehensionRate(studentId),
+      getQuestionsAnswered(studentId),
+    ]);
+
+  const plans = planRows.map(toPlanDto);
 
   const sessions = plans.flatMap((plan) =>
     plan.sessions.map((session) => ({ ...session, subject: plan.subject }))

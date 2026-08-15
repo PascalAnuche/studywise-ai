@@ -1,14 +1,26 @@
 #!/usr/bin/env node
-// Applies lib/db/schema.sql. `--fresh` drops the database file first.
-import { DatabaseSync } from 'node:sqlite';
+// Applies lib/db/schema.sql. `--fresh` drops a local database file first.
+//
+// Runs against whatever DATABASE_URL points at, so the same command migrates a
+// local file or a hosted Turso database.
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, announce, databaseFile } from './db-path.mjs';
+import { ROOT, connect, prepare } from './db-client.mjs';
 
-const file = databaseFile();
-announce(file);
+const client = connect();
+const isFile = (process.env.DATABASE_URL ?? 'file:./dev.db').startsWith('file:');
+const file = isFile
+  ? path.resolve(ROOT, (process.env.DATABASE_URL ?? 'file:./dev.db').slice('file:'.length))
+  : null;
 
 if (process.argv.includes('--fresh')) {
+  if (!isFile) {
+    // Dropping a hosted database is not something a build script should be able
+    // to do by accident.
+    console.error('--fresh only applies to a local file database. Refusing to drop a remote one.');
+    process.exit(1);
+  }
+
   for (const suffix of ['', '-journal', '-wal', '-shm']) {
     try {
       fs.rmSync(file + suffix, { force: true });
@@ -31,8 +43,7 @@ if (process.argv.includes('--fresh')) {
 }
 
 const schema = fs.readFileSync(path.resolve(ROOT, 'lib/db/schema.sql'), 'utf8');
-const db = new DatabaseSync(file);
-db.exec(schema);
+await client.executeMultiple(schema);
 
 /**
  * Additive column migrations.
@@ -52,20 +63,22 @@ const ADDITIVE = [
 
 const added = [];
 for (const { table, column, definition } of ADDITIVE) {
-  const exists = db
-    .prepare(`SELECT COUNT(*) AS n FROM pragma_table_info(?) WHERE name = ?`)
-    .get(table, column).n;
-  if (exists) continue;
+  const row = await prepare(
+    client,
+    `SELECT COUNT(*) AS n FROM pragma_table_info(?) WHERE name = ?`
+  ).get(table, column);
+  if (Number(row.n) > 0) continue;
 
-  db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+  await client.execute(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
   added.push(`${table}.${column}`);
 }
 
-const tables = db
-  .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")
-  .all();
+const tables = await prepare(
+  client,
+  "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'"
+).all();
 
-console.log(`Migrated ${path.basename(file)}: ${tables.length} tables`);
+console.log(`Migrated ${file ? path.basename(file) : 'remote database'}: ${tables.length} tables`);
 for (const t of tables) console.log(`  ${t.name}`);
 for (const column of added) console.log(`  + added column ${column}`);
-db.close();
+client.close();

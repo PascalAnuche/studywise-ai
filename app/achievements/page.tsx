@@ -19,8 +19,8 @@ import styles from '../page.module.css';
  */
 export const dynamic = 'force-dynamic';
 
-export default function AchievementsPage() {
-  const student = getStudent(getCurrentStudentId());
+export default async function AchievementsPage() {
+  const student = await getStudent(getCurrentStudentId());
   const earned = MOCK_ACHIEVEMENTS.filter((a) => a.earnedAt !== null);
   const inProgress = MOCK_ACHIEVEMENTS.filter((a) => a.earnedAt === null);
 

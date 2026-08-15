@@ -58,7 +58,7 @@ export async function PUT(
   const sessions = 'sessions' in body ? parseSessions(body.sessions) : undefined;
   if ('sessions' in body && !sessions) return badRequest('sessions are malformed');
 
-  const updated = updatePlan(getCurrentStudentId(), planId, {
+  const updated = await updatePlan(getCurrentStudentId(), planId, {
     subject: typeof body.subject === 'string' ? body.subject.trim() : undefined,
     frequency: typeof body.frequency === 'string' ? body.frequency.trim() : undefined,
     goals: Array.isArray(body.goals)

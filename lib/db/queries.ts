@@ -7,31 +7,31 @@ import type { Explanation, Progress, Recommendation, Student, StudyPlan } from '
  * no cross-student reads without dedicated admin tooling, which is not in v1.
  */
 
-export function getStudent(studentId: number): Student | undefined {
-  return queryOne<Student>('SELECT * FROM students WHERE id = ?', studentId);
+export async function getStudent(studentId: number): Promise<Student | undefined> {
+  return await queryOne<Student>('SELECT * FROM students WHERE id = ?', studentId);
 }
 
-export function getActivePlans(studentId: number): StudyPlan[] {
-  return queryAll<StudyPlan>(
+export async function getActivePlans(studentId: number): Promise<StudyPlan[]> {
+  return await queryAll<StudyPlan>(
     "SELECT * FROM study_plans WHERE student_id = ? AND status = 'active' ORDER BY updated_at DESC",
     studentId
   );
 }
 
-export function getProgress(studentId: number): Progress[] {
-  return queryAll<Progress>('SELECT * FROM progress WHERE student_id = ? ORDER BY topic', studentId);
+export async function getProgress(studentId: number): Promise<Progress[]> {
+  return await queryAll<Progress>('SELECT * FROM progress WHERE student_id = ? ORDER BY topic', studentId);
 }
 
-export function getRecentExplanations(studentId: number, limit = 5): Explanation[] {
-  return queryAll<Explanation>(
+export async function getRecentExplanations(studentId: number, limit = 5): Promise<Explanation[]> {
+  return await queryAll<Explanation>(
     'SELECT * FROM explanations WHERE student_id = ? ORDER BY created_at DESC LIMIT ?',
     studentId,
     limit
   );
 }
 
-export function getRecommendations(studentId: number, limit = 5): Recommendation[] {
-  return queryAll<Recommendation>(
+export async function getRecommendations(studentId: number, limit = 5): Promise<Recommendation[]> {
+  return await queryAll<Recommendation>(
     'SELECT * FROM recommendations WHERE student_id = ? ORDER BY created_at DESC LIMIT ?',
     studentId,
     limit
@@ -45,16 +45,15 @@ export function getRecommendations(studentId: number, limit = 5): Recommendation
  * recorded, not explanations. Using the comprehension count here would put a
  * number under a label that does not describe it.
  */
-export function getQuestionsAnswered(studentId: number): number {
-  return (
-    queryOne<{ n: number }>(
+export async function getQuestionsAnswered(studentId: number): Promise<number> {
+  const row = await queryOne<{ n: number }>(
       `SELECT COUNT(*) AS n
          FROM quiz_questions qq
          JOIN quizzes q ON q.id = qq.quiz_id
         WHERE q.student_id = ? AND qq.student_answer IS NOT NULL`,
       studentId
-    )?.n ?? 0
   );
+  return row?.n ?? 0;
 }
 
 /**
@@ -62,13 +61,14 @@ export function getQuestionsAnswered(studentId: number): number {
  * checkpoint was actually answered count: a null `understood` means the student
  * abandoned the question, which is not the same as "did not understand".
  */
-export function getComprehensionRate(studentId: number): { answered: number; understood: number } {
-  return (
-    queryOne<{ answered: number; understood: number }>(
-      `SELECT COUNT(*) AS answered, COALESCE(SUM(understood), 0) AS understood
+export async function getComprehensionRate(
+  studentId: number
+): Promise<{ answered: number; understood: number }> {
+  const row = await queryOne<{ answered: number; understood: number }>(
+    `SELECT COUNT(*) AS answered, COALESCE(SUM(understood), 0) AS understood
          FROM explanations
         WHERE student_id = ? AND understood IS NOT NULL`,
-      studentId
-    ) ?? { answered: 0, understood: 0 }
+    studentId
   );
+  return row ?? { answered: 0, understood: 0 };
 }

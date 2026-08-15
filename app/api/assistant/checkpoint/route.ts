@@ -30,10 +30,10 @@ export async function POST(request: Request) {
   if (understood === null) return badRequest('understood must be a boolean');
 
   const studentId = getCurrentStudentId();
-  const explanation = setUnderstood(studentId, explanationId, understood);
+  const explanation = await setUnderstood(studentId, explanationId, understood);
   if (!explanation) return notFound('Explanation not found');
 
-  const streak = extendStreak(studentId);
+  const streak = await extendStreak(studentId);
 
   return NextResponse.json({ success: true, understood: explanation.understood, streak });
 }

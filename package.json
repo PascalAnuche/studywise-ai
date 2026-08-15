@@ -18,6 +18,7 @@
     "prebuild": "node scripts/migrate.mjs && node scripts/seed.mjs"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.4",
     "next": "^15.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

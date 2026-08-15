@@ -39,7 +39,7 @@ export async function POST(request: Request) {
   const studentId = getCurrentStudentId();
 
   try {
-    const context = buildStudentContext(studentId);
+    const context = await buildStudentContext(studentId);
     const result = await runQuiz({
       input: { subject, topic, difficulty, questionCount: QUESTION_COUNT },
       context,
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ quizId: null, result });
     }
 
-    const quiz = insertQuiz({ studentId, subject, topic, difficulty, questions: result.questions });
+    const quiz = await insertQuiz({ studentId, subject, topic, difficulty, questions: result.questions });
 
     // toQuizDto withholds correct answers until submission, so the answer key
     // never reaches the browser with the questions.

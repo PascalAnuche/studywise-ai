@@ -15,9 +15,9 @@ import styles from '../page.module.css';
  */
 export const dynamic = 'force-dynamic';
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
   const studentId = getCurrentStudentId();
-  const student = getStudent(studentId);
+  const student = await getStudent(studentId);
 
   if (!student) {
     return (
@@ -30,9 +30,9 @@ export default function ProfilePage() {
     );
   }
 
-  const plans = listPlans(studentId);
-  const quizzes = listQuizzes(studentId, 50);
-  const explanations = getRecentExplanations(studentId, 50);
+  const plans = await listPlans(studentId);
+  const quizzes = await listQuizzes(studentId, 50);
+  const explanations = await getRecentExplanations(studentId, 50);
 
   return (
     <main id="main" className={styles.page}>

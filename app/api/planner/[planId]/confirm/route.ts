@@ -38,17 +38,17 @@ export async function POST(
   if (understood === null) return badRequest('understood must be a boolean');
 
   const studentId = getCurrentStudentId();
-  const plan = confirmPlan(studentId, planId, understood);
+  const plan = await confirmPlan(studentId, planId, understood);
   if (!plan) return notFound('Plan not found');
 
-  const withSessions = getPlan(studentId, planId);
+  const withSessions = await getPlan(studentId, planId);
 
   // Only an accepted plan counts as study activity. Rejecting a plan you don't
   // understand shouldn't quietly award a streak day.
   let streak: number | null = null;
   if (understood) {
-    streak = extendStreak(studentId);
-    for (const session of withSessions?.sessions ?? []) touchTopic(studentId, session.topic);
+    streak = await extendStreak(studentId);
+    for (const session of withSessions?.sessions ?? []) await touchTopic(studentId, session.topic);
   }
 
   return NextResponse.json({

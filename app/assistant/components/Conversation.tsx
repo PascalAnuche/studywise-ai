@@ -114,7 +114,7 @@ export function Conversation(props: ConversationProps) {
         explanationId: props.explanationId,
         understood: value,
       });
-      setUnderstood(value);
+      await setUnderstood(value);
       // PRD 7.1: on "no" the assistant explains why and how, rather than
       // leaving the student where they were.
       if (!value) {

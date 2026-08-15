@@ -23,16 +23,29 @@ import path from 'node:path';
 
 let client: Client | null = null;
 
+/**
+ * The effective database URL.
+ *
+ * A blank value counts as unset. `??` alone does not: a host with an empty
+ * `DATABASE_URL` — a variable added but never given a value — passes `''`
+ * straight through, which skips the fallback, fails the `file:` test, and
+ * reaches the client as `createClient({ url: '' })`.
+ */
+export function databaseUrl(): string {
+  const raw = process.env.DATABASE_URL?.trim();
+  return raw ? raw : 'file:./dev.db';
+}
+
 /** `file:./dev.db` in the env, a filesystem path on disk. */
 export function resolveDatabasePath(): string {
-  const url = process.env.DATABASE_URL ?? 'file:./dev.db';
+  const url = databaseUrl();
   const bare = url.startsWith('file:') ? url.slice('file:'.length) : url;
   return path.resolve(process.cwd(), bare);
 }
 
 /** True when the configured database is a local file rather than a remote one. */
 export function isFileDatabase(): boolean {
-  return (process.env.DATABASE_URL ?? 'file:./dev.db').startsWith('file:');
+  return databaseUrl().startsWith('file:');
 }
 
 /**
@@ -72,8 +85,8 @@ export function getClient(): Client {
     client = isFileDatabase()
       ? createClient({ url: `file:${openPath()}` })
       : createClient({
-          url: process.env.DATABASE_URL!,
-          authToken: process.env.DATABASE_AUTH_TOKEN,
+          url: databaseUrl(),
+          authToken: process.env.DATABASE_AUTH_TOKEN?.trim() || undefined,
         });
   }
   return client;

@@ -5,13 +5,11 @@
 // local file or a hosted Turso database.
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, connect, prepare } from './db-client.mjs';
+import { ROOT, connect, databaseUrl, isFileDatabase, prepare } from './db-client.mjs';
 
 const client = connect();
-const isFile = (process.env.DATABASE_URL ?? 'file:./dev.db').startsWith('file:');
-const file = isFile
-  ? path.resolve(ROOT, (process.env.DATABASE_URL ?? 'file:./dev.db').slice('file:'.length))
-  : null;
+const isFile = isFileDatabase();
+const file = isFile ? path.resolve(ROOT, databaseUrl().slice('file:'.length)) : null;
 
 if (process.argv.includes('--fresh')) {
   if (!isFile) {

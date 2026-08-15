@@ -15,6 +15,7 @@ import path from 'node:path';
  * file" build failure in the first place.
  */
 const load = async () => (await import('./client')).openPath;
+const loadUrl = async () => (await import('./client')).databaseUrl;
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -74,5 +75,33 @@ describe('openPath', () => {
     const openPath = await load();
     // The build failure this guards against was opaque; this one says where.
     expect(() => openPath()).toThrow(/No database at .*dev\.db/);
+  });
+});
+
+/**
+ * A host can hold a `DATABASE_URL` that exists but is empty — added to the
+ * project and never given a value. `??` does not treat that as unset, so the
+ * blank string skipped the fallback, failed the `file:` test and reached the
+ * client as `createClient({ url: '' })`. Three deployments died on it.
+ */
+describe('databaseUrl', () => {
+  it('falls back when the variable is unset', async () => {
+    delete process.env.DATABASE_URL;
+    expect(await (await loadUrl())()).toBe('file:./dev.db');
+  });
+
+  it('falls back when the variable is set but empty', async () => {
+    process.env.DATABASE_URL = '';
+    expect((await loadUrl())()).toBe('file:./dev.db');
+  });
+
+  it('falls back when the variable is only whitespace', async () => {
+    process.env.DATABASE_URL = '   ';
+    expect((await loadUrl())()).toBe('file:./dev.db');
+  });
+
+  it('uses a real value, trimmed of stray whitespace', async () => {
+    process.env.DATABASE_URL = '  libsql://example.turso.io  ';
+    expect((await loadUrl())()).toBe('libsql://example.turso.io');
   });
 });

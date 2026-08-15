@@ -17,12 +17,30 @@ import { createClient } from '@libsql/client';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+/**
+ * The effective database URL.
+ *
+ * A blank value counts as unset. `??` alone does not: a host with an empty
+ * `DATABASE_URL` — a variable added but never given a value — passes `''`
+ * straight through, which skips the fallback, fails the `file:` test, and
+ * reaches the client as `createClient({ url: '' })`. That is the URL_INVALID
+ * every build was dying on.
+ */
+export function databaseUrl() {
+  const raw = process.env.DATABASE_URL?.trim();
+  return raw ? raw : 'file:./dev.db';
+}
+
+export function isFileDatabase() {
+  return databaseUrl().startsWith('file:');
+}
+
 export function connect() {
-  const url = process.env.DATABASE_URL ?? 'file:./dev.db';
+  const url = databaseUrl();
 
   if (!url.startsWith('file:')) {
     console.log(`database: ${url.replace(/\/\/.*@/, '//')}`);
-    return createClient({ url, authToken: process.env.DATABASE_AUTH_TOKEN });
+    return createClient({ url, authToken: process.env.DATABASE_AUTH_TOKEN?.trim() || undefined });
   }
 
   // Resolved from the repo root, not the working directory: a build host is not

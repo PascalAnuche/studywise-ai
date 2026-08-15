@@ -11,7 +11,7 @@
  * Dates are relative to today, so the data never goes stale.
  * Re-runnable: it clears the seeded student first.
  */
-import { connect, prepare } from './db-client.mjs';
+import { connect, isFileDatabase, prepare } from './db-client.mjs';
 
 /**
  * Seeding is destructive: it deletes the seed student and everything that
@@ -22,7 +22,7 @@ import { connect, prepare } from './db-client.mjs';
  * every single deploy, taking any real student's work with it. So a remote
  * database has to be asked for explicitly.
  */
-const isFile = (process.env.DATABASE_URL ?? 'file:./dev.db').startsWith('file:');
+const isFile = isFileDatabase();
 if (!isFile && !process.argv.includes('--force')) {
   console.log(
     'Skipping seed: DATABASE_URL points at a hosted database, and seeding deletes\n' +

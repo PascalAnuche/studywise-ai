@@ -4,6 +4,13 @@ import { getQuiz, getQuizRecommendations } from '@/lib/db/practice';
 import { getCurrentStudentId } from '@/lib/session';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * GET /api/practice/:quizId/recommendations — PRD 7.3
  *
  * Based on the specific topics missed in this quiz, never generic advice. Each

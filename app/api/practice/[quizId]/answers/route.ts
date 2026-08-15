@@ -4,6 +4,13 @@ import { saveAnswers } from '@/lib/db/practice';
 import { getCurrentStudentId } from '@/lib/session';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * PUT /api/practice/:quizId/answers — PRD 7.3's "save questions" step.
  *
  * Saves work in progress. Scores nothing, reveals nothing, and refuses once the

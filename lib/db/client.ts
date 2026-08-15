@@ -1,4 +1,6 @@
 import { DatabaseSync } from 'node:sqlite';
+import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 
 /**
@@ -15,9 +17,44 @@ export function resolveDatabasePath(): string {
   return path.resolve(process.cwd(), bare);
 }
 
+/**
+ * Where to actually open the database.
+ *
+ * A serverless deployment ships the seeded file inside a read-only bundle, and
+ * SQLite cannot open a database it cannot write beside — WAL mode needs to
+ * create a `-wal` sibling even to read. So when the directory is not writable
+ * the file is copied to the temp directory once per cold start and opened
+ * there.
+ *
+ * The consequence is deliberate and needs saying: **writes survive only as
+ * long as that instance does.** Anything a student saves on the deployed demo
+ * is lost when the instance recycles. Replacing this with a hosted database is
+ * tracked in AGENTS.md.
+ */
+export function openPath(): string {
+  const source = resolveDatabasePath();
+
+  try {
+    fs.accessSync(path.dirname(source), fs.constants.W_OK);
+    return source;
+  } catch {
+    const target = path.join(os.tmpdir(), 'studywise.db');
+    if (!fs.existsSync(target)) {
+      if (!fs.existsSync(source)) {
+        throw new Error(
+          `No database at ${source}. The build should have created it via the ` +
+            `prebuild script; see AGENTS.md.`
+        );
+      }
+      fs.copyFileSync(source, target);
+    }
+    return target;
+  }
+}
+
 export function getDb(): DatabaseSync {
   if (!db) {
-    db = new DatabaseSync(resolveDatabasePath());
+    db = new DatabaseSync(openPath());
     db.exec('PRAGMA foreign_keys = ON');
     db.exec('PRAGMA journal_mode = WAL');
   }

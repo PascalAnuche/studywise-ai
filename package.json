@@ -14,7 +14,8 @@
     "db:seed": "node scripts/seed.mjs",
     "db:reset": "node scripts/migrate.mjs --fresh && node scripts/seed.mjs",
     "tokens": "node tokens/build-tokens.js",
-    "shots": "node scripts/screenshot.mjs"
+    "shots": "node scripts/screenshot.mjs",
+    "prebuild": "node scripts/migrate.mjs && node scripts/seed.mjs"
   },
   "dependencies": {
     "next": "^15.5.0",

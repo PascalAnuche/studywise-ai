@@ -7,6 +7,13 @@ import { getExplanationForStudent, getFollowUps, insertFollowUp } from '@/lib/db
 import { getCurrentStudentId } from '@/lib/session';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * POST /api/assistant/follow-up — PRD 7.1
  *
  * Carries the original question and answer plus every prior follow-up, so the

@@ -7,6 +7,13 @@ import { insertExplanation, touchTopic } from '@/lib/db/mutations';
 import { getCurrentStudentId } from '@/lib/session';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * POST /api/assistant/ask — PRD 7.1
  *
  * Mode is Explain because this is the Assistant route, never because of what

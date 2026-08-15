@@ -7,6 +7,13 @@ import { insertPlan, toPlanDto } from '@/lib/db/planner';
 import { getCurrentStudentId } from '@/lib/session';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * POST /api/planner/generate — PRD 7.2
  *
  * Structured inputs only, never free text alone. Topics and frequency are

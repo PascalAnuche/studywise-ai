@@ -104,6 +104,20 @@ Both of these violate PRD section 10, which lists accessible color contrast as a
 - `--color-text-muted` fails WCAG AA against `--color-background` (4.42:1). Documented with a fix value in `.agents/docs/DESIGN_SYSTEM.md`, needs correcting in Figma.
 - `--color-border` is 1.22:1 against a card, below the 3:1 needed where a border is the only thing identifying a control, which is the case for text inputs.
 
+## Deployment
+
+The app needs a Node runtime. **GitHub Pages cannot host it** — Pages serves static files only, and this app has 15 API routes, nine `force-dynamic` pages and a SQLite read on every request. `output: 'export'` refuses to build with API routes present, so there is no static escape hatch either.
+
+Three things make a hosted build work, and all three are load-bearing:
+
+1. **`prebuild` creates and seeds the database.** `dev.db` is gitignored, as a database should be, so it does not exist on a build machine. `/_not-found` is prerendered, prerendering it renders the root layout, and the layout mounts `TopbarStatus`, which queries the database — so a missing file fails the whole build with `SQLITE_CANTOPEN`. Seeding before `next build` is what makes prerender succeed.
+2. **`outputFileTracingIncludes` ships `dev.db` with the server bundle.** The path is built at runtime from `DATABASE_URL`, so nothing in the import graph points at the file and tracing would otherwise leave it behind.
+3. **`openPath()` copies the database to the temp directory when its own directory is read-only**, which is the serverless case. SQLite in WAL mode has to create a `-wal` sibling even to read, so it cannot open a database inside a read-only bundle.
+
+**Writes on a deployed instance are ephemeral.** They land in that instance's temp copy and are lost when it recycles. That is fine for a demo and wrong for real students — replacing the file-backed database with a hosted one (Turso/libSQL keeps the SQL as-is; its client is async, so `queryAll`/`queryOne` and every caller would need `await`) is the open item.
+
+`openPath()`'s read-only branch never runs on a developer machine, and Windows cannot even simulate it — `chmod -w` on a directory is advisory there. `lib/db/client.test.ts` is therefore the only thing that exercises it before a deploy. Keep it.
+
 ## Scripts
 
 `node tokens/build-tokens.js` regenerates `tokens/tokens.css` from the Figma exports. It resolves paths relative to itself, so it runs from any directory.

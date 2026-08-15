@@ -3,6 +3,13 @@ import { getGeneralRecommendations } from '@/lib/db/progress';
 import { getCurrentStudentId } from '@/lib/session';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * GET /api/progress/recommendations — PRD 7.4
  *
  * Recommendations from a general progress review rather than a specific quiz.

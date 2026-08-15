@@ -5,6 +5,13 @@ import { getCurrentStudentId } from '@/lib/session';
 import type { PlanSession } from '@/lib/ai/types';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * PUT /api/planner/:planId — PRD 7.2
  *
  * Plans stay editable after generation *and* after saving, so this accepts a

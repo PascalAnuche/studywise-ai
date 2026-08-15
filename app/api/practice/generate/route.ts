@@ -7,6 +7,13 @@ import { insertQuiz, toQuizDto } from '@/lib/db/practice';
 import { getCurrentStudentId } from '@/lib/session';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * POST /api/practice/generate — PRD 7.3
  *
  * Difficulty is required and arrives before generation, not after. The PRD's

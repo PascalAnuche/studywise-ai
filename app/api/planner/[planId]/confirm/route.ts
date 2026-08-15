@@ -5,6 +5,13 @@ import { extendStreak, touchTopic } from '@/lib/db/mutations';
 import { getCurrentStudentId } from '@/lib/session';
 
 /**
+ * Never prerendered. Route handlers with no dynamic marker are candidates for
+ * build-time evaluation, which would run this query against a database that
+ * holds only seed data — and cache the result forever.
+ */
+export const dynamic = 'force-dynamic';
+
+/**
  * POST /api/planner/:planId/confirm — PRD 7.2
  *
  * The Planner's understanding checkpoint, mirroring the Assistant's. The

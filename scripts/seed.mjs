@@ -14,8 +14,10 @@
 import { DatabaseSync } from 'node:sqlite';
 import path from 'node:path';
 
-const url = process.env.DATABASE_URL ?? 'file:./dev.db';
-const file = path.resolve(process.cwd(), url.startsWith('file:') ? url.slice(5) : url);
+import { announce, databaseFile } from './db-path.mjs';
+
+const file = databaseFile();
+announce(file);
 const db = new DatabaseSync(file);
 db.exec('PRAGMA foreign_keys = ON');
 

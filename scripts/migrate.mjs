@@ -3,9 +3,10 @@
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
+import { ROOT, announce, databaseFile } from './db-path.mjs';
 
-const url = process.env.DATABASE_URL ?? 'file:./dev.db';
-const file = path.resolve(process.cwd(), url.startsWith('file:') ? url.slice(5) : url);
+const file = databaseFile();
+announce(file);
 
 if (process.argv.includes('--fresh')) {
   for (const suffix of ['', '-journal', '-wal', '-shm']) {
@@ -29,7 +30,7 @@ if (process.argv.includes('--fresh')) {
   console.log(`Dropped ${path.basename(file)}`);
 }
 
-const schema = fs.readFileSync(path.resolve(process.cwd(), 'lib/db/schema.sql'), 'utf8');
+const schema = fs.readFileSync(path.resolve(ROOT, 'lib/db/schema.sql'), 'utf8');
 const db = new DatabaseSync(file);
 db.exec(schema);
 

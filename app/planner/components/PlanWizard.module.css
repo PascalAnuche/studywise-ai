@@ -1,0 +1,71 @@
+/* Steps specific to the study-plan flow. The frame lives in components/Wizard. */
+.dates {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.error {
+  color: var(--color-confidence-verify-fg);
+}
+
+.summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.summarySubject {
+  font: var(--text-h4);
+}
+
+.summaryMeta {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.topicList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  /* A long plan scrolls inside the step rather than growing the dialog past
+   * the viewport, which would put the save button out of reach. */
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.topicRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  color: var(--color-confidence-established-fg);
+  font: var(--text-body);
+}
+
+.topicName {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text);
+}
+
+.topicCount {
+  flex: none;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 34rem) {
+  .dates {
+    grid-template-columns: 1fr 1fr;
+  }
+}

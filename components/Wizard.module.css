@@ -1,0 +1,264 @@
+/*
+ * The frame every multi-step flow uses: creating a study plan (flow 2) and
+ * generating a quiz (flow 3).
+ *
+ * It exists as one component because the two flows are the same interaction —
+ * a sequence of small decisions with a progress indicator, a way back, and one
+ * primary action — and building them separately is how they drift apart.
+ */
+.wizard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  min-height: 0;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/*
+ * The count is text, not the bar alone. A bar communicates progress only to
+ * someone who can see it and estimate; "Step 3 of 5" is exact and is what a
+ * screen reader announces.
+ */
+.progressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.track {
+  display: block;
+  height: var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  transition: width 240ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}
+
+.title {
+  font: var(--text-h4);
+}
+
+.subtitle {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-height: 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.footerNote {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.footerActions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Option lists — the radio and checkbox groups the flows are built from.
+ * Whole-row targets, not a 16px control with a label beside it.
+ * ------------------------------------------------------------------------ */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  font: var(--text-body);
+  color: var(--color-text);
+  text-align: start;
+  cursor: pointer;
+}
+
+.option:hover {
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+}
+
+.option:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.optionSelected,
+.optionSelected:hover {
+  border-color: var(--color-primary);
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.optionLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * Selection is a tick, not colour alone. The tinted row is reinforcement for
+ * anyone who can see it; the mark is what makes the state unambiguous.
+ */
+.optionMark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border: 1px solid var(--color-border-hover);
+  background: var(--color-card);
+  color: transparent;
+}
+
+.markRadio {
+  border-radius: var(--radius-full);
+}
+
+.markCheck {
+  border-radius: var(--radius-sm);
+}
+
+.optionSelected .optionMark {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-card);
+}
+
+/* ---------------------------------------------------------------------------
+ * Generating step — the AI working state.
+ * ------------------------------------------------------------------------ */
+.generating {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  max-width: 22rem;
+  text-align: start;
+}
+
+.stepRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font: var(--text-body);
+  color: var(--color-text-muted);
+}
+
+.stepDone {
+  color: var(--color-text);
+}
+
+.stepMark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-hover);
+  color: transparent;
+}
+
+.stepDone .stepMark {
+  border-color: var(--color-confidence-established-fg);
+  background: var(--color-confidence-established-fg);
+  color: var(--color-card);
+}
+
+.percent {
+  font: var(--text-h3);
+  color: var(--color-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * Confirmation and end states.
+ * ------------------------------------------------------------------------ */
+.done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.doneMark {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-4xl);
+  height: var(--spacing-4xl);
+  border-radius: var(--radius-full);
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+}
+
+.doneTitle {
+  font: var(--text-h4);
+}
+
+.doneText {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+  max-width: 34ch;
+}

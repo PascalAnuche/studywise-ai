@@ -10,7 +10,7 @@ import { Toast } from '@/components/Toast';
 import { isAside } from '@/lib/ai/types';
 import type { AsideResult, PlanInput, PlannerResult } from '@/lib/ai/types';
 import { AIResponse } from '@/components/AIResponse';
-import { PlanForm } from './PlanForm';
+import { PlanWizard } from './PlanWizard';
 import { MiniCalendar, type DayMarker } from './MiniCalendar';
 import styles from '../planner.module.css';
 
@@ -133,45 +133,9 @@ function Ring({ percent }: { percent: number }) {
 export function PlannerBoard({ plan, schedule, tasks, markers, streak, today }: PlannerBoardProps) {
   const [tab, setTab] = useState('my-plans');
   const [formOpen, setFormOpen] = useState(false);
-  const [pending, setPending] = useState(false);
   const [aside, setAside] = useState<AsideResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function generate(input: PlanInput) {
-    setPending(true);
-    setError(null);
-    setAside(null);
-    try {
-      const response = await fetch('/api/planner/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(input),
-      });
-      const data: unknown = await response.json().catch(() => null);
-      if (!response.ok) {
-        throw new Error(
-          data && typeof data === 'object' && 'error' in data
-            ? String((data as { error: unknown }).error)
-            : 'Could not build a plan'
-        );
-      }
-
-      const result = (data as { result: PlannerResult }).result;
-      if (isAside(result)) {
-        setAside(result);
-        return;
-      }
-
-      // The plan is the answer to the form, so the form gets out of the way and
-      // the page reloads onto the new schedule.
-      setFormOpen(false);
-      window.location.reload();
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Could not build a plan');
-    } finally {
-      setPending(false);
-    }
-  }
 
   return (
     <div className={styles.layout}>
@@ -404,7 +368,15 @@ export function PlannerBoard({ plan, schedule, tasks, markers, streak, today }: 
       </aside>
 
       <Modal open={formOpen} title="Create a study plan" wide onClose={() => setFormOpen(false)}>
-        <PlanForm pending={pending} onSubmit={generate} />
+        <PlanWizard
+          onCancel={() => setFormOpen(false)}
+          /* The new plan is the point of the flow, so the page reloads onto the
+           * schedule it just created rather than leaving a stale one behind. */
+          onSaved={() => {
+            setFormOpen(false);
+            window.location.reload();
+          }}
+        />
       </Modal>
 
       {error && <Toast tone="caution" message={error} onDismiss={() => setError(null)} />}

@@ -14,6 +14,10 @@
   align-items: center;
   gap: var(--spacing-xs);
   min-height: var(--spacing-xl);
+  /* Width as well as height: the 24px minimum is a box, and a short label like
+   * "Edit" cleared the height while measuring only 20px across. */
+  min-width: var(--spacing-xl);
+  justify-content: center;
   padding: var(--spacing-xs) 0;
   margin-block: calc(var(--spacing-xs) * -1);
   border: 0;

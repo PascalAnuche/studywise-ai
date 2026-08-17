@@ -303,3 +303,5 @@ export const MOCK_PRIVACY: { label: string; detail: string }[] = [
 export * from './resources';
 export * from './flashcards';
 export * from './notes';
+export * from './achievements-page';
+export * from './profile-page';

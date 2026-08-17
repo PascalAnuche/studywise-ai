@@ -1,0 +1,450 @@
+/*
+ * Achievements — flow 7, built to the approved design.
+ *
+ * Narrow first: five figures start two-up, badges start one-up, and the rail
+ * stacks under the main column until 82rem.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 96rem;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.main,
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  min-width: 0;
+}
+
+.main > *,
+.rail > * {
+  min-width: 0;
+}
+
+.title {
+  font: var(--text-h2);
+}
+
+.subtitle {
+  font: var(--text-body-large);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+/* Five figures across at desktop, as designed. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+/* Icon and figure share a baseline row, with the label beneath. */
+.statHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.statValue {
+  font: var(--text-h3);
+  line-height: 1.1;
+}
+
+.statLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.statDelta {
+  font: var(--text-caption);
+  color: var(--color-confidence-established-fg);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.sectionTitle {
+  font: var(--text-h4);
+}
+
+/* Category chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.chip {
+  min-height: var(--spacing-2xl);
+  padding: var(--spacing-xs) var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-card);
+  color: var(--color-text-muted);
+  font: var(--text-caption);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--color-border-hover);
+  color: var(--color-text);
+}
+
+.chip:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.chipActive,
+.chipActive:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-card);
+}
+
+/* Badge grid */
+.badges {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+  text-align: center;
+}
+
+/*
+ * The hexagon is a clip-path rather than an image, so it inherits the tone and
+ * follows a theme change like everything else. A locked badge keeps the shape
+ * and loses the colour, which is what makes the two states read at a glance
+ * without needing the caption.
+ */
+.medal {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-4xl);
+  height: var(--spacing-4xl);
+  margin-bottom: var(--spacing-xs);
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--tone) 78%, white),
+    var(--tone)
+  );
+  color: var(--color-card);
+}
+
+.medalLocked {
+  background: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.badgeTitle {
+  font: var(--text-body-medium);
+}
+
+.badgeRequirement {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+  text-wrap: balance;
+}
+
+.badgeFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  width: 100%;
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.earned {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-confidence-established-fg);
+}
+
+.badgeProgress {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.track {
+  display: block;
+  flex: 1;
+  height: var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+}
+
+.viewMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  min-height: var(--spacing-4xl);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-card);
+  color: var(--color-primary);
+  font: var(--text-body-medium);
+  cursor: pointer;
+}
+
+.viewMore:hover {
+  background: var(--color-surface-hover);
+}
+
+.viewMore:focus-visible {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.panelNote {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+/* Rail */
+.railHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.railTitle {
+  font: var(--text-body-medium);
+}
+
+.streak {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.streakRing {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--spacing-4xl);
+  height: var(--spacing-4xl);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-chart-amber);
+  background: color-mix(in srgb, var(--color-chart-amber) 12%, var(--color-card));
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.streakBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 0;
+}
+
+.streakValue {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.streakNumber {
+  font: var(--text-h2);
+  line-height: 1;
+}
+
+.streakNote {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.week {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-lg);
+}
+
+.weekDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: var(--spacing-xs);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.weekMark {
+  display: grid;
+  place-items: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  color: transparent;
+}
+
+.weekDone {
+  background: var(--color-confidence-established-fg);
+  border-color: var(--color-confidence-established-fg);
+  color: var(--color-card);
+}
+
+.railList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.railRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.railRowBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.railRowTitle {
+  font: var(--text-body-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.railRowDate {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/* Top skills */
+.skills {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.skillRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font: var(--text-caption);
+}
+
+.skillName {
+  flex: 0 0 8rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+
+.skillPercent {
+  flex: none;
+  min-width: 2.5rem;
+  text-align: end;
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 30rem) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 48rem) {
+  .layout {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .badges {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .layout {
+    padding: var(--spacing-2xl);
+  }
+
+  .stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .badges {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 82rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 19rem);
+  }
+}

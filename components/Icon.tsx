@@ -69,7 +69,14 @@ export type IconName =
   | 'trash'
   | 'users'
   | 'filter'
-  | 'play';
+  | 'play'
+  | 'lock'
+  | 'crown'
+  | 'layers'
+  | 'camera'
+  | 'mail'
+  | 'pin'
+  | 'medal';
 
 const PATHS: Record<IconName, React.ReactNode> = {
   home: (
@@ -434,6 +441,48 @@ const PATHS: Record<IconName, React.ReactNode> = {
   play: (
     <>
       <path d="M8.5 5.5 18 12l-9.5 6.5Z" />
+    </>
+  ),
+  lock: (
+    <>
+      <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
+      <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+    </>
+  ),
+  crown: (
+    <>
+      <path d="M3.5 7.5 7 12l5-6.5 5 6.5 3.5-4.5V18a1.5 1.5 0 0 1-1.5 1.5h-14A1.5 1.5 0 0 1 3.5 18Z" />
+    </>
+  ),
+  layers: (
+    <>
+      <path d="m12 3.5 8.5 4.5L12 12.5 3.5 8Z" />
+      <path d="m3.5 12.5 8.5 4.5 8.5-4.5" />
+      <path d="m3.5 16.5 8.5 4.5 8.5-4.5" />
+    </>
+  ),
+  camera: (
+    <>
+      <path d="M3.5 8.5h3.2l1.5-2.2h7.6l1.5 2.2h3.2v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5Z" />
+      <circle cx="12" cy="13.5" r="3.2" />
+    </>
+  ),
+  mail: (
+    <>
+      <rect x="3" y="5.5" width="18" height="13" rx="2.5" />
+      <path d="m3.5 7.5 8.5 6 8.5-6" />
+    </>
+  ),
+  pin: (
+    <>
+      <path d="M12 21s6.5-6.1 6.5-11a6.5 6.5 0 0 0-13 0C5.5 14.9 12 21 12 21Z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </>
+  ),
+  medal: (
+    <>
+      <circle cx="12" cy="14.5" r="5.5" />
+      <path d="M8.5 9.5 6.5 3.5h11l-2 6" />
     </>
   ),
 };

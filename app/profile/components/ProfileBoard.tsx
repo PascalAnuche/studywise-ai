@@ -65,8 +65,10 @@ export function ProfileBoard({ name, discipline, avatarUrl = null }: ProfileBoar
           <span className={styles.avatarWrap}>
             <span className={styles.avatar}>
               {avatarUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element -- no loader
-                // is configured, and next/image would pull in sharp for one photo.
+                /* A plain img, not next/image: the avatar is one small square
+                 * from an arbitrary URL, and next/image would pull sharp into
+                 * the deployment for it. */
+                // eslint-disable-next-line @next/next/no-img-element
                 <img className={styles.avatarImage} src={avatarUrl} alt={`${name}'s profile photo`} />
               ) : (
                 <span aria-hidden="true">{initials}</span>

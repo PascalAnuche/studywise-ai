@@ -23,3 +23,6 @@ build/
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
+
+# Throwaway debug scripts
+scripts/.*.mjs

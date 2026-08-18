@@ -77,7 +77,8 @@ export type IconName =
   | 'mail'
   | 'pin'
   | 'medal'
-  | 'collapse';
+  | 'collapse'
+  | 'chevron-up';
 
 const PATHS: Record<IconName, React.ReactNode> = {
   home: (
@@ -189,6 +190,11 @@ const PATHS: Record<IconName, React.ReactNode> = {
   'chevron-down': (
     <>
       <path d="m6.5 9.5 5.5 5.5 5.5-5.5" />
+    </>
+  ),
+  'chevron-up': (
+    <>
+      <path d="m6.5 14.5 5.5-5.5 5.5 5.5" />
     </>
   ),
   'chevron-left': (

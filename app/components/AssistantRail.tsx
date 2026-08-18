@@ -65,12 +65,21 @@ export function AssistantRail({ latest }: AssistantRailProps) {
           aria-label={minimised ? 'Expand the assistant' : 'Minimise the assistant'}
           onClick={() => setMinimised((open) => !open)}
         >
-          <Icon name={minimised ? 'expand' : 'collapse'} size={18} />
+          <Icon name={minimised ? 'chevron-up' : 'chevron-down'} size={18} />
         </button>
       </header>
 
-      {minimised ? null : latest ? (
-        <div className={styles.body} id="assistant-rail-body">
+      <div
+        className={`${styles.collapsible} ${minimised ? styles.collapsibleClosed : ''}`.trim()}
+      >
+        {/*
+          Kept mounted rather than unmounted, so the collapse can animate. It is
+          made inert while closed, so nothing inside takes focus or reaches a
+          screen reader.
+        */}
+        <div className={styles.collapsibleInner} id="assistant-rail-body" inert={minimised}>
+      {latest ? (
+        <div className={styles.body}>
           <p className={styles.question}>{latest.question}</p>
 
           <div className={styles.answer}>
@@ -135,7 +144,6 @@ export function AssistantRail({ latest }: AssistantRailProps) {
         </div>
       )}
 
-      {minimised ? null : (
       <form
         className={styles.composer}
         onSubmit={(event) => {
@@ -159,7 +167,8 @@ export function AssistantRail({ latest }: AssistantRailProps) {
           <Icon name="send" size={18} />
         </button>
       </form>
-      )}
+        </div>
+      </div>
     </section>
   );
 }

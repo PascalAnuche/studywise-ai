@@ -50,6 +50,8 @@
 .collapsible {
   display: grid;
   grid-template-rows: 1fr;
+  /* Fills the card below the header, so the composer stays on the bottom. */
+  flex: 1;
   min-height: 0;
 }
 
@@ -60,6 +62,7 @@
 .collapsibleInner {
   display: flex;
   flex-direction: column;
+  flex: 1;
   min-height: 0;
   overflow: hidden;
 }
@@ -103,9 +106,18 @@
   justify-content: center;
   width: var(--spacing-xl);
   height: var(--spacing-xl);
+  padding: 0;
+  border: 0;
+  background: transparent;
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   text-decoration: none;
+  cursor: pointer;
+}
+
+.headAction:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 .headAction:hover {

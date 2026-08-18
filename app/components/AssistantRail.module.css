@@ -14,14 +14,9 @@
   background: var(--color-card);
   box-shadow: var(--shadow-card);
   overflow: hidden;
-  /*
-   * Height follows the content, capped to the column. That is what lets the
-   * collapse animate: a card fixed at 100% cannot shrink with its content, so
-   * closing it snapped from full height to the header in one frame.
-   */
-  flex: 0 1 auto;
-  max-height: 100%;
-  min-height: 0;
+  /* Fills the column, as designed. */
+  height: 100%;
+  transition: height 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /*
@@ -33,9 +28,17 @@
  * thing that moves is the top edge, which is what makes the collapse read as
  * the panel folding down into the corner.
  */
-/* Docked only while minimised; open, the card stays at the top of the column. */
+/*
+ * Collapsed to the header and docked to the bottom.
+ *
+ * An explicit height rather than `auto`: `auto` cannot be transitioned, and
+ * animating the height is what lets the card fill the column when open and
+ * still fold down smoothly. The value is the header — 16px padding twice, a
+ * 24px control, and the card's two 1px borders. `margin-top: auto` pins the
+ * bottom edge, so only the top travels.
+ */
 .railMinimised {
-  height: auto;
+  height: calc(var(--spacing-lg) * 2 + var(--spacing-xl) + 2px);
   margin-top: auto;
 }
 
@@ -48,7 +51,6 @@
   display: grid;
   grid-template-rows: 1fr;
   min-height: 0;
-  transition: grid-template-rows 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .collapsibleClosed {
@@ -63,7 +65,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .collapsible {
+  .rail {
     transition: none;
   }
 }

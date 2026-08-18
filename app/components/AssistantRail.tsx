@@ -65,7 +65,7 @@ export function AssistantRail({ latest }: AssistantRailProps) {
           aria-label={minimised ? 'Expand the assistant' : 'Minimise the assistant'}
           onClick={() => setMinimised((open) => !open)}
         >
-          <Icon name={minimised ? 'chevron-up' : 'chevron-down'} size={18} />
+          <Icon name="expand" size={18} />
         </button>
       </header>
 

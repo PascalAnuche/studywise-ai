@@ -109,3 +109,20 @@
   font: var(--text-body);
   max-width: 46ch;
 }
+
+/*
+ * A ticked session strikes through the whole item.
+ *
+ * :has() rather than a client component and a piece of state: the checkbox is
+ * uncontrolled and this is presentation, so the styling can follow the DOM
+ * directly and the list stays a server component.
+ */
+.item:has(.check:checked) .title,
+.item:has(.check:checked) .meta {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.item:has(.check:checked) .icon {
+  opacity: 0.55;
+}

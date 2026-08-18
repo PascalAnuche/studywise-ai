@@ -14,6 +14,20 @@
   align-items: start;
 }
 
+/*
+ * From the wide breakpoint the page itself stops scrolling: the conversation
+ * column is pinned to the viewport with its composer at the bottom, and the
+ * rail beside it is the only column that scrolls. Letting the document scroll
+ * instead moved the composer off screen and dragged the rail with it.
+ */
+@media (min-width: 82rem) {
+  .layout {
+    height: calc(100vh - var(--layout-topbar-height));
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
 .thread {
   display: flex;
   flex-direction: column;
@@ -304,6 +318,15 @@
   gap: var(--spacing-lg);
   padding: var(--spacing-xl) var(--spacing-lg);
   min-width: 0;
+}
+
+/* The one scrolling column, once the page itself is fixed. */
+@media (min-width: 82rem) {
+  .rail {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+  }
 }
 
 .railHead {

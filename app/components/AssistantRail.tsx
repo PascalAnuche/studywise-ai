@@ -43,7 +43,10 @@ export function AssistantRail({ latest }: AssistantRailProps) {
   const [minimised, setMinimised] = useState(false);
 
   return (
-    <section className={styles.rail} aria-labelledby="assistant-rail-title">
+    <section
+      className={`${styles.rail} ${minimised ? styles.railMinimised : ''}`.trim()}
+      aria-labelledby="assistant-rail-title"
+    >
       <header className={styles.head}>
         <h2 id="assistant-rail-title" className={styles.title}>
           <span className={styles.titleIcon} aria-hidden="true">
@@ -132,6 +135,7 @@ export function AssistantRail({ latest }: AssistantRailProps) {
         </div>
       )}
 
+      {minimised ? null : (
       <form
         className={styles.composer}
         onSubmit={(event) => {
@@ -155,6 +159,7 @@ export function AssistantRail({ latest }: AssistantRailProps) {
           <Icon name="send" size={18} />
         </button>
       </form>
+      )}
     </section>
   );
 }

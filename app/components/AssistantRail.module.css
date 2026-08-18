@@ -17,6 +17,21 @@
   height: 100%;
 }
 
+/*
+ * Minimised, the card shrinks to its header rather than keeping a full-height
+ * empty frame. Hiding the body alone left the border sitting at the bottom of
+ * the column with nothing between it and the title.
+ */
+.railMinimised {
+  height: auto;
+  align-self: start;
+}
+
+/* The header carries the card's bottom edge when nothing follows it. */
+.railMinimised .head {
+  border-bottom: 0;
+}
+
 .head {
   display: flex;
   align-items: center;

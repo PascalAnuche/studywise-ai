@@ -76,7 +76,8 @@ export type IconName =
   | 'camera'
   | 'mail'
   | 'pin'
-  | 'medal';
+  | 'medal'
+  | 'collapse';
 
 const PATHS: Record<IconName, React.ReactNode> = {
   home: (
@@ -483,6 +484,12 @@ const PATHS: Record<IconName, React.ReactNode> = {
     <>
       <circle cx="12" cy="14.5" r="5.5" />
       <path d="M8.5 9.5 6.5 3.5h11l-2 6" />
+    </>
+  ),
+  collapse: (
+    <>
+      <path d="M9.5 4.5V10H4M14.5 19.5V14H20" />
+      <path d="M3.5 20.5 10 14M20.5 3.5 14 10" />
     </>
   ),
 };

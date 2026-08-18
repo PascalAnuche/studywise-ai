@@ -132,7 +132,8 @@ export function Conversation(props: ConversationProps) {
 
   return (
     <>
-      <div className={styles.conversation}>
+      {/* The thread scrolls; the composer below it does not. */}
+      <div className={styles.threadScroll}>
         <div className={styles.question}>
           {props.question}
           <span className={styles.questionMeta}>

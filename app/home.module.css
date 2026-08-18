@@ -53,13 +53,6 @@
 }
 
 /* Decorative, and the first thing to go when space is tight. */
-.illustration {
-  display: none;
-  flex: none;
-  color: var(--color-primary);
-  opacity: 0.9;
-}
-
 .cards {
   display: grid;
   grid-template-columns: 1fr;
@@ -124,11 +117,7 @@
     padding: var(--spacing-2xl);
   }
 
-  .illustration {
-    display: block;
-  }
-
-  .cards {
+    .cards {
     grid-template-columns: 1fr 1fr;
   }
 }

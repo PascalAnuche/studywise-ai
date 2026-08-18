@@ -38,6 +38,9 @@ export interface AssistantRailProps {
 export function AssistantRail({ latest }: AssistantRailProps) {
   const router = useRouter();
   const [followUp, setFollowUp] = useState('');
+  // Minimised keeps the header and hides everything under it, so the assistant
+  // gets out of the way without leaving the page.
+  const [minimised, setMinimised] = useState(false);
 
   return (
     <section className={styles.rail} aria-labelledby="assistant-rail-title">
@@ -51,13 +54,20 @@ export function AssistantRail({ latest }: AssistantRailProps) {
         <Link href="/assistant" className={styles.headAction} aria-label="Explanation history">
           <Icon name="history" size={18} />
         </Link>
-        <Link href="/assistant" className={styles.headAction} aria-label="Open the full assistant">
-          <Icon name="expand" size={18} />
-        </Link>
+        <button
+          type="button"
+          className={styles.headAction}
+          aria-expanded={!minimised}
+          aria-controls="assistant-rail-body"
+          aria-label={minimised ? 'Expand the assistant' : 'Minimise the assistant'}
+          onClick={() => setMinimised((open) => !open)}
+        >
+          <Icon name={minimised ? 'expand' : 'collapse'} size={18} />
+        </button>
       </header>
 
-      {latest ? (
-        <div className={styles.body}>
+      {minimised ? null : latest ? (
+        <div className={styles.body} id="assistant-rail-body">
           <p className={styles.question}>{latest.question}</p>
 
           <div className={styles.answer}>

@@ -49,13 +49,6 @@
   gap: var(--spacing-md);
 }
 
-.statIcon {
-  display: grid;
-  place-items: center;
-  flex: none;
-  color: var(--color-primary);
-}
-
 .statBody {
   display: flex;
   flex-direction: column;

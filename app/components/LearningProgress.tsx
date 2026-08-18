@@ -108,9 +108,6 @@ export function LearningProgress({
 
         <div className={styles.stats}>
           <div className={styles.stat}>
-            <span className={styles.statIcon}>
-              <Icon name="sparkle" size={18} />
-            </span>
             <span className={styles.statBody}>
               <span className={styles.statValue}>{studyTime}</span>
               <span className={styles.statLabel}>Study Time</span>
@@ -118,9 +115,6 @@ export function LearningProgress({
           </div>
 
           <div className={styles.stat}>
-            <span className={styles.statIcon}>
-              <Icon name="check" size={18} />
-            </span>
             <span className={styles.statBody}>
               <span className={styles.statValue}>{topicsLearned}</span>
               <span className={styles.statLabel}>Topics Learned</span>
@@ -128,9 +122,6 @@ export function LearningProgress({
           </div>
 
           <div className={styles.stat}>
-            <span className={styles.statIcon}>
-              <Icon name="target" size={18} />
-            </span>
             <span className={styles.statBody}>
               <span className={styles.statValue}>{questionsSolved}</span>
               <span className={styles.statLabel}>Questions Solved</span>

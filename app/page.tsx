@@ -73,9 +73,6 @@ export default async function HomePage() {
             <h1 className={styles.hello}>Hi {view.firstName}! 👋</h1>
             <p className={styles.subtitle}>Let&rsquo;s make today a productive learning day.</p>
           </div>
-          <div className={styles.illustration} aria-hidden="true">
-            <Icon name="sparkle" size={64} />
-          </div>
         </header>
 
         <LearnComposer />

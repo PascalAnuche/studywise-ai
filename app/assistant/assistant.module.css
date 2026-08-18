@@ -20,7 +20,26 @@
   min-width: 0;
   min-height: 0;
   padding: var(--spacing-xl) var(--spacing-lg);
+  gap: var(--spacing-lg);
+  /*
+   * Bounded to the viewport so the thread inside it can scroll. Without a
+   * height the column grows with the conversation, the page scrolls as a
+   * whole, and the composer walks off the bottom of the screen.
+   */
+  height: calc(100vh - var(--layout-topbar-height));
+  overflow: hidden;
+}
+
+/* The only thing that scrolls. */
+.threadScroll {
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-xl);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  /* Room for the last message to clear the composer's top edge. */
+  padding-bottom: var(--spacing-sm);
 }
 
 .header {
@@ -37,16 +56,6 @@
   gap: var(--spacing-md);
 }
 
-.avatar {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: var(--spacing-4xl);
-  height: var(--spacing-4xl);
-  border-radius: var(--radius-lg);
-  background: var(--color-secondary);
-  color: var(--color-primary);
-}
 
 .title {
   font: var(--text-h2);
@@ -221,7 +230,9 @@
 }
 
 /* Composer: a box with the input above and the attachment row beneath. */
+/* Pinned under the thread rather than carried along by it. */
 .composer {
+  flex: none;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);

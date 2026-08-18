@@ -64,9 +64,6 @@ export default async function AssistantPage({
       <main id="main" className={styles.thread}>
         <header className={styles.header}>
           <div className={styles.identity}>
-            <span className={styles.avatar} aria-hidden="true">
-              <Icon name="sparkle" size={22} />
-            </span>
             <div>
               <h1 className={styles.title}>AI Assistant</h1>
               <p className={styles.subtitle}>Your smart study companion</p>

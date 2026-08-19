@@ -11,10 +11,6 @@
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-full);
   white-space: nowrap;
-  /* Hug the label. inline-flex alone is not enough: a flex column stretches its
-   * items, so the badge filled the width of whatever contained it. */
-  align-self: flex-start;
-  width: fit-content;
 }
 
 .dot {

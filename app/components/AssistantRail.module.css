@@ -211,7 +211,6 @@
 
 .why {
   border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-primary);
   border-radius: var(--radius-md);
   background: var(--color-secondary);
   padding: var(--spacing-lg);

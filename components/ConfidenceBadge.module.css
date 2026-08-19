@@ -11,6 +11,8 @@
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-full);
   white-space: nowrap;
+  align-self: flex-start;
+  width: fit-content;
 }
 
 .dot {

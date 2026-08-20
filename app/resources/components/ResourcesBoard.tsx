@@ -21,10 +21,11 @@ import {
   type ResourceListEntry,
 } from '@/lib/mock';
 import {
-  FilterButton,
   FilterControls,
+  FilterMenu,
   FilterRow,
   SearchField,
+  type FilterGroup,
 } from '../../components/Toolbar';
 import styles from '../resources.module.css';
 
@@ -44,6 +45,27 @@ const KIND_TONE = {
   book: 'amber',
   article: 'blue',
 } as const;
+
+/* The first option in each group is the default, and counts as unfiltered. */
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'sort',
+    label: 'Sort by',
+    options: [
+      { value: 'recent', label: 'Recently added' },
+      { value: 'oldest', label: 'Oldest first' },
+      { value: 'title', label: 'Title A–Z' },
+    ],
+  },
+  {
+    id: 'saved',
+    label: 'Show',
+    options: [
+      { value: 'all', label: 'Everything' },
+      { value: 'bookmarked', label: 'Bookmarked only' },
+    ],
+  },
+];
 
 const SUBJECTS = [
   { value: 'all', label: 'All Subjects' },
@@ -77,6 +99,7 @@ export function ResourcesBoard() {
   const [type, setType] = useState('all');
   const [subject, setSubject] = useState('all');
   const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState<Record<string, string>>({ sort: 'recent', saved: 'all' });
 
   return (
     <div className={styles.layout}>
@@ -103,7 +126,12 @@ export function ResourcesBoard() {
               onValueChange={setSubject}
               options={SUBJECTS}
             />
-            <FilterButton>Filters</FilterButton>
+            <FilterMenu
+              label="Filters"
+              groups={FILTER_GROUPS}
+              values={filters}
+              onChange={setFilters}
+            />
           </FilterControls>
         </FilterRow>
 

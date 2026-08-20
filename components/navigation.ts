@@ -27,7 +27,6 @@ export const PRIMARY_DESTINATIONS: Destination[] = [
   { href: '/planner', label: 'Study Planner', icon: 'plan', description: 'Build and adjust a study plan', flow: 2 },
   { href: '/progress', label: 'Progress', icon: 'progress', description: 'How the studying is going', flow: 6 },
   { href: '/resources', label: 'Resources', icon: 'resources', description: 'Your uploaded materials', flow: 4 },
-  { href: '/flashcards', label: 'Flashcards', icon: 'flashcards', description: 'Review with active recall', flow: 5 },
   { href: '/notes', label: 'Notes', icon: 'notes', description: 'Write and organise notes', flow: 5 },
   { href: '/achievements', label: 'Achievements', icon: 'achievements', description: 'Milestones and streaks', flow: 7 },
 ];

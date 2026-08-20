@@ -64,7 +64,7 @@ export interface Milestone {
 }
 
 export const MOCK_MILESTONES: Milestone[] = [
-  { id: 'flashcards-50', title: 'Completed 50 Flashcards', date: 'May 20, 2024', icon: 'check-circle', tone: 'teal' },
+  { id: 'explanations-20', title: 'Saved 20 Explanations', date: 'May 20, 2024', icon: 'check-circle', tone: 'teal' },
   { id: 'hours-10', title: 'Studied for 10 Hours', date: 'May 15, 2024', icon: 'clock', tone: 'blue' },
   { id: 'notes-25', title: 'Created 25 Notes', date: 'May 12, 2024', icon: 'notes', tone: 'indigo' },
   { id: 'quizzes-5', title: 'Completed 5 Quizzes', date: 'May 10, 2024', icon: 'target', tone: 'amber' },
@@ -103,3 +103,14 @@ export const MOCK_BADGE_COUNTS: Record<'all' | BadgeCategory, number> = {
   consistency: 7,
   exploration: 4,
 };
+
+/** Monday-first study week, for the streak panel. `done` is a day studied. */
+export const MOCK_STREAK_DAYS: { day: string; done: boolean }[] = [
+  { day: 'M', done: true },
+  { day: 'T', done: true },
+  { day: 'W', done: true },
+  { day: 'T', done: true },
+  { day: 'F', done: true },
+  { day: 'S', done: true },
+  { day: 'S', done: false },
+];

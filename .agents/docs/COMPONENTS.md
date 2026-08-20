@@ -86,12 +86,11 @@ Prompt section 12 governs every string here: describe the work, never the person
 - `WeakAreaList` — each area individually, carrying the quiz evidence that flagged it ("3 of 5 questions were answered incorrectly on 2026-08-10"), never a verdict. Ends in two links out, so the page finishes with something to do
 - `TopicCompletionList` — the only place a student writes to `progress` directly. Marking a topic deliberately does **not** extend the streak: ticking four boxes should not read as four days of study
 
-## Resources, Flashcards and Notes — flows 4 and 5, built to the approved design
+## Resources and Notes — flows 4 and 5, built to the approved design
 
 All three render entirely from `lib/mock` and share their header furniture (`app/components/Toolbar.tsx`: `TabStrip`, `SearchField`, `FilterRow`, `ViewToggle`, `FilterButton`).
 
 - `ResourcesBoard` — type filters, a scroll-snapping featured row, browse-by-subject, and the recent-resources table. The featured row is a flex scroller rather than a carousel with a next button, which would do nothing on a touch screen
-- `FlashcardsBoard`, `ScheduleChart` — set grid and the spaced-repetition panel. Per-set percentages describe cards answered correctly on the last pass, a fact about the deck rather than a claim about the student
 - `NotesBoard`, `NoteBody` — list and detail. **Below 64rem they are one pane at a time** with a back control. `NoteBody` renders structured blocks, not markdown, so nothing has to decide what to do with arbitrary HTML
 
 ## Responsiveness

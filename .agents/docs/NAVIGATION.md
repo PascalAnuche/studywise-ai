@@ -15,14 +15,14 @@ Source of truth for the shape of each flow is the diagram; this file records how
 | 2 | Create a Study Plan | `/planner` | yes | Built to the approved design |
 | 3 | Take an AI-Generated Quiz | `/practice` | **no** | Built |
 | 4 | Resources & Upload Materials | `/resources` | yes | Screen built, renders from `lib/mock` |
-| 5 | Notes & Flashcards | `/notes`, `/flashcards` | yes | Screens built, render from `lib/mock` |
+| 5 | Notes | `/notes` | yes | Screen built, renders from `lib/mock` |
 | 6 | Track Learning Progress | `/progress` | yes | Built |
 | 7 | Achievements & Study Streak | `/achievements` | yes | Screen built, achievements from `lib/mock`, streak is real |
 | 8 | Profile & Settings | `/profile`, `/settings` | yes | Profile is real; Settings renders from `lib/mock` |
 
 **Flow 3 has no sidebar entry.** The approved design's sidebar has eight items and Practice is not among them, but flow 3 needs a home. It is reached from the Home composer's "Generate Quiz" action, from AI recommendations, and from weak-area links on Progress, so the flow is never a dead end. Open question in the PRD section 12.
 
-Flow 5 is one diagram covering two destinations: Notes is the writing half, Flashcards the recall half. They are separate sidebar entries because the design lists them separately.
+Flow 5 covered two destinations in the original diagram, Notes and Flashcards. Flashcards was removed from the product; Notes is what remains.
 
 ## Home
 
@@ -86,7 +86,7 @@ The journey map is Discover → Learn → Practice → Track → Reflect. A feat
 | A weak area | Assistant or Practice | `WeakAreaList` on Progress |
 | Home | any flow | Composer quick actions and recommendations |
 
-Planned by the flow diagram, not yet built: a material (flow 4) should reach Assistant, Practice and Flashcards; a note (flow 5) should reach Assistant and Practice.
+Planned by the flow diagram, not yet built: a material (flow 4) should reach Assistant and Practice; a note (flow 5) should reach Assistant and Practice.
 
 ## Adding a destination
 

@@ -1,7 +1,7 @@
 /**
  * Mock data for the features the backend does not model yet.
  *
- * Resources (flow 4), Notes and Flashcards (flow 5), Achievements (flow 7) and
+ * Resources (flow 4), Notes (flow 5), Achievements (flow 7) and
  * Settings (flow 8) have no tables. Rather than leave four destinations empty
  * until the backend restructure, they render from here.
  *
@@ -76,32 +76,6 @@ export const MOCK_NOTES: MockNote[] = [
   { id: 4, title: 'Hash collisions', subject: 'Data Structures', excerpt: 'Chaining vs open addressing. Collisions are guaranteed by pigeonhole, so the question is only how you resolve them.', wordCount: 260, updatedAt: daysAgo(4) },
   { id: 5, title: 'Process states', subject: 'Operating Systems', excerpt: 'New, ready, running, waiting, terminated. The scheduler only ever moves things between ready and running.', wordCount: 180, updatedAt: daysAgo(2) },
   { id: 6, title: 'Memoisation vs tabulation', subject: 'Data Structures', excerpt: 'Same cache, opposite direction. Top-down starts at the answer; bottom-up starts at the base.', wordCount: 240, updatedAt: daysAgo(1) },
-];
-
-// ---------------------------------------------------------------------------
-// Flow 5 — Flashcards
-// ---------------------------------------------------------------------------
-
-export interface MockFlashcardSet {
-  id: number;
-  title: string;
-  subject: string;
-  cardCount: number;
-  /** Cards answered "knew it" on the last pass. */
-  known: number;
-  /** Cards marked for review rather than dropped. */
-  forReview: number;
-  lastReviewedAt: string | null;
-}
-
-export const MOCK_FLASHCARD_SETS: MockFlashcardSet[] = [
-  { id: 1, title: 'Arrays Basics', subject: 'Data Structures', cardCount: 12, known: 10, forReview: 2, lastReviewedAt: daysAgo(6) },
-  { id: 2, title: 'Linked Lists', subject: 'Data Structures', cardCount: 14, known: 11, forReview: 3, lastReviewedAt: daysAgo(5) },
-  { id: 3, title: 'Big-O notation', subject: 'Data Structures', cardCount: 10, known: 6, forReview: 4, lastReviewedAt: daysAgo(4) },
-  { id: 4, title: 'Hash Tables', subject: 'Data Structures', cardCount: 16, known: 9, forReview: 7, lastReviewedAt: daysAgo(4) },
-  { id: 5, title: 'Recursion patterns', subject: 'Data Structures', cardCount: 18, known: 15, forReview: 3, lastReviewedAt: daysAgo(3) },
-  { id: 6, title: 'Scheduling algorithms', subject: 'Operating Systems', cardCount: 11, known: 7, forReview: 4, lastReviewedAt: daysAgo(2) },
-  { id: 7, title: 'Dynamic programming', subject: 'Data Structures', cardCount: 15, known: 0, forReview: 0, lastReviewedAt: null },
 ];
 
 // ---------------------------------------------------------------------------
@@ -301,7 +275,6 @@ export const MOCK_PRIVACY: { label: string; detail: string }[] = [
 // ---------------------------------------------------------------------------
 
 export * from './resources';
-export * from './flashcards';
 export * from './notes';
 export * from './achievements-page';
 export * from './profile-page';

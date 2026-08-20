@@ -116,7 +116,7 @@ Two sources, and the difference matters.
 
 **`scripts/seed.mjs`** fills the real database for the features that have tables. It seeds one student with a term of coherent study: the topics on the plan are the topics quizzed, the weak areas are the ones actually missed, and the recommendations name those same topics. Dates are relative to today, so it never goes stale, and it is re-runnable. `npm run db:seed`.
 
-**`lib/mock/`** covers the four flows with no backend yet: Resources, Notes, Flashcards, Achievements, and the Settings preferences. Three rules keep it honest:
+**`lib/mock/`** covers the flows with no backend yet: Resources, Notes, Achievements, and the Settings preferences. Three rules keep it honest:
 
 1. **Everything is in that one module.** No fixture is inlined in a component, so deleting `lib/mock` and following the type errors is an exact inventory of what still needs a real source
 2. **The shapes are what the real queries should return**, so swapping the source is a change of import, not a rewrite

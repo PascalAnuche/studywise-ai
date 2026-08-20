@@ -5,7 +5,7 @@ import { Icon, type IconName } from '@/components/Icon';
 import styles from './Toolbar.module.css';
 
 /**
- * Header furniture shared by Resources, Flashcards and Notes.
+ * Header furniture shared by Resources and Notes.
  *
  * These are presentational only. Filtering is not wired to anything yet
  * because none of the three screens has a backend; the controls change their

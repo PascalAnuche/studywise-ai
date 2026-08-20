@@ -1,6 +1,6 @@
 /*
  * The tinted rounded square behind an icon. It appears roughly thirty times
- * across Resources, Flashcards and Notes, which is why it is a component.
+ * across Resources and Notes, which is why it is a component.
  *
  * The tint is mixed from the series colour rather than stored as a second
  * token per hue: one source of truth per colour, and a theme change moves the

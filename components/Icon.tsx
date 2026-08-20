@@ -15,7 +15,6 @@ export type IconName =
   | 'practice'
   | 'progress'
   | 'resources'
-  | 'flashcards'
   | 'notes'
   | 'achievements'
   | 'profile'
@@ -132,12 +131,6 @@ const PATHS: Record<IconName, React.ReactNode> = {
   resources: (
     <>
       <path d="M4 6.5A1.5 1.5 0 0 1 5.5 5h3.4a1.5 1.5 0 0 1 1.2.6l.9 1.2h7.5A1.5 1.5 0 0 1 20 8.3V18a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18Z" />
-    </>
-  ),
-  flashcards: (
-    <>
-      <rect x="6.5" y="7.5" width="14" height="11" rx="2" />
-      <path d="M16.5 4.5h-11A1.5 1.5 0 0 0 4 6v9" />
     </>
   ),
   notes: (
@@ -525,9 +518,6 @@ const FILLED_PATHS: Partial<Record<IconName, React.ReactNode>> = {
   ),
   resources: (
     <path d="M3.5 6.5A2 2 0 0 1 5.5 4.5h3.4a2 2 0 0 1 1.6.8l1 1.35h7A2 2 0 0 1 20.5 8.65V18a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z" />
-  ),
-  flashcards: (
-    <path d="M4 5.25A1.75 1.75 0 0 1 5.75 3.5h10.5a1.75 1.75 0 0 1 1.75 1.75V6H8.25A2.25 2.25 0 0 0 6 8.25V16.5h-.25A1.75 1.75 0 0 1 4 14.75Zm3.5 3A1.5 1.5 0 0 1 9 6.75h9.75a1.75 1.75 0 0 1 1.75 1.75v9.75A1.75 1.75 0 0 1 18.75 20H9.25A1.75 1.75 0 0 1 7.5 18.25Z" />
   ),
   notes: (
     <path d="M6 2.5h7.5L19.5 8v12.5A1.5 1.5 0 0 1 18 22H6a1.5 1.5 0 0 1-1.5-1.5v-16.5A1.5 1.5 0 0 1 6 2.5Zm7.75 1.6V8h3.9ZM8.5 12a.75.75 0 0 0 0 1.5h7a.75.75 0 0 0 0-1.5Zm0 3.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5Z" />

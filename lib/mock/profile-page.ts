@@ -11,7 +11,7 @@ import type { ChartTone } from '../tones';
 
 export interface ProfileStat {
   id: string;
-  icon: 'notes' | 'flashcards' | 'flame' | 'clock' | 'star';
+  icon: 'notes' | 'learn' | 'flame' | 'clock' | 'star';
   value: string;
   label: string;
   delta: string;
@@ -20,7 +20,7 @@ export interface ProfileStat {
 
 export const MOCK_PROFILE_STATS: ProfileStat[] = [
   { id: 'notes', icon: 'notes', value: '42', label: 'Notes Created', delta: '12 this month', tone: 'indigo' },
-  { id: 'sets', icon: 'flashcards', value: '18', label: 'Flashcard Sets', delta: '4 this month', tone: 'teal' },
+  { id: 'saved', icon: 'learn', value: '18', label: 'Saved Explanations', delta: '4 this month', tone: 'teal' },
   { id: 'streak', icon: 'flame', value: '12', label: 'Day Streak', delta: 'Best: 21 days', tone: 'amber' },
   { id: 'time', icon: 'clock', value: '134h', label: 'Total Study Time', delta: '18h this month', tone: 'blue' },
   { id: 'points', icon: 'star', value: '8,450', label: 'Points Earned', delta: '950 this month', tone: 'magenta' },
@@ -47,14 +47,14 @@ export interface LearningGoal {
   current: number;
   target: number;
   unit: string;
-  icon: 'target' | 'book' | 'flashcards';
+  icon: 'target' | 'book' | 'practice';
   tone: ChartTone;
 }
 
 export const MOCK_LEARNING_GOALS: LearningGoal[] = [
   { id: 'hours', title: 'Study 15 hours this week', current: 12, target: 15, unit: 'hours', icon: 'target', tone: 'teal' },
   { id: 'chapters', title: 'Read 5 chapters', current: 3, target: 5, unit: 'chapters', icon: 'book', tone: 'indigo' },
-  { id: 'flashcards', title: 'Create 10 flashcards', current: 7, target: 10, unit: 'flashcards', icon: 'flashcards', tone: 'amber' },
+  { id: 'quizzes', title: 'Take 10 practice quizzes', current: 7, target: 10, unit: 'quizzes', icon: 'practice', tone: 'amber' },
 ];
 
 export interface Reminder {

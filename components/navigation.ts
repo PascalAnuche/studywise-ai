@@ -32,8 +32,7 @@ export const PRIMARY_DESTINATIONS: Destination[] = [
 ];
 
 export const SECONDARY_DESTINATIONS: Destination[] = [
-  { href: '/profile', label: 'Profile', icon: 'profile', description: 'Your account', flow: 8 },
-  { href: '/settings', label: 'Settings', icon: 'settings', description: 'Preferences and privacy', flow: 8 },
+  { href: '/profile', label: 'Settings', icon: 'settings', description: 'Your account, preferences and privacy', flow: 8 },
 ];
 
 /** Not in the sidebar, but a real destination the topbar still labels. */

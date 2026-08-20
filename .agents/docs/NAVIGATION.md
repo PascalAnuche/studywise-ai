@@ -18,7 +18,7 @@ Source of truth for the shape of each flow is the diagram; this file records how
 | 5 | Notes | `/notes` | yes | Screen built, renders from `lib/mock` |
 | 6 | Track Learning Progress | `/progress` | yes | Built |
 | 7 | Achievements & Study Streak | `/achievements` | yes | Screen built, achievements from `lib/mock`, streak is real |
-| 8 | Profile & Settings | `/profile`, `/settings` | yes | Profile is real; Settings renders from `lib/mock` |
+| 8 | Profile & Settings | `/profile` | yes | Profile is real; Settings renders from `lib/mock` |
 
 **Flow 3 has no sidebar entry.** The approved design's sidebar has eight items and Practice is not among them, but flow 3 needs a home. It is reached from the Home composer's "Generate Quiz" action, from AI recommendations, and from weak-area links on Progress, so the flow is never a dead end. Open question in the PRD section 12.
 

@@ -12,6 +12,8 @@ import {
   MOCK_CONNECTED,
   MOCK_INTERESTS,
   MOCK_LEARNING_GOALS,
+  MOCK_PREFERENCES,
+  MOCK_PRIVACY,
   MOCK_PROFILE_STATS,
   MOCK_REMINDERS,
   MOCK_TOP_SKILLS,
@@ -55,7 +57,7 @@ export function ProfileBoard({ name, discipline, avatarUrl = null }: ProfileBoar
     <div className={styles.layout}>
       <main id="main" className={styles.main}>
         <header>
-          <h1 className={styles.title}>My Profile</h1>
+          <h1 className={styles.title}>Settings</h1>
           <p className={styles.subtitle}>
             Manage your information, preferences and account settings.
           </p>
@@ -191,6 +193,46 @@ export function ProfileBoard({ name, discipline, avatarUrl = null }: ProfileBoar
               </Card>
             </div>
           </>
+        ) : tab === 'preferences' ? (
+          <Card>
+            <h2 className={styles.panelTitle}>Preferences</h2>
+            <p className={styles.panelText}>
+              How the assistant and reminders behave. Nothing here is stored yet.
+            </p>
+            <ul className={styles.settingsList}>
+              {MOCK_PREFERENCES.map((preference) => (
+                <li key={preference.id} className={styles.settingsRow}>
+                  <span className={styles.settingsBody}>
+                    <span className={styles.settingsLabel}>{preference.label}</span>
+                    <span className={styles.settingsDetail}>{preference.description}</span>
+                  </span>
+                  <span className={styles.settingsValue}>{preference.value}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        ) : tab === 'privacy' ? (
+          <Card>
+            <h2 className={styles.panelTitle}>Privacy &amp; Security</h2>
+            {/*
+              Kept prominent rather than buried. Prompt section 12 treats study
+              struggles and performance history as sensitive by default, and a
+              student should be able to read that rather than take it on trust.
+            */}
+            <p className={styles.panelText}>
+              What StudyWise stores about you, and what it will never do with it.
+            </p>
+            <ul className={styles.settingsList}>
+              {MOCK_PRIVACY.map((item) => (
+                <li key={item.label} className={styles.settingsRow}>
+                  <span className={styles.settingsBody}>
+                    <span className={styles.settingsLabel}>{item.label}</span>
+                    <span className={styles.settingsDetail}>{item.detail}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Card>
         ) : (
           <Card>
             <h2 className={styles.panelTitle}>{TABS.find((t) => t.id === tab)?.label}</h2>
@@ -259,7 +301,7 @@ export function ProfileBoard({ name, discipline, avatarUrl = null }: ProfileBoar
         <Card>
           <div className={styles.railHead}>
             <h2 className={styles.railTitle}>Study Reminders</h2>
-            <ActionLink href="/settings" icon={null}>
+            <ActionLink href="/profile" icon={null}>
               Edit
             </ActionLink>
           </div>
@@ -301,7 +343,7 @@ export function ProfileBoard({ name, discipline, avatarUrl = null }: ProfileBoar
         <Card>
           <div className={styles.railHead}>
             <h2 className={styles.railTitle}>Connected Accounts</h2>
-            <ActionLink href="/settings" icon={null}>
+            <ActionLink href="/profile" icon={null}>
               Manage
             </ActionLink>
           </div>

@@ -66,7 +66,7 @@ export function Sidebar() {
           <span className={styles.upsellBody}>
             Get personalised study recommendations and stay on track.
           </span>
-          <Link href="/settings#plan" className={styles.upsellAction}>
+          <Link href="/profile" className={styles.upsellAction}>
             Upgrade to Pro
             <Icon name="sparkle" size={16} />
           </Link>

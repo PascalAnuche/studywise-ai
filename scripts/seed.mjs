@@ -129,6 +129,37 @@ for (const [index, [topic, focus, minutes, daysAgo, startTime]] of PAST_SESSIONS
   await insertSession.run(pastAlgorithms.id, index + 1, topic, focus, minutes, day(daysAgo), startTime, iso(72), iso(daysAgo));
 }
 
+/*
+ * A second finished plan. One completed plan cannot demonstrate — or verify —
+ * a two-column grid, and this one deliberately ends short of 100% so the
+ * figure is visibly computed rather than a constant.
+ */
+const pastNetworks = await insertPlan.get(
+  studentId,
+  'Computer Networks',
+  JSON.stringify(['Understand the layers well enough to explain them']),
+  JSON.stringify(['OSI model', 'TCP/IP', 'DNS']),
+  '2x/week',
+  day(110),
+  day(84),
+  'completed',
+  1,
+  iso(110),
+  iso(84)
+);
+
+const NETWORK_SESSIONS = [
+  ['OSI model', 'Read Chapter 1', 60, 108, '10:00'],
+  ['TCP/IP', 'Algorithms Practice', 60, 102, '10:00'],
+  ['DNS', 'Practice Questions', 45, 96, '14:00'],
+  // Scheduled but never sat: this is what keeps the figure under 100%.
+  ['TCP/IP', 'Weekly Review', 60, -400, '11:00'],
+];
+
+for (const [index, [topic, focus, minutes, daysAgo, startTime]] of NETWORK_SESSIONS.entries()) {
+  await insertSession.run(pastNetworks.id, index + 1, topic, focus, minutes, day(daysAgo), startTime, iso(110), iso(84));
+}
+
 // A draft whose checkpoint has not been answered: understood stays null.
 await insertPlan.get(
   studentId,

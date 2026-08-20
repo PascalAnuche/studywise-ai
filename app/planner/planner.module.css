@@ -877,17 +877,21 @@
 
 /* Past plans */
 .pastList {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--spacing-lg);
+}
+
+/* Cards in a row share a height, so their figure rows sit on one line. */
+.pastList > * {
+  min-width: 0;
 }
 
 .pastHead {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
   margin-bottom: var(--spacing-lg);
 }
 
@@ -921,7 +925,7 @@
 .pastStats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   padding: var(--spacing-lg) 0;
   border-block: 1px solid var(--color-border);
 }
@@ -967,7 +971,8 @@
 }
 
 @media (min-width: 48rem) {
-  .goalGrid {
+  .goalGrid,
+  .pastList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

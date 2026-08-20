@@ -97,6 +97,38 @@ const operatingSystems = await insertPlan.get(
   iso(3)
 );
 
+/*
+ * A finished plan, so Past Plans has something real to show. Its dates sit
+ * wholly in the past and every session with them, which is what makes its
+ * completion figure 100% rather than a number written here.
+ */
+const pastAlgorithms = await insertPlan.get(
+  studentId,
+  'Algorithms',
+  JSON.stringify(['Get through the sorting unit before the mid-term', 'Stop confusing merge and quick sort']),
+  JSON.stringify(['Bubble sort', 'Merge sort', 'Quicksort', 'Binary search']),
+  '3x/week',
+  day(72),
+  day(45),
+  'completed',
+  1,
+  iso(72),
+  iso(45)
+);
+
+const PAST_SESSIONS = [
+  ['Bubble sort', 'Algorithms Practice', 45, 70, '10:00'],
+  ['Merge sort', 'Data Structures Lecture', 60, 66, '10:00'],
+  ['Quicksort', 'Algorithms Practice', 60, 62, '14:00'],
+  ['Binary search', 'Practice Questions', 45, 58, '09:30'],
+  ['Merge sort', 'Weekly Review', 60, 52, '11:00'],
+  ['Quicksort', 'Practice Questions', 45, 46, '15:00'],
+];
+
+for (const [index, [topic, focus, minutes, daysAgo, startTime]] of PAST_SESSIONS.entries()) {
+  await insertSession.run(pastAlgorithms.id, index + 1, topic, focus, minutes, day(daysAgo), startTime, iso(72), iso(daysAgo));
+}
+
 // A draft whose checkpoint has not been answered: understood stays null.
 await insertPlan.get(
   studentId,

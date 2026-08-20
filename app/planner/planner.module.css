@@ -744,3 +744,230 @@
     grid-template-columns: minmax(0, 1fr) minmax(20rem, 22rem);
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * Study Goals and Past Plans.
+ *
+ * Both are panels of the planner rather than separate routes, matching how
+ * Achievements, Notes and Settings handle their sections. The tabs used to set
+ * state and render nothing; these are what they now open.
+ * ------------------------------------------------------------------------ */
+.panelHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.panelTitle {
+  font: var(--text-h4);
+}
+
+.panelCount {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.emptyText {
+  font: var(--text-body);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+/* Goals */
+.goalGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+.goalCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 0;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+/* Tile left, status right, both on the card's own baseline. */
+.goalTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.goalStatus {
+  flex: none;
+  padding: 2px var(--spacing-md);
+  border-radius: var(--radius-full);
+  font: var(--text-caption);
+  white-space: nowrap;
+}
+
+.goalActive {
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+}
+
+.goalDraft {
+  background: var(--color-background);
+  color: var(--color-text-muted);
+}
+
+.goalText {
+  font: var(--text-body-medium);
+  /* Two goals of different lengths still line their meta rows up. */
+  flex: 1;
+}
+
+.goalMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.goalMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.goalFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.goalTrack {
+  display: block;
+  flex: 1;
+  height: var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.goalBar {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+}
+
+.goalPercent {
+  flex: none;
+  min-width: 2.5rem;
+  text-align: end;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.goalNote {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/* Past plans */
+.pastList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.pastHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-lg);
+}
+
+.pastTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.pastTitle {
+  font: var(--text-h4);
+}
+
+.pastBadge {
+  flex: none;
+  padding: 2px var(--spacing-md);
+  border-radius: var(--radius-full);
+  background: var(--color-confidence-established-bg);
+  color: var(--color-confidence-established-fg);
+  font: var(--text-caption);
+  white-space: nowrap;
+}
+
+.pastRange {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/* Three figures on one baseline, evenly divided. */
+.pastStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg) 0;
+  border-block: 1px solid var(--color-border);
+}
+
+.pastStat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 0;
+}
+
+.pastStatValue {
+  font: var(--text-h4);
+  line-height: 1.1;
+}
+
+.pastStatLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.pastGoals {
+  list-style: none;
+  margin: var(--spacing-lg) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.pastGoal {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  font: var(--text-body);
+  color: var(--color-text-muted);
+}
+
+.pastGoal svg {
+  flex: none;
+  margin-top: 3px;
+  color: var(--color-confidence-established-fg);
+}
+
+@media (min-width: 48rem) {
+  .goalGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

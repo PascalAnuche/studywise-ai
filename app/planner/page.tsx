@@ -7,6 +7,8 @@ import type { DayMarker } from './components/MiniCalendar';
 import {
   PlannerBoard,
   type ActivePlan,
+  type GoalCard,
+  type PastPlan,
   type ScheduleSlot,
   type UpcomingTask,
 } from './components/PlannerBoard';
@@ -32,6 +34,14 @@ function hash(value: string): number {
   let h = 0;
   for (let i = 0; i < value.length; i++) h = (Math.imul(31, h) + value.charCodeAt(i)) | 0;
   return Math.abs(h);
+}
+
+function formatDate(value: string): string {
+  return new Date(`${value}T00:00:00`).toLocaleDateString(undefined, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
 }
 
 function formatDateRange(start: string | null, end: string | null): string {
@@ -133,9 +143,53 @@ export default async function PlannerPage() {
     mark(item.endDate, 'goal');
   }
 
+  /** Share of a plan's sessions whose slot has passed. */
+  const percentFor = (p: (typeof plans)[number]) =>
+    p.sessions.length === 0
+      ? 0
+      : Math.round(
+          (p.sessions.filter((s) => isDone(s.scheduledFor, s.startTime, s.durationMinutes)).length /
+            p.sessions.length) *
+            100
+        );
+
+  /*
+   * Goals are real: `study_plans.goals` holds what the student wrote when the
+   * plan was made. Each one is shown against the plan it belongs to, so the
+   * progress beside a goal is the progress of the work that serves it rather
+   * than a number invented for the card.
+   */
+  const goals: GoalCard[] = plans
+    .filter((p) => p.status !== 'completed')
+    .flatMap((p) =>
+      p.goals.map((text, index) => ({
+        id: `${p.id}-${index}`,
+        text,
+        subject: p.subject,
+        status: p.status,
+        targetDate: p.endDate ? formatDate(p.endDate) : null,
+        percentComplete: percentFor(p),
+        sessionCount: p.sessions.length,
+      }))
+    );
+
+  const pastPlans: PastPlan[] = plans
+    .filter((p) => p.status === 'completed')
+    .map((p) => ({
+      id: p.id,
+      subject: p.subject,
+      dateRange: formatDateRange(p.startDate, p.endDate),
+      topicCount: p.topics.length,
+      sessionCount: p.sessions.length,
+      percentComplete: percentFor(p),
+      goals: p.goals,
+    }));
+
   return (
     <PlannerBoard
       plan={plan}
+      goals={goals}
+      pastPlans={pastPlans}
       schedule={schedule}
       tasks={tasks}
       markers={markers}

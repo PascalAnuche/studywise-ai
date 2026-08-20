@@ -339,9 +339,6 @@ export function PlannerBoard({
           <>
             <div className={styles.panelHead}>
               <h2 className={styles.panelTitle}>Study Goals</h2>
-              <span className={styles.panelCount}>
-                {goals.length} {goals.length === 1 ? 'goal' : 'goals'}
-              </span>
             </div>
 
             {goals.length === 0 ? (
@@ -405,9 +402,6 @@ export function PlannerBoard({
           <>
             <div className={styles.panelHead}>
               <h2 className={styles.panelTitle}>Past Plans</h2>
-              <span className={styles.panelCount}>
-                {pastPlans.length} {pastPlans.length === 1 ? 'plan' : 'plans'}
-              </span>
             </div>
 
             {pastPlans.length === 0 ? (

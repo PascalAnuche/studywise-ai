@@ -755,7 +755,6 @@
 .panelHead {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
   gap: var(--spacing-md);
 }
 
@@ -763,10 +762,6 @@
   font: var(--text-h4);
 }
 
-.panelCount {
-  font: var(--text-caption);
-  color: var(--color-text-muted);
-}
 
 .emptyText {
   font: var(--text-body);

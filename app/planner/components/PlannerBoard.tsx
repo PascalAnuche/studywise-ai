@@ -180,8 +180,8 @@ export function PlannerBoard({
             <p className={styles.subtitle}>Plan your study schedule and goals with the help of AI.</p>
           </div>
           <button type="button" className={styles.createButton} onClick={() => setFormOpen(true)}>
-            Create New Plan
             <Icon name="plus" size={16} />
+            Create New Plan
           </button>
         </header>
 

@@ -76,7 +76,7 @@
   align-items: center;
   /* Children of a button are wrapped in this span, so an icon beside the text
    * is spaced by this gap and not by the button's own. */
-  gap: var(--spacing-md);
+  gap: var(--spacing-xs);
 }
 
 .loadingLabel {

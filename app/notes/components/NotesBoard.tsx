@@ -70,12 +70,12 @@ export function NotesBoard() {
           </div>
           <div className={styles.headerActions}>
             <Button variant="ghost">
-              New Note
               <Icon name="plus" size={16} />
+              New Note
             </Button>
             <Button>
-              Import Notes
               <Icon name="upload" size={16} />
+              Import Notes
             </Button>
           </div>
         </header>

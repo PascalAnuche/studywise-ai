@@ -74,9 +74,17 @@
 .label {
   display: inline-flex;
   align-items: center;
-  /* Children of a button are wrapped in this span, so an icon beside the text
-   * is spaced by this gap and not by the button's own. */
-  gap: var(--spacing-xs);
+  /*
+   * No gap, deliberately.
+   *
+   * The icons are drawn on a 24-unit grid and none of them fill it: the glyph
+   * stops about 3.5px short of its own box at 16px. That inset already reads
+   * as the space between an icon and its label, so any gap on top of it lands
+   * at roughly 7px — which is what made a "4px" gap still look too wide.
+   *
+   * Measured across these buttons the visual gap is 3 to 3.7px.
+   */
+  gap: 0;
 }
 
 .loadingLabel {

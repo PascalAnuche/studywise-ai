@@ -12,11 +12,15 @@ import {
   MOCK_BADGES,
   MOCK_BADGE_COUNTS,
   MOCK_MILESTONES,
+  MOCK_PERSONAL_BESTS,
   MOCK_STREAK_DAYS,
+  MOCK_STREAK_STATS,
+  MOCK_STUDY_HISTORY,
   MOCK_TOP_SKILLS,
   type BadgeCategory,
 } from '@/lib/mock';
 import { TabStrip, type TabItem } from '../../components/Toolbar';
+import { StudyHeatmap } from './StudyHeatmap';
 import styles from '../achievements.module.css';
 
 const TABS: TabItem[] = [
@@ -141,66 +145,122 @@ export function AchievementsBoard({ streak }: { streak: number }) {
         )}
 
         {tab === 'milestones' && (
-          <Card>
+          <section>
             <div className={styles.sectionHead}>
               <h2 className={styles.sectionTitle}>Milestones</h2>
+              <ActionLink href="/progress">View progress</ActionLink>
             </div>
-            <ul className={styles.railList}>
+
+            {/* A timeline: milestones are dated, and the order is the point. */}
+            <ol className={styles.timeline}>
               {MOCK_MILESTONES.map((milestone) => (
-                <li key={milestone.id} className={styles.railRow}>
-                  <IconTile icon={milestone.icon} tone={milestone.tone} size="sm" />
-                  <span className={styles.railRowBody}>
-                    <span className={styles.railRowTitle}>{milestone.title}</span>
-                    <span className={styles.railRowDate}>{milestone.date}</span>
+                <li key={milestone.id} className={styles.timelineItem}>
+                  <span className={styles.timelineMark}>
+                    <IconTile icon={milestone.icon} tone={milestone.tone} size="sm" />
                   </span>
+                  <article className={styles.timelineCard}>
+                    <div className={styles.timelineHead}>
+                      <h3 className={styles.timelineTitle}>{milestone.title}</h3>
+                      <span className={styles.timelineDate}>{milestone.date}</span>
+                    </div>
+                    <p className={styles.timelineDetail}>{milestone.detail}</p>
+                  </article>
                 </li>
               ))}
-            </ul>
-          </Card>
+            </ol>
+          </section>
         )}
 
         {tab === 'streaks' && (
-          <Card>
-            <div className={styles.sectionHead}>
-              <h2 className={styles.sectionTitle}>This week</h2>
+          <section className={styles.streakPanel}>
+            <div className={styles.streakFigures}>
+              <article className={styles.streakFigure}>
+                <span className={styles.streakFigureValue}>{MOCK_STREAK_STATS.current}</span>
+                <span className={styles.streakFigureLabel}>Current streak, days</span>
+              </article>
+              <article className={styles.streakFigure}>
+                <span className={styles.streakFigureValue}>{MOCK_STREAK_STATS.best}</span>
+                <span className={styles.streakFigureLabel}>Longest streak, days</span>
+              </article>
+              <article className={styles.streakFigure}>
+                <span className={styles.streakFigureValue}>{MOCK_STREAK_STATS.daysStudied}</span>
+                <span className={styles.streakFigureLabel}>Days studied</span>
+              </article>
+              <article className={styles.streakFigure}>
+                <span className={styles.streakFigureValue}>{MOCK_STREAK_STATS.thisMonth}</span>
+                <span className={styles.streakFigureLabel}>Days this month</span>
+              </article>
             </div>
-            <ul className={styles.week}>
-              {MOCK_STREAK_DAYS.map((entry, index) => (
-                <li key={index} className={styles.weekDay}>
-                  <span className={`${styles.weekMark} ${entry.done ? styles.weekDone : ''}`.trim()}>
-                    {entry.done && <Icon name="check" size={12} />}
-                    <span className="visually-hidden">
-                      {entry.done ? 'Studied' : 'Not studied'}
+
+            <Card>
+              <div className={styles.sectionHead}>
+                <h2 className={styles.sectionTitle}>This week</h2>
+              </div>
+              <ul className={styles.week}>
+                {MOCK_STREAK_DAYS.map((entry, index) => (
+                  <li key={index} className={styles.weekDay}>
+                    <span
+                      className={`${styles.weekMark} ${entry.done ? styles.weekDone : ''}`.trim()}
+                    >
+                      {entry.done && <Icon name="check" size={12} />}
+                      <span className="visually-hidden">
+                        {entry.done ? 'Studied' : 'Not studied'}
+                      </span>
                     </span>
-                  </span>
-                  {entry.day}
-                </li>
-              ))}
-            </ul>
-          </Card>
+                    {entry.day}
+                  </li>
+                ))}
+              </ul>
+            </Card>
+
+            <Card>
+              <div className={styles.sectionHead}>
+                <h2 className={styles.sectionTitle}>Last twelve weeks</h2>
+              </div>
+              <StudyHeatmap days={MOCK_STUDY_HISTORY} />
+            </Card>
+          </section>
         )}
 
         {tab === 'leaderboard' && (
-          <Card>
-            <div className={styles.sectionHead}>
-              <h2 className={styles.sectionTitle}>Leaderboard</h2>
-            </div>
+          <section className={styles.streakPanel}>
             {/*
               The design puts a ranking of students here. Prompt section 12
-              rules out comparing one student to another, so the tab keeps its
-              place and says what is shown instead. Flagged in AGENTS.md.
+              rules out comparing one student to another, so the comparison is
+              against their own record instead. Flagged in AGENTS.md.
             */}
-            <p className={styles.panelNote}>
-              StudyWise doesn&rsquo;t rank you against other students. Your badges, milestones and
-              streak above are your own record, and they&rsquo;re the only measure here.
-            </p>
-          </Card>
+            <Card className={styles.noRank}>
+              <span className={styles.noRankTitle}>
+                <Icon name="shield" size={16} />
+                No student rankings
+              </span>
+              <p className={styles.noRankText}>
+                StudyWise doesn&rsquo;t rank you against anyone else, and never will. What it can
+                show you is how this week compares with your own.
+              </p>
+            </Card>
+
+            <div className={styles.bestGrid}>
+              {MOCK_PERSONAL_BESTS.map((best) => (
+                <article key={best.id} className={styles.bestCard}>
+                  <div className={styles.bestHead}>
+                    <IconTile icon={best.icon} tone={best.tone} size="sm" />
+                    <span className={styles.bestLabel}>{best.label}</span>
+                  </div>
+                  <span className={styles.bestValue}>{best.value}</span>
+                  <span className={styles.bestDetail}>{best.detail}</span>
+                </article>
+              ))}
+            </div>
+          </section>
         )}
 
-        <button type="button" className={styles.viewMore}>
-          View More Badges
-          <Icon name="chevron-down" size={16} />
-        </button>
+        {tab === 'badges' && (
+          <button type="button" className={styles.viewMore}>
+            View More Badges
+            <Icon name="chevron-down" size={16} />
+          </button>
+        )}
       </main>
 
       <aside className={styles.rail}>

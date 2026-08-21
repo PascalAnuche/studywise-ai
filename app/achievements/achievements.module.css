@@ -448,3 +448,249 @@
     grid-template-columns: minmax(0, 1fr) minmax(18rem, 19rem);
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * Milestones — a dated timeline.
+ * ------------------------------------------------------------------------ */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.timelineItem {
+  position: relative;
+  display: flex;
+  gap: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+}
+
+/*
+ * The connecting line is drawn from the marker rather than behind the row, so
+ * it stops cleanly at the last item instead of running past it.
+ */
+.timelineItem:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: calc(var(--spacing-2xl) / 2 - 1px);
+  top: var(--spacing-2xl);
+  bottom: 0;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.timelineMark {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--color-background);
+  padding-bottom: var(--spacing-sm);
+}
+
+.timelineCard {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+.timelineHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.timelineTitle {
+  font: var(--text-body-medium);
+}
+
+.timelineDate {
+  flex: none;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.timelineDetail {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+ * Streaks and the personal-record panel.
+ * ------------------------------------------------------------------------ */
+.streakPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.streakFigures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.streakFigure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+.streakFigureValue {
+  font: var(--text-h2);
+  line-height: 1.1;
+  color: var(--color-primary);
+}
+
+.streakFigureLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/* Heatmap */
+.heatmap {
+  display: flex;
+  gap: var(--spacing-md);
+  overflow-x: auto;
+  /* Positioned so a visually-hidden descendant cannot escape this clip. */
+  position: relative;
+  padding-bottom: var(--spacing-sm);
+}
+
+/* Mon / Wed / Fri sit against rows 1, 3 and 5 of the seven-row column. */
+.heatDays {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  gap: calc(var(--spacing-lg) - 2px);
+  flex: none;
+  padding-top: 2px;
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.heatGrid {
+  display: flex;
+  gap: 4px;
+}
+
+.heatWeek {
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.heatCell {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  background: var(--color-border);
+}
+
+.heat0 {
+  background: var(--color-border);
+}
+
+/* Three steps of the same hue: the level is the depth, never a different tone. */
+.heat1 {
+  background: color-mix(in srgb, var(--color-primary) 30%, var(--color-card));
+}
+
+.heat2 {
+  background: color-mix(in srgb, var(--color-primary) 60%, var(--color-card));
+}
+
+.heat3 {
+  background: var(--color-primary);
+}
+
+.heatLegend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+/* Personal records */
+.noRank {
+  background: var(--color-secondary);
+}
+
+.noRankTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  font: var(--text-body-medium);
+  color: var(--color-primary);
+}
+
+.noRankText {
+  font: var(--text-body);
+  color: var(--color-text);
+  max-width: 60ch;
+}
+
+.bestGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.bestCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+.bestHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.bestLabel {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.bestValue {
+  font: var(--text-h3);
+  line-height: 1.1;
+}
+
+.bestDetail {
+  font: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 48rem) {
+  .streakFigures {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .bestGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

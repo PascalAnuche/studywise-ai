@@ -1,4 +1,4 @@
-import type { StudyDay } from '@/lib/mock';
+import type { StudyDay } from '@/lib/db/activity';
 import styles from '../achievements.module.css';
 
 /**
@@ -34,10 +34,12 @@ export function StudyHeatmap({ days }: { days: StudyDay[] }) {
   return (
     <>
       <div className={styles.heatmap} aria-hidden="true">
+        {/* One cell per weekday, three of them labelled, so each label sits on
+          * the row it names. */}
         <div className={styles.heatDays}>
-          <span>Mon</span>
-          <span>Wed</span>
-          <span>Fri</span>
+          {['Mon', '', 'Wed', '', 'Fri', '', ''].map((day, index) => (
+            <span key={index}>{day}</span>
+          ))}
         </div>
         <div className={styles.heatGrid}>
           {weeks.map((week, w) => (

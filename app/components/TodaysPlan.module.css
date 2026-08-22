@@ -126,3 +126,13 @@
 .item:has(.check:checked) .icon {
   opacity: 0.55;
 }
+
+/*
+ * The link out of an empty state. It sat at its text height, 20px, which is
+ * under the 24px minimum target size (WCAG 2.2, 2.5.8).
+ */
+.empty a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--spacing-xl);
+}
